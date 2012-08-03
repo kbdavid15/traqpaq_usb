@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleLibUsbTest", "ConsoleLibUsbTest\ConsoleLibUsbTest.csproj", "{76A252C3-0147-4A5D-975F-4C0124A0BA1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibUSBRead", "LibUSBRead\LibUSBRead.csproj", "{06E63843-C9DE-459D-82D9-5866107D4926}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76A252C3-0147-4A5D-975F-4C0124A0BA1B}.Debug|x86.ActiveCfg = Debug|x86
+		{76A252C3-0147-4A5D-975F-4C0124A0BA1B}.Debug|x86.Build.0 = Debug|x86
+		{76A252C3-0147-4A5D-975F-4C0124A0BA1B}.Release|x86.ActiveCfg = Release|x86
+		{76A252C3-0147-4A5D-975F-4C0124A0BA1B}.Release|x86.Build.0 = Release|x86
+		{06E63843-C9DE-459D-82D9-5866107D4926}.Debug|x86.ActiveCfg = Debug|x86
+		{06E63843-C9DE-459D-82D9-5866107D4926}.Debug|x86.Build.0 = Debug|x86
+		{06E63843-C9DE-459D-82D9-5866107D4926}.Release|x86.ActiveCfg = Release|x86
+		{06E63843-C9DE-459D-82D9-5866107D4926}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
