@@ -8,7 +8,7 @@ using LibUsbDotNet.Info;
 
 namespace traqpaq_GUI
 {
-    class traqpaqDevice
+    public class traqpaqDevice
     {
         int pid, vid;   // use to set the PID and VID for the USB device.this will be used to locate the device
         public static UsbDevice MyUSBDevice;
@@ -40,13 +40,14 @@ namespace traqpaq_GUI
 
         // Methods for talking to the device
 
-        bool sendCommand(byte cmd, byte length, byte index)
+        bool sendCommand(byte cmd, byte length, byte index, out byte[] read)
         {
             int bytesRead, bytesWritten, timeout;
             timeout = 250;  // timeout in ms
             byte[] writeBuffer = { cmd, length, (byte)(index) };
             byte[] readBuffer = new byte[length];
-            
+            read = readBuffer;
+
             this.ec = writer.Write(writeBuffer, timeout, out bytesWritten);
             if (this.ec != ErrorCode.None)
                 return false;
@@ -54,11 +55,7 @@ namespace traqpaq_GUI
             this.ec = reader.Read(readBuffer, timeout, out bytesRead);
             if (this.ec != ErrorCode.None)
                 return false;
-
-            Console.Write(readBuffer);
-
-
-
+            read = readBuffer;
             return true;
         }
 
@@ -66,16 +63,12 @@ namespace traqpaq_GUI
         /// Sends the command to the device asking for the software versions
         /// </summary>
         /// <returns>String with the software major and minor versions</returns>
-        string get_sw_version()
+        internal string get_sw_version()
         {
-            string sw_version = "";
-            bool error = sendCommand(USBCommand.USB_CMD_REQ_APPL_VER, 16, 0);
-
-
-            return sw_version;
+            byte[] sw_version;
+            bool error = sendCommand(USBCommand.USB_CMD_REQ_APPL_VER, 2, 0, out sw_version);
+            return sw_version[0] + "." + sw_version[1];
+             
         }
-
-
-
     }
 }

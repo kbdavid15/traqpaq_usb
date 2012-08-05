@@ -11,13 +11,13 @@ namespace traqpaq_GUI
 {
     public partial class Form1 : Form
     {
-        traqpaqDevice traqpaq;
+        public traqpaqDevice traqpaq;
 
         public Form1()
         {
             InitializeComponent();
             // once the form is loaded, connect to the USB device
-            traqpaq = new traqpaqDevice();
+            this.traqpaq = new traqpaqDevice();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -33,7 +33,7 @@ namespace traqpaq_GUI
         /// <param name="e"></param>
         private void versionButton_Click(object sender, EventArgs e)
         {
-
+            outLabel.Text = "Software version: " + traqpaq.get_sw_version();
         }
     }
 }
