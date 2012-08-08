@@ -58,8 +58,9 @@
             this.outLabel.AutoSize = true;
             this.outLabel.Location = new System.Drawing.Point(9, 9);
             this.outLabel.Name = "outLabel";
-            this.outLabel.Size = new System.Drawing.Size(0, 13);
+            this.outLabel.Size = new System.Drawing.Size(45, 13);
             this.outLabel.TabIndex = 2;
+            this.outLabel.Text = "Version:";
             // 
             // Form1
             // 

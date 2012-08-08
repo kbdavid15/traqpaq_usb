@@ -33,7 +33,7 @@ namespace traqpaq_GUI
         /// <param name="e"></param>
         private void versionButton_Click(object sender, EventArgs e)
         {
-            outLabel.Text = "Software version: " + traqpaq.get_sw_version();
+            outLabel.Text += " " + traqpaq.get_sw_version();
         }
     }
 }
