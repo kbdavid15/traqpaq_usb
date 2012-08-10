@@ -133,7 +133,7 @@ namespace traqpaq_GUI
         // also don't want to deal with the byte array for each function
         // this could make it cleaner, if say, I want the string version
         // of the application version, I can just say ToString()
-        class ApplicationVersion
+        public class ApplicationVersion
         {
             private byte[] _value = new byte[2];
 
@@ -156,7 +156,7 @@ namespace traqpaq_GUI
             sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, version.Value);
             return version;
         }
-
+        /*
         public byte[] reqHardwareVersion()
         {
         }
@@ -256,7 +256,7 @@ namespace traqpaq_GUI
         {
 
         }
-
+        */
 
 
 
