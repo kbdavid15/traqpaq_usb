@@ -135,17 +135,25 @@ namespace traqpaq_GUI
         // of the application version, I can just say ToString()
         public class ApplicationVersion
         {
-            private byte[] _value = new byte[2];
-
-            public ApplicationVersion() { }
-            
+            public byte[] Value = new byte[2];
+            public ApplicationVersion() { }            
             public override string ToString()
             {
-                return _value[0] + "." + _value[1];
+                return Value[0] + "." + Value[1];
             }
-
-            public byte[] Value { get; set; }
+            
         }
+
+        public class HardwareVersion
+        {
+            public byte[] Value = new byte[1];
+            public HardwareVersion() { }
+            public override string ToString()
+            {
+                return Value[0].ToString();
+            }
+        }
+
 
 
 
@@ -156,11 +164,14 @@ namespace traqpaq_GUI
             sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, version.Value);
             return version;
         }
-        /*
-        public byte[] reqHardwareVersion()
+        
+        public HardwareVersion reqHardwareVersion()
         {
+            HardwareVersion version = new HardwareVersion();
+            sendCommand(usbCommand.USB_CMD_REQ_HARDWARE_VER, version.Value);
+            return version;
         }
-
+/*
         public byte[] reqSerialNumber()
         {
         }
