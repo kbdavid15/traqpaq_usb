@@ -11,13 +11,13 @@ namespace traqpaq_GUI
 {
     public partial class Form1 : Form
     {
-        public traqpaqDevice traqpaq;
+        public TraqpaqDevice traqpaq;
 
         public Form1()
         {
             InitializeComponent();
             // once the form is loaded, connect to the USB device
-            this.traqpaq = new traqpaqDevice();
+            this.traqpaq = new TraqpaqDevice();
         }
 
         private void closeButton_Click(object sender, EventArgs e)

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace traqpaq_GUI
 {
-    public class traqpaqDevice
+    public class TraqpaqDevice
     {
         int PID, VID;   // use to set the PID and VID for the USB device.this will be used to locate the device
         public static UsbDevice MyUSBDevice;
@@ -22,7 +22,7 @@ namespace traqpaq_GUI
         /// <summary>
         /// Class constructor for the traq|paq
         /// </summary>
-        public traqpaqDevice()
+        public TraqpaqDevice()
         {
             this.PID = 0x1000;
             this.VID = 0xAAAA;
@@ -41,10 +41,20 @@ namespace traqpaq_GUI
 
         }
 
-        /*
-         * Methods for talking to the device
-         */
+        /*************************************
+         * Methods for talking to the device *
+         *************************************/
 
+        /// <summary>
+        /// Deprecated. Function sends a bulk transfer to the device.
+        /// These functions should NOT be called directly. Use the 
+        /// wrapper methods of this class instead.
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <param name="readBuffer">Pre allocated byte array</param>
+        /// <param name="length">Length of bytes requested. Not preferred</param>
+        /// <param name="index">Index command byte. Not preferred method</param>
+        /// <returns>False if read or write error. True otherwise</returns>
         private bool sendCommand(usbCommand cmd, byte[] readBuffer, byte length, byte index)
         {
             int bytesRead, bytesWritten;
@@ -62,6 +72,12 @@ namespace traqpaq_GUI
             return true;
         }
 
+        /// <summary>
+        /// Send command with no command bytes in the writeBuffer
+        /// </summary>
+        /// <param name="cmd">USB command</param>
+        /// <param name="readBuffer">Pre-allocated byte array</param>
+        /// <returns>False if read or write error. True otherwise</returns>
         private bool sendCommand(usbCommand cmd, byte[] readBuffer)
         {
             int bytesRead, bytesWritten;
@@ -78,14 +94,22 @@ namespace traqpaq_GUI
             return true;
         }
 
-        private bool sendCommand(usbCommand cmd, byte[] readBuffer, params byte[] args)
+        /// <summary>
+        /// Send the command to the device. Preferred method for adding command bytes
+        /// </summary>
+        /// <param name="cmd">USB command</param>
+        /// <param name="readBuffer">Pre-allocated byte array</param>
+        /// <param name="commandBytes">command bytes passed in order from byte0..byte1..byte(n)
+        ///                            They are appended to the writeBuffer</param>
+        /// <returns>False if read or write error. True otherwise.</returns>
+        private bool sendCommand(usbCommand cmd, byte[] readBuffer, params byte[] commandBytes)
         {
             int bytesRead, bytesWritten;
-            byte[] writeBuffer = new byte[args.Length + 1];
+            byte[] writeBuffer = new byte[commandBytes.Length + 1];
             writeBuffer[0] = (byte)cmd;
-            for (int i = 0; i < args.Length; i++)
+            for (int i = 0; i < commandBytes.Length; i++)
             {
-                writeBuffer[i+1] = args[i];
+                writeBuffer[i+1] = commandBytes[i];
             }
 
             this.ec = writer.Write(writeBuffer, TIMEOUT, out bytesWritten);
@@ -98,6 +122,143 @@ namespace traqpaq_GUI
 
             return true;
         }
+
+        /********************************************************
+         * Methods for sending commands to the device           *
+         * All these methods call the sendCommand() function.   *
+         * These should be used to access the device.           *
+         ********************************************************/
+
+        // not sure if I want to create a class for each type. 
+        // also don't want to deal with the byte array for each function
+        // this could make it cleaner, if say, I want the string version
+        // of the application version, I can just say ToString()
+        class ApplicationVersion
+        {
+            private byte[] _value = new byte[2];
+
+            public ApplicationVersion() { }
+            
+            public override string ToString()
+            {
+                return _value[0] + "." + _value[1];
+            }
+
+            public byte[] Value { get; set; }
+        }
+
+
+
+
+        public ApplicationVersion reqApplicationVersion()
+        {
+            ApplicationVersion version = new ApplicationVersion();
+            sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, version.Value);
+            return version;
+        }
+
+        public byte[] reqHardwareVersion()
+        {
+        }
+
+        public byte[] reqSerialNumber()
+        {
+        }
+
+        public byte[] reqTesterID()
+        {
+        }
+
+        public byte[] reqBatteryVoltage()
+        {
+        }
+
+        public byte[] reqBatteryTemp()
+        {
+        }
+
+        public byte[] reqBatteryInstCurrent()
+        {
+        }
+
+        public byte[] reqBatteryAccumCurrent()
+        {
+        }
+
+        public byte[] setBatteryFullChargeState()
+        {
+        }
+
+        public byte[] readTracks()
+        {
+        }
+
+        public byte[] readRecordTable()
+        {
+
+        }
+
+        public byte[] readRecordData()
+        {
+        }
+
+        public byte[] eraseAllRecordData()
+        {
+        }
+
+        public byte[] writeDefaultPrefs()
+        {
+        }
+
+        public byte[] writeSavedTracks()
+        {
+        }
+
+        public byte[] readOTP()
+        {
+
+        }
+
+        public byte[] writeOTP()
+        {
+        }
+
+        public byte[] eraseFlash()
+        {
+        }
+
+        public byte[] isFlashBusy()
+        {
+        }
+
+        public byte[] eraseChip()
+        {
+
+        }
+
+        public byte[] isFlashFull()
+        {
+        }
+
+        public byte[] getFlashPercentUsed()
+        {
+        }
+
+        public byte[] getLastGPS_lat()
+        {
+        }
+
+        public byte[] getLastGPS_long()
+        {
+        }
+
+        public byte[] getLastGPS_heading()
+        {
+
+        }
+
+
+
 
 
         /// <summary>
