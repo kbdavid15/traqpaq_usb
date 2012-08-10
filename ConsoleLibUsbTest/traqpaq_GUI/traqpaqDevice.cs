@@ -41,76 +41,84 @@ namespace traqpaq_GUI
 
         }
 
-        // Methods for talking to the device
-        bool sendCommand(usbCommand cmd, byte length, byte index, out byte[] read)
+        /*
+         * Methods for talking to the device
+         */
+
+        private bool sendCommand(usbCommand cmd, byte[] readBuffer, byte length, byte index)
         {
             int bytesRead, bytesWritten;
-            
+
             byte[] writeBuffer = { (byte)cmd, length, (byte)(index) };
-            byte[] readBuffer = new byte[length];
-            read = readBuffer;
 
             this.ec = writer.Write(writeBuffer, TIMEOUT, out bytesWritten);
             if (this.ec != ErrorCode.None)
                 return false;
-            
+
             this.ec = reader.Read(readBuffer, TIMEOUT, out bytesRead);
             if (this.ec != ErrorCode.None)
                 return false;
-            read = readBuffer;
-            
+
             return true;
         }
 
-        private cmdReturnClass sendCommand(usbCommand cmd, byte read_length, byte index)
+        private bool sendCommand(usbCommand cmd, byte[] readBuffer)
         {
-            cmdReturnClass result;
             int bytesRead, bytesWritten;
 
-            byte[] writeBuffer = { (byte)cmd, read_length, (byte)(index) };
-            byte[] readBuffer = new byte[read_length];
+            byte[] writeBuffer = { (byte)cmd };
 
             this.ec = writer.Write(writeBuffer, TIMEOUT, out bytesWritten);
             if (this.ec != ErrorCode.None)
-            {
-                result = new cmdReturnClass(this.ec, readBuffer);
-                return result;
-            }
+                return false;
+
             this.ec = reader.Read(readBuffer, TIMEOUT, out bytesRead);
-            result = new cmdReturnClass(this.ec, readBuffer);
-            return result;
+            if (this.ec != ErrorCode.None)
+                return false;
+            return true;
         }
 
-        private cmdReturnClass sendCommand(usbCommand cmd, byte write_length, byte index, byte read_length)
+        private bool sendCommand(usbCommand cmd, byte[] readBuffer, params byte[] args)
         {
-            //TODO finish modifying this function
-            cmdReturnClass result;
             int bytesRead, bytesWritten;
-
-            byte[] writeBuffer = { (byte)cmd, write_length, (byte)(index) };
-            byte[] readBuffer = new byte[read_length];
+            byte[] writeBuffer = new byte[args.Length + 1];
+            writeBuffer[0] = (byte)cmd;
+            for (int i = 0; i < args.Length; i++)
+            {
+                writeBuffer[i+1] = args[i];
+            }
 
             this.ec = writer.Write(writeBuffer, TIMEOUT, out bytesWritten);
             if (this.ec != ErrorCode.None)
-            {
-                result = new cmdReturnClass(this.ec, readBuffer);
-                return result;
-            }
+                return false;
+
             this.ec = reader.Read(readBuffer, TIMEOUT, out bytesRead);
-            result = new cmdReturnClass(this.ec, readBuffer);
-            return result;
+            if (this.ec != ErrorCode.None)
+                return false;
+
+            return true;
         }
+
 
         /// <summary>
         /// Sends the command to the device asking for the software versions
         /// </summary>
         /// <returns>String with the software major and minor versions</returns>
-        internal string get_sw_version()
+        public string get_sw_version()
         {
-            byte[] sw_version;
-            bool error = sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, 2, 0, out sw_version);
-            return sw_version[0] + "." + sw_version[1];
-             
+            byte[] sw_version = new byte[2];
+            if (sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, sw_version))
+                return sw_version[0] + "." + sw_version[1];
+            else
+                return "";
         }
+
+        public byte[] read_recordtable()
+        {
+            byte[] readBuffer = new byte[16];
+            sendCommand(usbCommand.USB_CMD_READ_RECORDTABLE, readBuffer, 16, 0);
+            return readBuffer;
+        }
+
     }
 }

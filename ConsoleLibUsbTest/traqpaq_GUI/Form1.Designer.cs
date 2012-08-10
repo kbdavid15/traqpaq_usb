@@ -31,6 +31,7 @@
             this.versionButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.outLabel = new System.Windows.Forms.Label();
+            this.readRecordTableButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // versionButton
@@ -62,11 +63,22 @@
             this.outLabel.TabIndex = 2;
             this.outLabel.Text = "Version:";
             // 
+            // readRecordTableButton
+            // 
+            this.readRecordTableButton.Location = new System.Drawing.Point(12, 107);
+            this.readRecordTableButton.Name = "readRecordTableButton";
+            this.readRecordTableButton.Size = new System.Drawing.Size(75, 23);
+            this.readRecordTableButton.TabIndex = 3;
+            this.readRecordTableButton.Text = "Read";
+            this.readRecordTableButton.UseVisualStyleBackColor = true;
+            this.readRecordTableButton.Click += new System.EventHandler(this.readRecordTableButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.readRecordTableButton);
             this.Controls.Add(this.outLabel);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.versionButton);
@@ -82,6 +94,7 @@
         private System.Windows.Forms.Button versionButton;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Label outLabel;
+        private System.Windows.Forms.Button readRecordTableButton;
     }
 }
 

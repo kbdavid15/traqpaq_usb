@@ -35,5 +35,17 @@ namespace traqpaq_GUI
         {
             outLabel.Text += " " + traqpaq.get_sw_version();
         }
+
+        private void readRecordTableButton_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            byte[] recordTable = traqpaq.read_recordtable();
+            foreach (byte b in recordTable)
+            {
+                s += b.ToString();
+            }
+
+            MessageBox.Show(s);
+        }
     }
 }
