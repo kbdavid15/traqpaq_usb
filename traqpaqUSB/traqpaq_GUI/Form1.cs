@@ -36,6 +36,9 @@ namespace traqpaq_GUI
             //outLabel.Text += " " + traqpaq.get_sw_version();
             outLabel.Text += "" + traqpaq.reqApplicationVersion().ToString();
             outLabel.Text += "\nHardware Version: " + traqpaq.reqHardwareVersion().ToString();
+            outLabel.Text += "\nSerial Number: " + traqpaq.reqSerialNumber().ToString();
+            outLabel.Text += "\nTester ID: " + traqpaq.reqTesterID().ToString();
+            outLabel.Text += "\nBattery Voltage: " + traqpaq.reqBatteryVoltage().ToString();
         }
 
         private void readRecordTableButton_Click(object sender, EventArgs e)

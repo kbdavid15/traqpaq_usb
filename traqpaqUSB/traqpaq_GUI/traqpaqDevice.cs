@@ -11,8 +11,9 @@ namespace traqpaq_GUI
 {
     public class TraqpaqDevice
     {
+        public const byte OTP_SERIAL_LENGTH = 13;
         int PID, VID;   // use to set the PID and VID for the USB device.this will be used to locate the device
-        public static UsbDevice MyUSBDevice;
+        public UsbDevice MyUSBDevice;
         public static UsbDeviceFinder traqpaqDeviceFinder;
         UsbEndpointReader reader;
         UsbEndpointWriter writer;
@@ -31,7 +32,7 @@ namespace traqpaq_GUI
             traqpaqDeviceFinder = new UsbDeviceFinder(this.VID, this.PID);
 
             // open the device
-            MyUSBDevice = UsbDevice.OpenUsbDevice(traqpaqDeviceFinder);
+            this.MyUSBDevice = UsbDevice.OpenUsbDevice(traqpaqDeviceFinder);
 
             // If the device is open and ready
             if (MyUSBDevice == null) throw new Exception("Device Not Found.");
@@ -140,8 +141,7 @@ namespace traqpaq_GUI
             public override string ToString()
             {
                 return Value[0] + "." + Value[1];
-            }
-            
+            }            
         }
 
         public class HardwareVersion
@@ -154,36 +154,91 @@ namespace traqpaq_GUI
             }
         }
 
+        public class SerialNumber
+        {
+            public byte[] Value = new byte[OTP_SERIAL_LENGTH];
+            public SerialNumber() { }
+            public override string ToString()
+            {   // value is in ASCII
+                return Encoding.ASCII.GetString(Value);
+            }
+        }
 
+        public class TesterID
+        {
+            public byte[] Value = new byte[1];
+            public TesterID() { }
+            public override string ToString()
+            {
+                return Value[0].ToString();
+            }
+        }
 
+        public class BatteryVoltage
+        {
+            public byte[] Value = new byte[2];
+            public string hexValue { get; set; }
+            public Int16 decimalValue { get; set; }
+            public BatteryVoltage() { }
+            public override string ToString()
+            {
+                // Battery voltage is a word, so concantenate the 2 bytes into an int
+                int word = Value[0] << 8 | Value[1];
+                this.hexValue = word.ToString();
+                // convert to decimal
+                this.decimalValue = Convert.ToInt16(hexValue, 16);
+                return decimalValue.ToString();
+            }
+        }
+
+        public class SavedTracks
+        {
+            //TODO saved tracks class
+        }
 
 
         public ApplicationVersion reqApplicationVersion()
         {
             ApplicationVersion version = new ApplicationVersion();
-            sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, version.Value);
+            if (!sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, version.Value))
+                version = null;
             return version;
         }
         
         public HardwareVersion reqHardwareVersion()
         {
             HardwareVersion version = new HardwareVersion();
-            sendCommand(usbCommand.USB_CMD_REQ_HARDWARE_VER, version.Value);
+            if (!sendCommand(usbCommand.USB_CMD_REQ_HARDWARE_VER, version.Value))
+                version = null;
             return version;
         }
-/*
-        public byte[] reqSerialNumber()
+
+        public SerialNumber reqSerialNumber()
         {
+            SerialNumber sn = new SerialNumber();
+            if (!sendCommand(usbCommand.USB_CMD_REQ_SERIAL_NUMBER, sn.Value))
+                sn = null;
+            return sn;
         }
 
-        public byte[] reqTesterID()
+        public TesterID reqTesterID()
         {
+            TesterID tester = new TesterID();
+            if (!sendCommand(usbCommand.USB_CMD_REQ_TESTER_ID, tester.Value))
+                tester = null;
+            return tester;
         }
 
-        public byte[] reqBatteryVoltage()
+        public BatteryVoltage reqBatteryVoltage()
         {
+            BatteryVoltage bv = new BatteryVoltage();
+            if (!sendCommand(usbCommand.USB_CMD_REQ_BATTERY_VOLTAGE, bv.Value))
+                bv = null;
+            return bv;
         }
 
+        //TODO battery functions
+/* More battery functions. Consider implementing all of these in one class
         public byte[] reqBatteryTemp()
         {
         }
@@ -199,7 +254,8 @@ namespace traqpaq_GUI
         public byte[] setBatteryFullChargeState()
         {
         }
-
+ */
+/*
         public byte[] readTracks()
         {
         }
