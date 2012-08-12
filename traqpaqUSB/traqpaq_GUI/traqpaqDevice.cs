@@ -45,41 +45,15 @@ namespace traqpaq_GUI
             // create the battery object
             this.battery = new Battery(this);
 
-            // create a list of saved tracks
+            // create a saved track reader to get a list of saved tracks
             this.trackReader = new SavedTrackReader(this);
 
         }
 
-        /*************************************
-         * Methods for talking to the device *
-         *************************************/
-
-        /// <summary>
-        /// Deprecated. Function sends a bulk transfer to the device.
-        /// These functions should NOT be called directly. Use the 
-        /// wrapper methods of this class instead.
-        /// </summary>
-        /// <param name="cmd"></param>
-        /// <param name="readBuffer">Pre allocated byte array</param>
-        /// <param name="length">Length of bytes requested. Not preferred</param>
-        /// <param name="index">Index command byte. Not preferred method</param>
-        /// <returns>False if read or write error. True otherwise</returns>
-        private bool sendCommand(usbCommand cmd, byte[] readBuffer, byte length, byte index)
-        {
-            int bytesRead, bytesWritten;
-
-            byte[] writeBuffer = { (byte)cmd, length, (byte)(index) };
-
-            this.ec = writer.Write(writeBuffer, TIMEOUT, out bytesWritten);
-            if (this.ec != ErrorCode.None)
-                return false;
-
-            this.ec = reader.Read(readBuffer, TIMEOUT, out bytesRead);
-            if (this.ec != ErrorCode.None)
-                return false;
-
-            return true;
-        }
+        /*************************************************
+         * Methods for talking to the device             *
+         * These functions should not be called directly *
+         *************************************************/
 
         /// <summary>
         /// Send command with no command bytes in the writeBuffer
@@ -137,11 +111,6 @@ namespace traqpaq_GUI
          * All these methods call the sendCommand() function.   *
          * These should be used to access the device.           *
          ********************************************************/
-
-        // not sure if I want to create a class for each type. 
-        // also don't want to deal with the byte array for each function
-        // this could make it cleaner, if say, I want the string version
-        // of the application version, I can just say ToString()
         public class ApplicationVersion
         {
             public byte[] Value = new byte[2];
@@ -182,6 +151,37 @@ namespace traqpaq_GUI
             }
         }
 
+        public ApplicationVersion reqApplicationVersion()
+        {
+            ApplicationVersion version = new ApplicationVersion();
+            if (!sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, version.Value))
+                version = null;
+            return version;
+        }
+
+        public HardwareVersion reqHardwareVersion()
+        {
+            HardwareVersion version = new HardwareVersion();
+            if (!sendCommand(usbCommand.USB_CMD_REQ_HARDWARE_VER, version.Value))
+                version = null;
+            return version;
+        }
+
+        public SerialNumber reqSerialNumber()
+        {
+            SerialNumber sn = new SerialNumber();
+            if (!sendCommand(usbCommand.USB_CMD_REQ_SERIAL_NUMBER, sn.Value))
+                sn = null;
+            return sn;
+        }
+
+        public TesterID reqTesterID()
+        {
+            TesterID tester = new TesterID();
+            if (!sendCommand(usbCommand.USB_CMD_REQ_TESTER_ID, tester.Value))
+                tester = null;
+            return tester;
+        }
 
         public class Battery
         {
@@ -306,10 +306,19 @@ namespace traqpaq_GUI
                 while (!isEmpty)
                 {   // keep reading tracks until one is empty
                     track = new SavedTrack(this, index);
-                    trackList.Add(track);
-                    isEmpty = track.isEmpty;
-                    index ++;
+                    if (track.readTrack())
+                    {
+                        trackList.Add(track);
+                        isEmpty = track.isEmpty;
+                        index++;
+                    }
+                    else isEmpty = false;   // track read failed
                 }
+            }
+
+            //TODO use this function to write default saved track info to flash
+            public void writeSavedTracks()
+            {
             }
 
             private class SavedTrack
@@ -327,7 +336,6 @@ namespace traqpaq_GUI
                 {
                     this.parent = parent;
                     this.index = index;
-                    readTrack();    // read the track right away
                 }
                 /// <summary>
                 /// Read saved track data from the device
@@ -339,7 +347,6 @@ namespace traqpaq_GUI
                     byte lowerIndex = (byte)(index & 0xFF);
                     if (parent.traqpaq.sendCommand(usbCommand.USB_CMD_READ_SAVED_TRACKS, trackReadBuff, upperIndex, lowerIndex))
                     {
-                        //var name = new ArraySegment<byte>(trackReadBuff, 0, 20);
                         trackName = Encoding.ASCII.GetString(trackReadBuff, 0, 20);
                         Longitute = trackReadBuff[20] << 24 | trackReadBuff[21] << 16 | trackReadBuff[22] << 8 | trackReadBuff[23];
                         Latitude = trackReadBuff[24] << 24 | trackReadBuff[25] << 16 | trackReadBuff[26] << 8 | trackReadBuff[27];
@@ -352,63 +359,36 @@ namespace traqpaq_GUI
             }
         }
 
+        public class RecordTable
+        {   //TODO record table class
+            public void readRecordTable()
+            {
 
-        public ApplicationVersion reqApplicationVersion()
-        {
-            ApplicationVersion version = new ApplicationVersion();
-            if (!sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, version.Value))
-                version = null;
-            return version;
-        }
-        
-        public HardwareVersion reqHardwareVersion()
-        {
-            HardwareVersion version = new HardwareVersion();
-            if (!sendCommand(usbCommand.USB_CMD_REQ_HARDWARE_VER, version.Value))
-                version = null;
-            return version;
+            }
         }
 
-        public SerialNumber reqSerialNumber()
-        {
-            SerialNumber sn = new SerialNumber();
-            if (!sendCommand(usbCommand.USB_CMD_REQ_SERIAL_NUMBER, sn.Value))
-                sn = null;
-            return sn;
+        public class RecordData
+        {   //TODO record data class
+            RecordTable recordTable;
+            public RecordData(RecordTable recordTable)
+            {
+                this.recordTable = recordTable;
+            }
+            public void readRecordData()
+            {
+            }
+
+            public void eraseAllRecordData()
+            {
+            }
         }
-
-        public TesterID reqTesterID()
-        {
-            TesterID tester = new TesterID();
-            if (!sendCommand(usbCommand.USB_CMD_REQ_TESTER_ID, tester.Value))
-                tester = null;
-            return tester;
-        }
-
-        
-
-        
+                
 /*
-        public byte[] readRecordTable()
-        {
-
-        }
-
-        public byte[] readRecordData()
-        {
-        }
-
-        public byte[] eraseAllRecordData()
-        {
-        }
-
         public byte[] writeDefaultPrefs()
         {
         }
 
-        public byte[] writeSavedTracks()
-        {
-        }
+        
 
         public byte[] readOTP()
         {
