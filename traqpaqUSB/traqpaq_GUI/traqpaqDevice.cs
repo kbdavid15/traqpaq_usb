@@ -19,6 +19,7 @@ namespace traqpaq_GUI
         UsbEndpointWriter writer;
         ErrorCode ec = ErrorCode.None;
         public const int TIMEOUT = 250;  // timeout in ms
+        public Battery battery;
 
         /// <summary>
         /// Class constructor for the traq|paq
@@ -39,6 +40,9 @@ namespace traqpaq_GUI
 
             this.reader = MyUSBDevice.OpenEndpointReader(ReadEndpointID.Ep01);
             this.writer = MyUSBDevice.OpenEndpointWriter(WriteEndpointID.Ep02);
+
+            // create the battery object
+            this.battery = new Battery(this);
 
         }
 
@@ -174,26 +178,116 @@ namespace traqpaq_GUI
             }
         }
 
-        public class BatteryVoltage
+
+        public class Battery
         {
-            public byte[] Value = new byte[2];
-            public string hexValue { get; set; }
-            public Int16 decimalValue { get; set; }
-            public BatteryVoltage() { }
-            public override string ToString()
+            byte[] VoltageRead = new byte[2];
+            byte[] TemperatureRead = new byte[2];
+            byte[] InstCurrentRead = new byte[2];
+            byte[] AccumCurrentRead = new byte[2];
+            byte[] SetChargeStateFlagRead = new byte[1];
+            
+            public double Voltage { get; set; }
+            public double Temperature { get; set; }
+            public double CurrentInst { get; set; }
+            public double CurrentAccum { get; set; }
+            public bool ChargeStateFlag { get; set; }
+
+            private TraqpaqDevice traqpaq;
+
+            public Battery(TraqpaqDevice parent) 
             {
-                // Battery voltage is a word, so concantenate the 2 bytes into an int
-                int word = Value[0] << 8 | Value[1];
-                this.hexValue = word.ToString();
-                // convert to decimal
-                this.decimalValue = Convert.ToInt16(hexValue, 16);
-                return decimalValue.ToString();
+                this.traqpaq = parent;
+            }            
+
+            /// <summary>
+            /// Request current battery voltage
+            /// </summary>
+            /// <returns>True if request was successful, false otherwise</returns>
+            public bool reqBatteryVoltage()
+            {
+                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_VOLTAGE, VoltageRead))
+                {   // Battery voltage is a word, so concantenate the 2 bytes into an int
+                    int temp = VoltageRead[0] << 8 | VoltageRead[1];
+                    // convert to Volts
+                    //TODO convert the voltage to volts
+                    //this.Voltage = temp;
+                    return true;
+                }
+                else return false;                    
+            }
+
+            /// <summary>
+            /// Request battery temperature
+            /// </summary>
+            /// <returns>True if request was successful, false otherwise</returns>
+            public bool reqBatteryTemp()
+            {
+                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_TEMPERATURE, TemperatureRead))
+                {
+                    //TODO set the Temperature property
+                    int temp = TemperatureRead[0] << 8 | TemperatureRead[1];
+
+                    return true;
+                }
+                else return false;
+            }
+
+            /// <summary>
+            /// Request battery instantaneous current draw
+            /// </summary>
+            /// <returns>True if request was successful, false otherwise</returns>
+            public bool reqBatteryInstCurrent()
+            {
+                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_INSTANT, InstCurrentRead))
+                {
+                    //TODO set the CurrentInst property
+                    int temp = InstCurrentRead[0] << 8 | InstCurrentRead[1];
+                    return true;
+                }
+                else return false;
+            }
+
+            /// <summary>
+            /// Request battery accumulated current draw
+            /// </summary>
+            /// <returns>True if request was successful, false otherwise</returns>
+            public bool reqBatteryAccumCurrent()
+            {
+                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_ACCUM, AccumCurrentRead))
+                {
+                    //TODO set the CurrentAccum property
+                    int temp = AccumCurrentRead[0] << 8 | AccumCurrentRead[1];
+                    return true;
+                }
+                else return false;
+            }
+
+            /// <summary>
+            /// Set accumulated battery current to full-charge state
+            /// </summary>
+            /// <returns>True if request was successful, false otherwise</returns>
+            public bool setBatteryFullChargeState()
+            {
+                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_UPDATE, SetChargeStateFlagRead))
+                {
+                    this.ChargeStateFlag = (SetChargeStateFlagRead[0] > 0);     //true if success
+                    return true; 
+                }
+                else return false;
             }
         }
+
+
+
 
         public class SavedTracks
         {
             //TODO saved tracks class
+            public bool readTracks()
+            {
+                return true;
+            }
         }
 
 
@@ -229,37 +323,10 @@ namespace traqpaq_GUI
             return tester;
         }
 
-        public BatteryVoltage reqBatteryVoltage()
-        {
-            BatteryVoltage bv = new BatteryVoltage();
-            if (!sendCommand(usbCommand.USB_CMD_REQ_BATTERY_VOLTAGE, bv.Value))
-                bv = null;
-            return bv;
-        }
+        
 
-        //TODO battery functions
-/* More battery functions. Consider implementing all of these in one class
-        public byte[] reqBatteryTemp()
-        {
-        }
-
-        public byte[] reqBatteryInstCurrent()
-        {
-        }
-
-        public byte[] reqBatteryAccumCurrent()
-        {
-        }
-
-        public byte[] setBatteryFullChargeState()
-        {
-        }
- */
+        
 /*
-        public byte[] readTracks()
-        {
-        }
-
         public byte[] readRecordTable()
         {
 
@@ -327,7 +394,7 @@ namespace traqpaq_GUI
 
 
 
-
+        /*
         /// <summary>
         /// Sends the command to the device asking for the software versions
         /// </summary>
@@ -347,6 +414,6 @@ namespace traqpaq_GUI
             sendCommand(usbCommand.USB_CMD_READ_RECORDTABLE, readBuffer, 16, 0);
             return readBuffer;
         }
-
+        */
     }
 }

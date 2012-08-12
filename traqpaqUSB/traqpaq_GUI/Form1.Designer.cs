@@ -65,7 +65,7 @@
             // 
             // readRecordTableButton
             // 
-            this.readRecordTableButton.Location = new System.Drawing.Point(12, 107);
+            this.readRecordTableButton.Location = new System.Drawing.Point(197, 198);
             this.readRecordTableButton.Name = "readRecordTableButton";
             this.readRecordTableButton.Size = new System.Drawing.Size(75, 23);
             this.readRecordTableButton.TabIndex = 3;

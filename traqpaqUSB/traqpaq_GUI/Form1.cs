@@ -38,11 +38,13 @@ namespace traqpaq_GUI
             outLabel.Text += "\nHardware Version: " + traqpaq.reqHardwareVersion().ToString();
             outLabel.Text += "\nSerial Number: " + traqpaq.reqSerialNumber().ToString();
             outLabel.Text += "\nTester ID: " + traqpaq.reqTesterID().ToString();
-            outLabel.Text += "\nBattery Voltage: " + traqpaq.reqBatteryVoltage().ToString();
+            traqpaq.battery.reqBatteryVoltage();
+            outLabel.Text += "\nBattery Voltage: " + traqpaq.battery.Voltage;
         }
 
         private void readRecordTableButton_Click(object sender, EventArgs e)
         {
+            /*
             string s = "";
             byte[] recordTable = traqpaq.read_recordtable();
             foreach (byte b in recordTable)
@@ -51,6 +53,7 @@ namespace traqpaq_GUI
             }
 
             MessageBox.Show(s);
+             */
         }
     }
 }
