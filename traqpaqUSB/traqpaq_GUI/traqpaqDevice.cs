@@ -20,6 +20,7 @@ namespace traqpaq_GUI
         ErrorCode ec = ErrorCode.None;
         public const int TIMEOUT = 250;  // timeout in ms
         public Battery battery;
+        public SavedTrackReader trackReader;
 
         /// <summary>
         /// Class constructor for the traq|paq
@@ -43,6 +44,9 @@ namespace traqpaq_GUI
 
             // create the battery object
             this.battery = new Battery(this);
+
+            // create a list of saved tracks
+            this.trackReader = new SavedTrackReader(this);
 
         }
 
@@ -278,15 +282,73 @@ namespace traqpaq_GUI
             }
         }
 
+        public class SavedTrackReader
+        {//TODO saved tracks class            
+            private List<SavedTrack> trackList = new List<SavedTrack>();
+            private TraqpaqDevice traqpaq;
 
-
-
-        public class SavedTracks
-        {
-            //TODO saved tracks class
-            public bool readTracks()
+            public SavedTrackReader(TraqpaqDevice parent)
             {
-                return true;
+                this.traqpaq = parent;
+                // get all the saved tracks and add them to the list
+                getAllTracks();
+            }
+
+            /// <summary>
+            /// Get all the saved tracks on the device and add them to the trackList
+            /// </summary>
+            private void getAllTracks()
+            {
+                bool isEmpty = false;
+                SavedTrack track;
+                short index = 0;
+
+                while (!isEmpty)
+                {   // keep reading tracks until one is empty
+                    track = new SavedTrack(this, index);
+                    trackList.Add(track);
+                    isEmpty = track.isEmpty;
+                    index ++;
+                }
+            }
+
+            private class SavedTrack
+            {
+                private byte[] trackReadBuff = new byte[32];
+                SavedTrackReader parent;
+                short index;
+                public string trackName { get; set; }
+                public int Longitute { get; set; }
+                public int Latitude { get; set; }
+                public short Heading { get; set; }
+                public bool isEmpty { get; set; }
+
+                public SavedTrack(SavedTrackReader parent, short index)
+                {
+                    this.parent = parent;
+                    this.index = index;
+                    readTrack();    // read the track right away
+                }
+                /// <summary>
+                /// Read saved track data from the device
+                /// </summary>
+                /// <returns>True if successful, false if there was an error</returns>
+                public bool readTrack()
+                {
+                    byte upperIndex = (byte)((index >> 8) & 0xFF);
+                    byte lowerIndex = (byte)(index & 0xFF);
+                    if (parent.traqpaq.sendCommand(usbCommand.USB_CMD_READ_SAVED_TRACKS, trackReadBuff, upperIndex, lowerIndex))
+                    {
+                        //var name = new ArraySegment<byte>(trackReadBuff, 0, 20);
+                        trackName = Encoding.ASCII.GetString(trackReadBuff, 0, 20);
+                        Longitute = trackReadBuff[20] << 24 | trackReadBuff[21] << 16 | trackReadBuff[22] << 8 | trackReadBuff[23];
+                        Latitude = trackReadBuff[24] << 24 | trackReadBuff[25] << 16 | trackReadBuff[26] << 8 | trackReadBuff[27];
+                        Heading = (short)(trackReadBuff[28] << 8 | trackReadBuff[29]);
+                        isEmpty = (trackReadBuff[30] == 0xFF);  // true if empty
+                        return true;
+                    }
+                    else return false;
+                }
             }
         }
 
