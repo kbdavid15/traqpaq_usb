@@ -12,7 +12,7 @@ namespace traqpaq_GUI
     public class TraqpaqDevice
     {
         public const byte OTP_SERIAL_LENGTH = 13;
-        int PID, VID;   // use to set the PID and VID for the USB device.this will be used to locate the device
+        int PID, VID;   // use to set the PID and VID for the USB device. will be used to locate the device
         public UsbDevice MyUSBDevice;
         public static UsbDeviceFinder traqpaqDeviceFinder;
         UsbEndpointReader reader;
@@ -52,7 +52,7 @@ namespace traqpaq_GUI
 
         /*************************************************
          * Methods for talking to the device             *
-         * These functions should not be called directly *
+         * sendCommand() should not be called directly   *
          *************************************************/
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace traqpaq_GUI
                     int temp = VoltageRead[0] << 8 | VoltageRead[1];
                     // convert to Volts
                     //TODO convert the voltage to volts
-                    //this.Voltage = temp;
+                    this.Voltage = temp;
                     return true;
                 }
                 else return false;                    
@@ -283,7 +283,7 @@ namespace traqpaq_GUI
         }
 
         public class SavedTrackReader
-        {//TODO saved tracks class            
+        {          
             private List<SavedTrack> trackList = new List<SavedTrack>();
             private TraqpaqDevice traqpaq;
 
@@ -308,7 +308,8 @@ namespace traqpaq_GUI
                     track = new SavedTrack(this, index);
                     if (track.readTrack())
                     {
-                        trackList.Add(track);
+                        if (!track.isEmpty)
+                            trackList.Add(track);   // don't add the track if it is empty
                         isEmpty = track.isEmpty;
                         index++;
                     }
@@ -316,9 +317,15 @@ namespace traqpaq_GUI
                 }
             }
 
-            //TODO use this function to write default saved track info to flash
-            public void writeSavedTracks()
+            //TODO test this function
+            public bool writeSavedTracks()
             {
+                byte[] readBuffer = new byte[1];
+                if (traqpaq.sendCommand(usbCommand.USB_CMD_WRITE_SAVED_TRACKS, readBuffer))
+                {
+                    return readBuffer[0] > 0;
+                }
+                else return false;
             }
 
             private class SavedTrack
@@ -359,18 +366,67 @@ namespace traqpaq_GUI
             }
         }
 
-        public class RecordTable
-        {   //TODO record table class
-            public void readRecordTable()
-            {
+        public class RecordTableReader
+        {   //TODO record table class            
+            TraqpaqDevice traqpaq;
+            List<RecordTable> recordTable = new List<RecordTable>();
 
+            public RecordTableReader(TraqpaqDevice parent)
+            {
+                this.traqpaq = parent;
+            }
+
+            /// <summary>
+            /// An individual record table
+            /// 16 bytes long,
+            /// </summary>
+            private class RecordTable
+            {
+                RecordTableReader parent;
+                byte[] readBuffer = new byte[16];
+                public bool RecordEmpty { get; set; }
+                public int TrackID { get; set; }
+                public int DateStamp { get; set; }
+                public int StartAddress { get; set; }
+                public int EndAddress { get; set; }
+
+                public RecordTable(RecordTableReader parent)
+                {
+                    this.parent = parent;
+                }
+
+                bool readRecordTable(byte index)
+                {
+                    byte length = 16;
+                    if (parent.traqpaq.sendCommand(usbCommand.USB_CMD_READ_RECORDTABLE, readBuffer, length, index))
+                    {   // set all the properties
+                        int idx = 0;
+                        this.RecordEmpty = readBuffer[idx++] == 0xFF;   // true if empty
+                        this.TrackID = readBuffer[idx++];
+                        idx = 4;    // skip 2 reserved bytes
+
+                        
+                        return true;
+                    }
+                    else return false;
+                }
+            }
+
+            /// <summary>
+            /// Populate the record table list
+            /// </summary>
+            /// <returns></returns>
+            public bool readRecordTable()
+            {
+                
+                return false;
             }
         }
 
         public class RecordData
         {   //TODO record data class
-            RecordTable recordTable;
-            public RecordData(RecordTable recordTable)
+            RecordTableReader recordTable;
+            public RecordData(RecordTableReader recordTable)
             {
                 this.recordTable = recordTable;
             }
