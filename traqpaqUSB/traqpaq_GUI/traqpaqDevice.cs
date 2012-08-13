@@ -11,7 +11,16 @@ namespace traqpaq_GUI
 {
     public class TraqpaqDevice
     {
+        #region Constants
         public const byte OTP_SERIAL_LENGTH = 13;
+        public const byte RECORD_DATA_PER_PAGE = 15;
+        public const double BATT_VOLTAGE_FACTOR = 0.00488;       // (Volts)
+        public const double BATT_TEMP_FACTOR = 0.125;            // (°Celsius)
+        public const double BATT_INST_CURRENT_FACTOR = 0.625;    // (mAmps)
+        public const double BATT_ACCUM_CURRENT_FACTOR = 0.25;    // (mAmp hours)
+        public const double SPEED_FACTOR = 0.5144;               // (meters/second)
+        #endregion
+
         int PID, VID;   // use to set the PID and VID for the USB device. will be used to locate the device
         public UsbDevice MyUSBDevice;
         public static UsbDeviceFinder traqpaqDeviceFinder;
@@ -50,11 +59,11 @@ namespace traqpaq_GUI
 
         }
 
+        #region sendCommand
         /*************************************************
          * Methods for talking to the device             *
          * sendCommand() should not be called directly   *
          *************************************************/
-
         /// <summary>
         /// Send command with no command bytes in the writeBuffer
         /// </summary>
@@ -86,7 +95,7 @@ namespace traqpaq_GUI
         ///                            They are appended to the writeBuffer</param>
         /// <returns>False if read or write error. True otherwise.</returns>
         private bool sendCommand(usbCommand cmd, byte[] readBuffer, params byte[] commandBytes)
-        {
+        {   //TODO take the max transfer of 64 bytes into account
             int bytesRead, bytesWritten;
             byte[] writeBuffer = new byte[commandBytes.Length + 1];
             writeBuffer[0] = (byte)cmd;
@@ -105,7 +114,9 @@ namespace traqpaq_GUI
 
             return true;
         }
+        #endregion
 
+        #region tFlashOTP
         /********************************************************
          * Methods for sending commands to the device           *
          * All these methods call the sendCommand() function.   *
@@ -182,6 +193,7 @@ namespace traqpaq_GUI
                 tester = null;
             return tester;
         }
+        #endregion
 
         public class Battery
         {
@@ -211,11 +223,9 @@ namespace traqpaq_GUI
             public bool reqBatteryVoltage()
             {
                 if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_VOLTAGE, VoltageRead))
-                {   // Battery voltage is a word, so concantenate the 2 bytes into an int
-                    int temp = VoltageRead[0] << 8 | VoltageRead[1];
+                {   // Battery voltage is a word, so concantenate the 2 bytes
                     // convert to Volts
-                    //TODO convert the voltage to volts
-                    this.Voltage = temp;
+                    this.Voltage = (VoltageRead[0] << 8 | VoltageRead[1]) * BATT_VOLTAGE_FACTOR;  // measured in volts
                     return true;
                 }
                 else return false;                    
@@ -229,9 +239,7 @@ namespace traqpaq_GUI
             {
                 if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_TEMPERATURE, TemperatureRead))
                 {
-                    //TODO set the Temperature property
-                    int temp = TemperatureRead[0] << 8 | TemperatureRead[1];
-
+                    this.Temperature = (TemperatureRead[0] << 8 | TemperatureRead[1]) * BATT_TEMP_FACTOR; // measured in °C
                     return true;
                 }
                 else return false;
@@ -245,8 +253,7 @@ namespace traqpaq_GUI
             {
                 if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_INSTANT, InstCurrentRead))
                 {
-                    //TODO set the CurrentInst property
-                    int temp = InstCurrentRead[0] << 8 | InstCurrentRead[1];
+                    this.CurrentInst = (InstCurrentRead[0] << 8 | InstCurrentRead[1]) * BATT_INST_CURRENT_FACTOR;
                     return true;
                 }
                 else return false;
@@ -260,8 +267,7 @@ namespace traqpaq_GUI
             {
                 if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_ACCUM, AccumCurrentRead))
                 {
-                    //TODO set the CurrentAccum property
-                    int temp = AccumCurrentRead[0] << 8 | AccumCurrentRead[1];
+                    this.CurrentAccum = (AccumCurrentRead[0] << 8 | AccumCurrentRead[1]) * BATT_ACCUM_CURRENT_FACTOR;
                     return true;
                 }
                 else return false;
@@ -281,6 +287,7 @@ namespace traqpaq_GUI
                 else return false;
             }
         }
+
 
         public class SavedTrackReader
         {          
@@ -336,7 +343,7 @@ namespace traqpaq_GUI
                 public string trackName { get; set; }
                 public int Longitute { get; set; }
                 public int Latitude { get; set; }
-                public short Heading { get; set; }
+                public ushort Heading { get; set; }
                 public bool isEmpty { get; set; }
 
                 public SavedTrack(SavedTrackReader parent, short index)
@@ -357,7 +364,7 @@ namespace traqpaq_GUI
                         trackName = Encoding.ASCII.GetString(trackReadBuff, 0, 20);
                         Longitute = trackReadBuff[20] << 24 | trackReadBuff[21] << 16 | trackReadBuff[22] << 8 | trackReadBuff[23];
                         Latitude = trackReadBuff[24] << 24 | trackReadBuff[25] << 16 | trackReadBuff[26] << 8 | trackReadBuff[27];
-                        Heading = (short)(trackReadBuff[28] << 8 | trackReadBuff[29]);
+                        Heading = (ushort)(trackReadBuff[28] << 8 | trackReadBuff[29]);
                         isEmpty = (trackReadBuff[30] == 0xFF);  // true if empty
                         return true;
                     }
@@ -366,8 +373,9 @@ namespace traqpaq_GUI
             }
         }
 
+
         public class RecordTableReader
-        {   //TODO record table class            
+        {            
             TraqpaqDevice traqpaq;
             List<RecordTable> recordTable = new List<RecordTable>();
 
@@ -378,24 +386,25 @@ namespace traqpaq_GUI
 
             /// <summary>
             /// An individual record table
-            /// 16 bytes long,
+            /// 16 byte struct is returned in the readBuffer.
+            /// The readRecordTable function deciphers the bytes.
             /// </summary>
-            private class RecordTable
+            public class RecordTable
             {
                 RecordTableReader parent;
                 byte[] readBuffer = new byte[16];
                 public bool RecordEmpty { get; set; }
-                public int TrackID { get; set; }
-                public int DateStamp { get; set; }
-                public int StartAddress { get; set; }
-                public int EndAddress { get; set; }
+                public byte TrackID { get; set; }
+                public uint DateStamp { get; set; }
+                public uint StartAddress { get; set; }
+                public uint EndAddress { get; set; }
 
                 public RecordTable(RecordTableReader parent)
                 {
                     this.parent = parent;
                 }
 
-                bool readRecordTable(byte index)
+                public bool readRecordTable(byte index)
                 {
                     byte length = 16;
                     if (parent.traqpaq.sendCommand(usbCommand.USB_CMD_READ_RECORDTABLE, readBuffer, length, index))
@@ -404,8 +413,9 @@ namespace traqpaq_GUI
                         this.RecordEmpty = readBuffer[idx++] == 0xFF;   // true if empty
                         this.TrackID = readBuffer[idx++];
                         idx = 4;    // skip 2 reserved bytes
-
-                        
+                        this.DateStamp = (uint)(readBuffer[idx++] << 24 | readBuffer[idx++] << 16 | readBuffer[idx++] << 8 | readBuffer[idx++]);
+                        this.StartAddress = (uint)(readBuffer[idx++] << 24 | readBuffer[idx++] << 16 | readBuffer[idx++] << 8 | readBuffer[idx++]);
+                        this.EndAddress = (uint)(readBuffer[idx++] << 24 | readBuffer[idx++] << 16 | readBuffer[idx++] << 8 | readBuffer[idx++]);                        
                         return true;
                     }
                     else return false;
@@ -413,32 +423,139 @@ namespace traqpaq_GUI
             }
 
             /// <summary>
-            /// Populate the record table list
+            /// Populate the record table list. Keep reading records until one is empty
             /// </summary>
             /// <returns></returns>
             public bool readRecordTable()
+            {   //TODO test this function
+                bool isEmpty = false;
+                byte index = 0;
+                RecordTable table;
+
+                while (!isEmpty)
+                {
+                    table = new RecordTable(this);
+                    if (table.readRecordTable(index))
+                    {
+                        isEmpty = table.RecordEmpty;
+                        if (!isEmpty)   // only add the table if it is not empty
+                            this.recordTable.Add(table);
+                        index++;
+                    }
+                    else return false;
+                }
+                return true;
+            }
+        }
+
+
+        /// <summary>
+        /// Reads the record data from the device using the start address and
+        /// end address for a record table. This class must be created with a 
+        /// record table object.
+        /// </summary>
+        public class RecordDataReader
+        {   //TODO record data class
+            RecordTableReader.RecordTable recordTable;
+            TraqpaqDevice traqpaq;
+            //public List<RecordDataPage> recordData = new List<RecordDataPage>();
+            public RecordDataPage[] recordData;
+            uint numPages;
+
+            public RecordDataReader(TraqpaqDevice parent, RecordTableReader.RecordTable recordTable)
             {
-                
+                this.traqpaq = parent;
+                this.recordTable = recordTable;
+                // allocate the recordData array, 256 bytes per page
+                this.numPages = (recordTable.EndAddress - recordTable.StartAddress) / 256;
+                this.recordData = new RecordDataPage[numPages];
+            }
+
+            public class RecordDataPage
+            {
+                RecordDataReader parent;
+                byte[] dataPage = new byte[256];
+                public int utc { get; set; }
+                public ushort hdop { get; set; }
+                public byte GPSmode { get; set; }
+                public byte Satellites { get; set; }
+                public tRecordData[] RecordData { get; set; }                
+
+                public RecordDataPage(RecordDataReader parent)
+                {
+                    this.parent = parent;
+                }
+
+                public struct tRecordData
+                {
+                    public int Latitude { get; set; }
+                    public int Longitude { get; set; }
+                    public bool lapDetected { get; set; }
+                    public int Altitude { get; set; }
+                    public double Speed { get; set; }
+                    public int Heading { get; set; }
+                }
+
+                public bool readRecordDataPage(int index)
+                {
+                    ushort length = 256;    // this might not work if max transfer is 64 bytes. may have to modify the sendCommand function
+                    if (parent.traqpaq.sendCommand(usbCommand.USB_CMD_READ_RECORDDATA, dataPage,
+                        (byte)((length >> 8) & 0xFF), (byte)(length & 0xFF), 
+                        (byte)((index >> 8) & 0xFF), (byte)(index & 0xFF)))
+                    {
+                        // extract the data from the dataPage byte array
+                        //TODO convert props to usable value, see GPS decoder ring
+                        int idx = 0;    // use to keep track of the index of the dataPage byte
+                        this.utc = dataPage[idx++] << 24 | dataPage[idx++] << 16 | dataPage[idx++] << 8 | dataPage[idx++];
+                        this.hdop = (ushort)(dataPage[idx++] << 8 | dataPage[idx++]);
+                        this.GPSmode = dataPage[idx++];
+                        this.Satellites = dataPage[idx++];
+                        idx += 8;   // 8 bytes are reserved
+                        // set the array of tRecordData structs
+                        for (int i = 0; i < RECORD_DATA_PER_PAGE; i++)
+                        {
+                            this.RecordData[i].Latitude = dataPage[idx++] << 24 | dataPage[idx++] << 16 | dataPage[idx++] << 8 | dataPage[idx++];
+                            this.RecordData[i].Longitude = dataPage[idx++] << 24 | dataPage[idx++] << 16 | dataPage[idx++] << 8 | dataPage[idx++];
+                            this.RecordData[i].lapDetected = dataPage[idx++] > 0;   // 0x00 means lap not detected. True if lap is detected
+                            idx++;  // reserved byte
+                            this.RecordData[i].Altitude = (dataPage[idx++] << 8 | dataPage[idx++]);
+                            this.RecordData[i].Speed = (dataPage[idx++] << 8 | dataPage[idx++]) * SPEED_FACTOR;
+                            this.RecordData[i].Heading = (dataPage[idx++] << 8 | dataPage[idx++]);
+                        }
+                    }
+                    return true;
+                }
+            }
+
+            /// <summary>
+            /// Read all the pages for a given record
+            /// </summary>
+            /// <returns>True if successful, false otherwise</returns>
+            public bool readRecordData()
+            {
+                for (int i = 0; i < numPages; i++)
+                {
+                    this.recordData[i] = new RecordDataPage(this);
+                    this.recordData[i].readRecordDataPage((int)this.recordTable.StartAddress + (i* 256));
+                }
+
+                return true;
+            }
+
+            /// <summary>
+            /// Erase all recorded data.
+            /// WARNING: Do not call this function until able to record new data to the device!
+            /// </summary>
+            /// <returns>True if successful, false otherwise</returns>
+            public bool eraseAllRecordData()
+            {
+                byte[] readBuffer = new byte[1];
+                if (traqpaq.sendCommand(usbCommand.USB_CMD_ERASE_RECORDDATA, readBuffer))
+                    return readBuffer[0] > 0;   // true if successful
                 return false;
             }
         }
 
-        public class RecordData
-        {   //TODO record data class
-            RecordTableReader recordTable;
-            public RecordData(RecordTableReader recordTable)
-            {
-                this.recordTable = recordTable;
-            }
-            public void readRecordData()
-            {
-            }
-
-            public void eraseAllRecordData()
-            {
-            }
-        }
-                
 /*
         public byte[] writeDefaultPrefs()
         {
@@ -490,28 +607,5 @@ namespace traqpaq_GUI
         }
         */
 
-
-
-        /*
-        /// <summary>
-        /// Sends the command to the device asking for the software versions
-        /// </summary>
-        /// <returns>String with the software major and minor versions</returns>
-        public string get_sw_version()
-        {
-            byte[] sw_version = new byte[2];
-            if (sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, sw_version))
-                return sw_version[0] + "." + sw_version[1];
-            else
-                return "";
-        }
-
-        public byte[] read_recordtable()
-        {
-            byte[] readBuffer = new byte[16];
-            sendCommand(usbCommand.USB_CMD_READ_RECORDTABLE, readBuffer, 16, 0);
-            return readBuffer;
-        }
-        */
     }
 }
