@@ -40,20 +40,13 @@ namespace traqpaq_GUI
             outLabel.Text += "\nTester ID: " + traqpaq.reqTesterID().ToString();
             traqpaq.battery.reqBatteryVoltage();
             outLabel.Text += "\nBattery Voltage: " + traqpaq.battery.Voltage;
+            traqpaq.battery.reqBatteryTemp();
+            outLabel.Text += "\nBattery Temp: " + traqpaq.battery.Temperature;
         }
 
         private void readRecordTableButton_Click(object sender, EventArgs e)
         {
-            /*
-            string s = "";
-            byte[] recordTable = traqpaq.read_recordtable();
-            foreach (byte b in recordTable)
-            {
-                s += b.ToString();
-            }
-
-            MessageBox.Show(s);
-             */
+            
         }
     }
 }
