@@ -30,8 +30,9 @@ namespace traqpaq_GUI
         public const int TIMEOUT = 250;  // timeout in ms
         public Battery battery;
         public SavedTrackReader trackReader;
+        public List<TraqpaqDevice.SavedTrackReader.SavedTrack> trackList { get; set; }
         RecordTableReader tableReader;
-        public List<RecordTableReader.RecordTable> recordTable;
+        public List<RecordTableReader.RecordTable> recordTableList;
         public RecordDataReader dataReader;
 
         /// <summary>
@@ -59,11 +60,12 @@ namespace traqpaq_GUI
 
             // create a saved track reader to get a list of saved tracks
             this.trackReader = new SavedTrackReader(this);
+            this.trackList = trackReader.trackList;
 
             // get the record table data
             tableReader = new RecordTableReader(this);
             tableReader.readRecordTable();
-            this.recordTable = tableReader.recordTable;
+            this.recordTableList = tableReader.recordTable;
 
             //TODO figure out how to use the record data reader class
 
@@ -301,7 +303,7 @@ namespace traqpaq_GUI
 
         public class SavedTrackReader
         {          
-            private List<SavedTrack> trackList = new List<SavedTrack>();
+            public List<SavedTrack> trackList = new List<SavedTrack>();
             private TraqpaqDevice traqpaq;
 
             public SavedTrackReader(TraqpaqDevice parent)
@@ -345,7 +347,7 @@ namespace traqpaq_GUI
                 else return false;
             }
 
-            private class SavedTrack
+            public class SavedTrack
             {
                 private byte[] trackReadBuff = new byte[32];
                 SavedTrackReader parent;

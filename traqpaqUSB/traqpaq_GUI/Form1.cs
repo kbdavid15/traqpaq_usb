@@ -18,6 +18,7 @@ namespace traqpaq_GUI
             InitializeComponent();
             // once the form is loaded, connect to the USB device
             this.traqpaq = new TraqpaqDevice();
+            populateListView();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -36,7 +37,7 @@ namespace traqpaq_GUI
             //outLabel.Text += " " + traqpaq.get_sw_version();
             outLabel.Text += "" + traqpaq.reqApplicationVersion().ToString();
             outLabel.Text += "\nHardware Version: " + traqpaq.reqHardwareVersion().ToString();
-            outLabel.Text += "\nSerial Number: " + traqpaq.reqSerialNumber().ToString();
+            outLabel.Text += "\nSerial#: " + traqpaq.reqSerialNumber().ToString();
             outLabel.Text += "\nTester ID: " + traqpaq.reqTesterID().ToString();
             traqpaq.battery.reqBatteryVoltage();
             outLabel.Text += "\nBattery Voltage: " + traqpaq.battery.Voltage;
@@ -44,9 +45,25 @@ namespace traqpaq_GUI
             outLabel.Text += "\nBattery Temp: " + traqpaq.battery.Temperature;
         }
 
+        private void populateListView()
+        {
+            ListViewItem lViewItem;
+            string[] lViewConstruct;
+            foreach (TraqpaqDevice.RecordTableReader.RecordTable table in traqpaq.recordTableList)
+            {
+                lViewConstruct = new string[] { table.TrackID.ToString(),
+                    traqpaq.trackList[table.TrackID].trackName, traqpaq.recordTableList.IndexOf(table).ToString(), 
+                    table.DateStamp.ToString(), table.StartAddress.ToString(), table.EndAddress.ToString() };
+                lViewItem = new ListViewItem(lViewConstruct);
+                lViewItem.Tag = table;
+                listView1.Items.Add(lViewItem);
+            }
+        }
+
         private void readRecordTableButton_Click(object sender, EventArgs e)
         {
-            
+            // get the selected list view object
+
         }
     }
 }
