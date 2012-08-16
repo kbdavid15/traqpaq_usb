@@ -107,7 +107,7 @@ namespace traqpaq_GUI
         ///                            They are appended to the writeBuffer</param>
         /// <returns>False if read or write error. True otherwise.</returns>
         private bool sendCommand(usbCommand cmd, byte[] readBuffer, params byte[] commandBytes)
-        {   //TODO take the max transfer of 64 bytes into account
+        {   
             int bytesRead, bytesWritten;
             byte[] writeBuffer = new byte[commandBytes.Length + 1];
             writeBuffer[0] = (byte)cmd;
@@ -124,6 +124,27 @@ namespace traqpaq_GUI
             if (this.ec != ErrorCode.None)
                 return false;
 
+            return true;
+        }
+        
+        private bool readRecordData(byte[] readBuffer, ushort length, ushort index)
+        {
+            int bytesRead, bytesWritten;
+            byte[] writeBuffer = { (byte)usbCommand.USB_CMD_READ_RECORDDATA, (byte)((length >> 8) & 0xFF),
+                                     (byte)(length & 0xFF), (byte)((index >> 8) & 0xFF), (byte)(index & 0xFF) };
+
+            this.ec = writer.Write(writeBuffer, TIMEOUT, out bytesWritten);
+            if (this.ec != ErrorCode.None)
+                return false;
+            // now read the response 64 bytes at a time
+            int i = 0;
+            while (i < length)
+            {
+                this.ec = reader.Read(readBuffer, i, 64, TIMEOUT, out bytesRead);
+                if (this.ec != ErrorCode.None)
+                    return false;
+                i += 64;
+            }
             return true;
         }
         #endregion
@@ -510,10 +531,8 @@ namespace traqpaq_GUI
 
                 public bool readRecordDataPage(int index)
                 {
-                    ushort length = 256;    // this might not work if max transfer is 64 bytes. may have to modify the sendCommand function
-                    if (parent.traqpaq.sendCommand(usbCommand.USB_CMD_READ_RECORDDATA, dataPage,
-                        (byte)((length >> 8) & 0xFF), (byte)(length & 0xFF), 
-                        (byte)((index >> 8) & 0xFF), (byte)(index & 0xFF)))
+                    ushort length = 256;
+                    if (parent.traqpaq.readRecordData(dataPage, length, (ushort)index))
                     {
                         // extract the data from the dataPage byte array
                         //TODO convert props to usable value, see GPS decoder ring
@@ -550,7 +569,6 @@ namespace traqpaq_GUI
                     this.recordData[i] = new RecordDataPage(this);
                     this.recordData[i].readRecordDataPage((int)this.recordTable.StartAddress + (i* 256));
                 }
-
                 return true;
             }
 

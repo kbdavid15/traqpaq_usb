@@ -63,7 +63,13 @@ namespace traqpaq_GUI
         private void readRecordTableButton_Click(object sender, EventArgs e)
         {
             // get the selected list view object
-
+            TraqpaqDevice.RecordTableReader.RecordTable table;
+            if (listView1.SelectedItems.Count == 1)
+                table = (TraqpaqDevice.RecordTableReader.RecordTable)listView1.SelectedItems[0].Tag;
+            else return;
+            TraqpaqDevice.RecordDataReader dataReader = new TraqpaqDevice.RecordDataReader(traqpaq, table);
+            dataReader.readRecordData();
+            //TODO use the data reader
         }
     }
 }
