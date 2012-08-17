@@ -30,4 +30,12 @@ namespace traqpaq_GUI
         USB_DBG_GPS_LONGITUDE = 0x41,
         USB_DBG_GPS_COURSE = 0x42,
     }
+
+    /// <summary>
+    /// Used as a container for constants
+    /// </summary>
+    public static class Constants
+    {
+        //TODO create constant class
+    }
 }

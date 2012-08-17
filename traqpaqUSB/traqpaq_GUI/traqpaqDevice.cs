@@ -19,6 +19,9 @@ namespace traqpaq_GUI
         public const double BATT_INST_CURRENT_FACTOR = 0.625;    // (mAmps)
         public const double BATT_ACCUM_CURRENT_FACTOR = 0.25;    // (mAmp hours)
         public const double SPEED_FACTOR = 0.5144;               // (meters/second)
+        public const int TIMEOUT = 250;                          // usb timeout in ms
+        //TODO see if the bit converter function Dad found works better than LSLs and LSRs
+        // then add more constants, similar to Ryan's memory map, in a separate class
         #endregion
 
         int PID, VID;   // use to set the PID and VID for the USB device. will be used to locate the device
@@ -26,14 +29,14 @@ namespace traqpaq_GUI
         public static UsbDeviceFinder traqpaqDeviceFinder;
         UsbEndpointReader reader;
         UsbEndpointWriter writer;
-        ErrorCode ec = ErrorCode.None;
-        public const int TIMEOUT = 250;  // timeout in ms
+        ErrorCode ec = ErrorCode.None;        
         public Battery battery;
         public SavedTrackReader trackReader;
         public List<TraqpaqDevice.SavedTrackReader.SavedTrack> trackList { get; set; }
         RecordTableReader tableReader;
         public List<RecordTableReader.RecordTable> recordTableList;
         public RecordDataReader dataReader;
+        public OTPreader myOTPreader { get; set; }
 
         /// <summary>
         /// Class constructor for the traq|paq
@@ -57,6 +60,9 @@ namespace traqpaq_GUI
 
             // create the battery object
             this.battery = new Battery(this);
+
+            // create the otp reader object
+            this.myOTPreader = new OTPreader(this);
 
             // create a saved track reader to get a list of saved tracks
             this.trackReader = new SavedTrackReader(this);
@@ -155,76 +161,92 @@ namespace traqpaq_GUI
          * All these methods call the sendCommand() function.   *
          * These should be used to access the device.           *
          ********************************************************/
-        public class ApplicationVersion
+        public class OTPreader
         {
-            public byte[] Value = new byte[2];
-            public ApplicationVersion() { }            
-            public override string ToString()
+            private TraqpaqDevice parent;
+            public string ApplicationVersion { get; set; }
+            public string HardwareVersion { get; set; }
+            public string SerialNumber { get; set; }
+            public string TesterID { get; set; }
+
+            public OTPreader(TraqpaqDevice parent) { this.parent = parent; }
+
+            public bool reqApplicationVersion()
             {
-                return Value[0] + "." + Value[1];
-            }            
-        }
+                byte[] readBuff = new byte[2];
+                if (parent.sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, readBuff))
+                {
+                    this.ApplicationVersion = readBuff[0] + "." + readBuff[1];
+                    return true;
+                }
+                else return false;
+            }
 
-        public class HardwareVersion
-        {
-            public byte[] Value = new byte[1];
-            public HardwareVersion() { }
-            public override string ToString()
+            public bool reqHardwareVersion()
             {
-                return Value[0].ToString();
+                byte[] readBuff = new byte[1];
+                if (parent.sendCommand(usbCommand.USB_CMD_REQ_HARDWARE_VER, readBuff))
+                {
+                    this.HardwareVersion = readBuff[0].ToString();
+                    return true;
+                }
+                else return false;
             }
-        }
 
-        public class SerialNumber
-        {
-            public byte[] Value = new byte[OTP_SERIAL_LENGTH];
-            public SerialNumber() { }
-            public override string ToString()
-            {   // value is in ASCII
-                return Encoding.ASCII.GetString(Value);
-            }
-        }
-
-        public class TesterID
-        {
-            public byte[] Value = new byte[1];
-            public TesterID() { }
-            public override string ToString()
+            public bool reqSerialNumber()
             {
-                return Value[0].ToString();
+                byte[] readBuff = new byte[OTP_SERIAL_LENGTH];
+                if (parent.sendCommand(usbCommand.USB_CMD_REQ_SERIAL_NUMBER, readBuff))
+                {
+                    this.SerialNumber = Encoding.ASCII.GetString(readBuff);
+                    return true;
+                }
+                else return false;
             }
-        }
 
-        public ApplicationVersion reqApplicationVersion()
-        {
-            ApplicationVersion version = new ApplicationVersion();
-            if (!sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, version.Value))
-                version = null;
-            return version;
-        }
+            /// <summary>
+            /// Request end-of-line Tester ID
+            /// </summary>
+            /// <returns></returns>
+            public bool reqTesterID()
+            {
+                byte[] readBuff = new byte[1];
+                if (parent.sendCommand(usbCommand.USB_CMD_REQ_TESTER_ID, readBuff))
+                {
+                    this.TesterID = readBuff[0].ToString();
+                    return true;
+                }
+                else return false;
+            }
 
-        public HardwareVersion reqHardwareVersion()
-        {
-            HardwareVersion version = new HardwareVersion();
-            if (!sendCommand(usbCommand.USB_CMD_REQ_HARDWARE_VER, version.Value))
-                version = null;
-            return version;
-        }
+            /// <summary>
+            /// Read specified bytes from flash OTP
+            /// </summary>
+            /// <param name="length">Number of bytes to read</param>
+            /// <param name="index">Byte index to start reading from</param>
+            /// <returns></returns>
+            public byte[] readOTP(byte length, byte index)
+            {
+                byte[] readBuff = new byte[length];
+                if (parent.sendCommand(usbCommand.USB_CMD_READ_OTP, readBuff, length, index))
+                {
+                    //TODO figure out how to return this value
+                    return readBuff;
+                }
+                return readBuff;
+            }
 
-        public SerialNumber reqSerialNumber()
-        {
-            SerialNumber sn = new SerialNumber();
-            if (!sendCommand(usbCommand.USB_CMD_REQ_SERIAL_NUMBER, sn.Value))
-                sn = null;
-            return sn;
-        }
-
-        public TesterID reqTesterID()
-        {
-            TesterID tester = new TesterID();
-            if (!sendCommand(usbCommand.USB_CMD_REQ_TESTER_ID, tester.Value))
-                tester = null;
-            return tester;
+            /// <summary>
+            /// Write fixed data in flash OTP
+            /// </summary>
+            public void writeOTP()
+            {
+                byte[] readBuff = new byte[256]; // don't know how big to make the buffer
+                if (parent.sendCommand(usbCommand.USB_CMD_WRITE_OTP, readBuff))
+                {
+                    //TODO learn more about this function
+                }                
+            }
         }
         #endregion
 
@@ -259,6 +281,7 @@ namespace traqpaq_GUI
                 {   // Battery voltage is a word, so concantenate the 2 bytes
                     // convert to Volts
                     this.Voltage = (VoltageRead[0] << 8 | VoltageRead[1]) * BATT_VOLTAGE_FACTOR;  // measured in volts
+                    //this.Voltage = BitConverter.ToUInt16(VoltageRead, 0); // check that this will produce the same result
                     return true;
                 }
                 else return false;                    
@@ -586,55 +609,111 @@ namespace traqpaq_GUI
             }
         }
 
-/*
-        public byte[] writeDefaultPrefs()
+        /// <summary>
+        /// Write the default user preferences to flash.
+        /// </summary>
+        /// <returns>True if successful, false otherwise</returns>
+        public bool writeDefaultPrefs()
         {
+            byte[] readBuff = new byte[1];
+            if (sendCommand(usbCommand.USB_CMD_WRITE_USERPREFS, readBuff))
+                return readBuff[0] > 0x00;  //TODO verify that this is the correct value for success
+            else return false;
         }
 
-        
-
-        public byte[] readOTP()
+        #region Debug functions
+        /// <summary>
+        /// Erase flash sector
+        /// </summary>
+        /// <param name="index">Index of sector to erase</param>
+        /// <returns>True if successful, false otherwise</returns>
+        public bool eraseFlash(byte index)
         {
-
+            byte[] readBuff = new byte[1];
+            if (sendCommand(usbCommand.USB_DBG_DF_SECTOR_ERASE, readBuff, index))
+                return readBuff[0] > 0x00;  //TODO verify that this is the correct value for success
+            else return false;
         }
 
-        public byte[] writeOTP()
+        /// <summary>
+        /// Check if flash is busy with at read or write operation
+        /// </summary>
+        /// <returns>True if busy, false otherwise</returns>
+        public bool isFlashBusy()
         {
+            byte[] readBuff = new byte[1];
+            if (sendCommand(usbCommand.USB_DBG_DF_BUSY, readBuff))
+                return readBuff[0] > 0x00;  //TODO verify that this is the correct value for busy
+            else return false;
         }
 
-        public byte[] eraseFlash()
+        /// <summary>
+        /// Erase entire flash
+        /// </summary>
+        /// <returns>True if success, false otherwise</returns>
+        public bool eraseChip()
         {
+            byte[] readBuff = new byte[1];
+            if (sendCommand(usbCommand.USB_DBG_DF_CHIP_ERASE, readBuff))
+                return readBuff[0] > 0x00;  //TODO verify that this is the correct value for success
+            else return false;
         }
 
-        public byte[] isFlashBusy()
+        public bool isFlashFull()
         {
+            byte[] readBuff = new byte[1];
+            if (sendCommand(usbCommand.USB_DBG_DF_IS_FLASH_FULL, readBuff))
+                return readBuff[0] > 0x00;  //TODO verify that this is the correct value for success
+            else return false;
         }
 
-        public byte[] eraseChip()
+        /// <summary>
+        /// Get percentage of used space in flash
+        /// </summary>
+        /// <returns>Percentage of used space, or -1 if request fails</returns>
+        public int getFlashPercentUsed()
         {
-
+            byte[] readBuff = new byte[1];
+            if (sendCommand(usbCommand.USB_DBG_DF_USED_SPACE, readBuff))
+                return readBuff[0];  //TODO verify that this is the correct value for success
+            else return -1;
         }
 
-        public byte[] isFlashFull()
+        /// <summary>
+        /// Read the last received GPS latitude
+        /// </summary>
+        /// <returns>The last GPS latitude as unsigned integer, or 0 if request fails</returns>
+        public uint getLastGPS_lat()
         {
+            byte[] readBuff = new byte[4];
+            if (sendCommand(usbCommand.USB_DBG_GPS_LATITUDE, readBuff))
+                return BitConverter.ToUInt32(readBuff, 0);
+            else return 0;
         }
 
-        public byte[] getFlashPercentUsed()
+        /// <summary>
+        /// Read the last received GPS longitude
+        /// </summary>
+        /// <returns>The last GPS longitude as unsigned integer, or 0 if request fails</returns>
+        public uint getLastGPS_long()
         {
+            byte[] readBuff = new byte[4];
+            if (sendCommand(usbCommand.USB_DBG_GPS_LONGITUDE, readBuff))
+                return BitConverter.ToUInt32(readBuff, 0);
+            else return 0;
         }
 
-        public byte[] getLastGPS_lat()
+        /// <summary>
+        /// Read the last received GPS heading
+        /// </summary>
+        /// <returns>The last GPS heading as unsigned integer, or 0 if request fails</returns>
+        public uint getLastGPS_heading()
         {
+            byte[] readBuff = new byte[4];
+            if (sendCommand(usbCommand.USB_DBG_GPS_COURSE, readBuff))
+                return BitConverter.ToUInt32(readBuff, 0);
+            else return 0;
         }
-
-        public byte[] getLastGPS_long()
-        {
-        }
-
-        public byte[] getLastGPS_heading()
-        {
-
-        }
-        */
+        #endregion
     }
 }

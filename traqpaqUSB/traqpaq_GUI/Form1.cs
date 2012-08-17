@@ -35,10 +35,14 @@ namespace traqpaq_GUI
         private void versionButton_Click(object sender, EventArgs e)
         {
             //outLabel.Text += " " + traqpaq.get_sw_version();
-            outLabel.Text += "" + traqpaq.reqApplicationVersion().ToString();
+            /*outLabel.Text += "" + traqpaq.reqApplicationVersion().ToString();
             outLabel.Text += "\nHardware Version: " + traqpaq.reqHardwareVersion().ToString();
             outLabel.Text += "\nSerial#: " + traqpaq.reqSerialNumber().ToString();
             outLabel.Text += "\nTester ID: " + traqpaq.reqTesterID().ToString();
+            */
+            outLabel.Text += traqpaq.myOTPreader.ApplicationVersion;
+            //TODO consider scrapping this subclass and make it part of the traqpaqDevice class
+
             traqpaq.battery.reqBatteryVoltage();
             outLabel.Text += "\nBattery Voltage: " + traqpaq.battery.Voltage;
             traqpaq.battery.reqBatteryTemp();
