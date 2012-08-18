@@ -280,8 +280,11 @@ namespace traqpaq_GUI
                 if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_VOLTAGE, VoltageRead))
                 {   // Battery voltage is a word, so concantenate the 2 bytes
                     // convert to Volts
-                    this.Voltage = (VoltageRead[0] << 8 | VoltageRead[1]) * BATT_VOLTAGE_FACTOR;  // measured in volts
-                    //this.Voltage = BitConverter.ToUInt16(VoltageRead, 0); // check that this will produce the same result
+                    //this.Voltage = (VoltageRead[0] << 8 | VoltageRead[1]) * BATT_VOLTAGE_FACTOR;  // measured in volts
+                    this.Voltage = BitConverter.ToUInt16(VoltageRead, 0) * BATT_VOLTAGE_FACTOR; // check that this will produce the same result
+                    Array.Reverse(VoltageRead); // this computer is little endian
+                    this.Voltage = BitConverter.ToUInt16(VoltageRead, 0) * BATT_VOLTAGE_FACTOR;
+                    
                     return true;
                 }
                 else return false;                    
