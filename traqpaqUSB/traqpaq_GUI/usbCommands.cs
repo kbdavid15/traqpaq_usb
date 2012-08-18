@@ -2,7 +2,7 @@
 
 namespace traqpaq_GUI
 {
-    public enum usbCommand : byte
+    public enum USBcommand : byte
     {
         USB_CMD_REQ_APPL_VER = 0x00,
         USB_CMD_REQ_HARDWARE_VER = 0x01,
@@ -31,11 +31,77 @@ namespace traqpaq_GUI
         USB_DBG_GPS_COURSE = 0x42,
     }
 
-    /// <summary>
-    /// Used as a container for constants
-    /// </summary>
     public static class Constants
     {
-        //TODO create constant class
+        // Dataflash Page Size
+        public const int MEMORY_PAGE_SIZE = 256;
+
+        // OTP
+        public const byte OTP_SERIAL_LENGTH = 13;
+
+        // Memory Layout
+        public const int ADDR_USER_PREFS_START = 0x00000000;
+        public const int ADDR_USER_PREFS_END = 0x000000FF;
+        public const int ADDR_RECORD_TABLE_START = 0x00000100;
+        public const int ADDR_RECORD_TABLE_END = 0x00000FFF;
+        public const int ADDR_TRACKLIST_START = 0x00001000;
+        public const int ADDR_TRACKLIST_END = 0x00001FFF;
+        public const int ADDR_RECORD_DATA_START = 0x00002000;
+        public const int ADDR_RECORD_DATA_END = 0x001FFFFF;
+
+        // Record Table Size
+        public const int RECORD_TABLE_SIZE = 16;
+
+        // Record Table Offsets
+        public const int RECORD_EMPTY = 0;
+        public const int RECORD_TRACK_ID = 1;
+        public const int RECORD_DATESTAMP = 4;
+        public const int RECORD_START_ADDRESS = 8;
+        public const int RECORD_END_ADDRESS = 12;
+
+        // Record Page Info Size
+        public const int RECORD_PAGE_INFO_SIZE = 16;
+
+        // Record Page Info Offsets
+        public const int RECORD_DATA_UTC = 0;
+        public const int RECORD_DATA_HDOP = 4;
+        public const int RECORD_DATA_MODE = 6;
+        public const int RECORD_DATA_SATELLITES = 7;
+
+        // Record Data Size
+        public const int RECORD_DATA_SIZE = 16;
+        public const int RECORD_DATA_PER_PAGE = 15;
+
+
+        // Record Data Offsets (to be multiplied by the index of the tRecordData struct)
+        public const int RECORD_DATA_LATITUDE = 16;
+        public const int RECORD_DATA_LONGITUDE = 20;
+        public const int RECORD_DATA_LAP_DETECTED = 24;
+        public const int RECORD_DATA_ALTITUDE = 26;
+        public const int RECORD_DATA_SPEED = 28;
+        public const int RECORD_DATA_COURSE = 30;
+
+
+        // TRACK LIST
+        public const int TRACKLIST_SIZE = 32;	// Size of Tracklist struct - 32 bytes
+
+        public const int TRACKLIST_NAME = 0;
+        public const int TRACKLIST_NAME_STRLEN = 20;
+
+        public const int TRACKLIST_LONGITUDE = 20;
+        public const int TRACKLIST_LATITUDE = 24;
+        public const int TRACKLIST_COURSE = 28;
+        public const int TRACKLIST_ISEMPTY = 30;
+
+
+        //Conversion factors
+        public const double BATT_VOLTAGE_FACTOR = 0.00488;       // (Volts)
+        public const double BATT_TEMP_FACTOR = 0.125;            // (°Celsius)
+        public const double BATT_INST_CURRENT_FACTOR = 0.625;    // (mAmps)
+        public const double BATT_ACCUM_CURRENT_FACTOR = 0.25;    // (mAmp hours)
+        public const double SPEED_FACTOR = 0.5144;               // (meters/second)
+        
+        
+        public const int TIMEOUT = 250;                          // usb timeout in ms
     }
 }

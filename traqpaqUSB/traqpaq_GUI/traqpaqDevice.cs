@@ -11,19 +11,6 @@ namespace traqpaq_GUI
 {
     public class TraqpaqDevice
     {
-        #region Constants
-        public const byte OTP_SERIAL_LENGTH = 13;
-        public const byte RECORD_DATA_PER_PAGE = 15;
-        public const double BATT_VOLTAGE_FACTOR = 0.00488;       // (Volts)
-        public const double BATT_TEMP_FACTOR = 0.125;            // (°Celsius)
-        public const double BATT_INST_CURRENT_FACTOR = 0.625;    // (mAmps)
-        public const double BATT_ACCUM_CURRENT_FACTOR = 0.25;    // (mAmp hours)
-        public const double SPEED_FACTOR = 0.5144;               // (meters/second)
-        public const int TIMEOUT = 250;                          // usb timeout in ms
-        //TODO see if the bit converter function Dad found works better than LSLs and LSRs
-        // then add more constants, similar to Ryan's memory map, in a separate class
-        #endregion
-
         int PID, VID;   // use to set the PID and VID for the USB device. will be used to locate the device
         public UsbDevice MyUSBDevice;
         public static UsbDeviceFinder traqpaqDeviceFinder;
@@ -88,17 +75,16 @@ namespace traqpaq_GUI
         /// <param name="cmd">USB command</param>
         /// <param name="readBuffer">Pre-allocated byte array</param>
         /// <returns>False if read or write error. True otherwise</returns>
-        private bool sendCommand(usbCommand cmd, byte[] readBuffer)
+        private bool sendCommand(USBcommand cmd, byte[] readBuffer)
         {
             int bytesRead, bytesWritten;
-
             byte[] writeBuffer = { (byte)cmd };
 
-            this.ec = writer.Write(writeBuffer, TIMEOUT, out bytesWritten);
+            this.ec = writer.Write(writeBuffer, Constants.TIMEOUT, out bytesWritten);
             if (this.ec != ErrorCode.None)
                 return false;
 
-            this.ec = reader.Read(readBuffer, TIMEOUT, out bytesRead);
+            this.ec = reader.Read(readBuffer, Constants.TIMEOUT, out bytesRead);
             if (this.ec != ErrorCode.None)
                 return false;
             return true;
@@ -112,7 +98,7 @@ namespace traqpaq_GUI
         /// <param name="commandBytes">command bytes passed in order from byte0..byte1..byte(n)
         ///                            They are appended to the writeBuffer</param>
         /// <returns>False if read or write error. True otherwise.</returns>
-        private bool sendCommand(usbCommand cmd, byte[] readBuffer, params byte[] commandBytes)
+        private bool sendCommand(USBcommand cmd, byte[] readBuffer, params byte[] commandBytes)
         {   
             int bytesRead, bytesWritten;
             byte[] writeBuffer = new byte[commandBytes.Length + 1];
@@ -122,11 +108,11 @@ namespace traqpaq_GUI
                 writeBuffer[i+1] = commandBytes[i];
             }
 
-            this.ec = writer.Write(writeBuffer, TIMEOUT, out bytesWritten);
+            this.ec = writer.Write(writeBuffer, Constants.TIMEOUT, out bytesWritten);
             if (this.ec != ErrorCode.None)
                 return false;
 
-            this.ec = reader.Read(readBuffer, TIMEOUT, out bytesRead);
+            this.ec = reader.Read(readBuffer, Constants.TIMEOUT, out bytesRead);
             if (this.ec != ErrorCode.None)
                 return false;
 
@@ -136,17 +122,17 @@ namespace traqpaq_GUI
         private bool readRecordData(byte[] readBuffer, ushort length, ushort index)
         {
             int bytesRead, bytesWritten;
-            byte[] writeBuffer = { (byte)usbCommand.USB_CMD_READ_RECORDDATA, (byte)((length >> 8) & 0xFF),
+            byte[] writeBuffer = { (byte)USBcommand.USB_CMD_READ_RECORDDATA, (byte)((length >> 8) & 0xFF),
                                      (byte)(length & 0xFF), (byte)((index >> 8) & 0xFF), (byte)(index & 0xFF) };
 
-            this.ec = writer.Write(writeBuffer, TIMEOUT, out bytesWritten);
+            this.ec = writer.Write(writeBuffer, Constants.TIMEOUT, out bytesWritten);
             if (this.ec != ErrorCode.None)
                 return false;
             // now read the response 64 bytes at a time
             int i = 0;
             while (i < length)
             {
-                this.ec = reader.Read(readBuffer, i, 64, TIMEOUT, out bytesRead);
+                this.ec = reader.Read(readBuffer, i, 64, Constants.TIMEOUT, out bytesRead);
                 if (this.ec != ErrorCode.None)
                     return false;
                 i += 64;
@@ -174,7 +160,7 @@ namespace traqpaq_GUI
             public bool reqApplicationVersion()
             {
                 byte[] readBuff = new byte[2];
-                if (parent.sendCommand(usbCommand.USB_CMD_REQ_APPL_VER, readBuff))
+                if (parent.sendCommand(USBcommand.USB_CMD_REQ_APPL_VER, readBuff))
                 {
                     this.ApplicationVersion = readBuff[0] + "." + readBuff[1];
                     return true;
@@ -185,7 +171,7 @@ namespace traqpaq_GUI
             public bool reqHardwareVersion()
             {
                 byte[] readBuff = new byte[1];
-                if (parent.sendCommand(usbCommand.USB_CMD_REQ_HARDWARE_VER, readBuff))
+                if (parent.sendCommand(USBcommand.USB_CMD_REQ_HARDWARE_VER, readBuff))
                 {
                     this.HardwareVersion = readBuff[0].ToString();
                     return true;
@@ -195,8 +181,8 @@ namespace traqpaq_GUI
 
             public bool reqSerialNumber()
             {
-                byte[] readBuff = new byte[OTP_SERIAL_LENGTH];
-                if (parent.sendCommand(usbCommand.USB_CMD_REQ_SERIAL_NUMBER, readBuff))
+                byte[] readBuff = new byte[Constants.OTP_SERIAL_LENGTH];
+                if (parent.sendCommand(USBcommand.USB_CMD_REQ_SERIAL_NUMBER, readBuff))
                 {
                     this.SerialNumber = Encoding.ASCII.GetString(readBuff);
                     return true;
@@ -211,7 +197,7 @@ namespace traqpaq_GUI
             public bool reqTesterID()
             {
                 byte[] readBuff = new byte[1];
-                if (parent.sendCommand(usbCommand.USB_CMD_REQ_TESTER_ID, readBuff))
+                if (parent.sendCommand(USBcommand.USB_CMD_REQ_TESTER_ID, readBuff))
                 {
                     this.TesterID = readBuff[0].ToString();
                     return true;
@@ -228,7 +214,7 @@ namespace traqpaq_GUI
             public byte[] readOTP(byte length, byte index)
             {
                 byte[] readBuff = new byte[length];
-                if (parent.sendCommand(usbCommand.USB_CMD_READ_OTP, readBuff, length, index))
+                if (parent.sendCommand(USBcommand.USB_CMD_READ_OTP, readBuff, length, index))
                 {
                     //TODO figure out how to return this value
                     return readBuff;
@@ -242,7 +228,7 @@ namespace traqpaq_GUI
             public void writeOTP()
             {
                 byte[] readBuff = new byte[256]; // don't know how big to make the buffer
-                if (parent.sendCommand(usbCommand.USB_CMD_WRITE_OTP, readBuff))
+                if (parent.sendCommand(USBcommand.USB_CMD_WRITE_OTP, readBuff))
                 {
                     //TODO learn more about this function
                 }                
@@ -277,17 +263,12 @@ namespace traqpaq_GUI
             /// <returns>True if request was successful, false otherwise</returns>
             public bool reqBatteryVoltage()
             {
-                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_VOLTAGE, VoltageRead))
-                {   // Battery voltage is a word, so concantenate the 2 bytes
-                    // convert to Volts
-                    //this.Voltage = (VoltageRead[0] << 8 | VoltageRead[1]) * BATT_VOLTAGE_FACTOR;  // measured in volts
-                    this.Voltage = BitConverter.ToUInt16(VoltageRead, 0) * BATT_VOLTAGE_FACTOR; // check that this will produce the same result
-                    Array.Reverse(VoltageRead); // this computer is little endian
-                    this.Voltage = BitConverter.ToUInt16(VoltageRead, 0) * BATT_VOLTAGE_FACTOR;
-                    
+                if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_VOLTAGE, VoltageRead))
+                {   // convert to Volts
+                    this.Voltage = BetterBitConverter.ToUInt16(VoltageRead, 0) * Constants.BATT_VOLTAGE_FACTOR;                    
                     return true;
                 }
-                else return false;                    
+                else return false;
             }
 
             /// <summary>
@@ -296,9 +277,9 @@ namespace traqpaq_GUI
             /// <returns>True if request was successful, false otherwise</returns>
             public bool reqBatteryTemp()
             {
-                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_TEMPERATURE, TemperatureRead))
+                if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_TEMPERATURE, TemperatureRead))
                 {
-                    this.Temperature = (TemperatureRead[0] << 8 | TemperatureRead[1]) * BATT_TEMP_FACTOR; // measured in °C
+                    this.Temperature = BetterBitConverter.ToUInt16(TemperatureRead, 0) * Constants.BATT_TEMP_FACTOR; // measured in °C
                     return true;
                 }
                 else return false;
@@ -310,9 +291,9 @@ namespace traqpaq_GUI
             /// <returns>True if request was successful, false otherwise</returns>
             public bool reqBatteryInstCurrent()
             {
-                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_INSTANT, InstCurrentRead))
+                if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_INSTANT, InstCurrentRead))
                 {
-                    this.CurrentInst = (InstCurrentRead[0] << 8 | InstCurrentRead[1]) * BATT_INST_CURRENT_FACTOR;
+                    this.CurrentInst = BetterBitConverter.ToUInt16(InstCurrentRead, 0) * Constants.BATT_INST_CURRENT_FACTOR;
                     return true;
                 }
                 else return false;
@@ -324,9 +305,9 @@ namespace traqpaq_GUI
             /// <returns>True if request was successful, false otherwise</returns>
             public bool reqBatteryAccumCurrent()
             {
-                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_ACCUM, AccumCurrentRead))
+                if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_ACCUM, AccumCurrentRead))
                 {
-                    this.CurrentAccum = (AccumCurrentRead[0] << 8 | AccumCurrentRead[1]) * BATT_ACCUM_CURRENT_FACTOR;
+                    this.CurrentAccum = BetterBitConverter.ToUInt16(AccumCurrentRead, 0) * Constants.BATT_ACCUM_CURRENT_FACTOR;
                     return true;
                 }
                 else return false;
@@ -338,7 +319,7 @@ namespace traqpaq_GUI
             /// <returns>True if request was successful, false otherwise</returns>
             public bool setBatteryFullChargeState()
             {
-                if (traqpaq.sendCommand(usbCommand.USB_CMD_REQ_BATTERY_UPDATE, SetChargeStateFlagRead))
+                if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_UPDATE, SetChargeStateFlagRead))
                 {
                     this.ChargeStateFlag = (SetChargeStateFlagRead[0] > 0);     //true if success
                     return true; 
@@ -367,7 +348,7 @@ namespace traqpaq_GUI
             {
                 bool isEmpty = false;
                 SavedTrack track;
-                short index = 0;
+                ushort index = 0;
 
                 while (!isEmpty)
                 {   // keep reading tracks until one is empty
@@ -387,7 +368,7 @@ namespace traqpaq_GUI
             public bool writeSavedTracks()
             {
                 byte[] readBuffer = new byte[1];
-                if (traqpaq.sendCommand(usbCommand.USB_CMD_WRITE_SAVED_TRACKS, readBuffer))
+                if (traqpaq.sendCommand(USBcommand.USB_CMD_WRITE_SAVED_TRACKS, readBuffer))
                 {
                     return readBuffer[0] > 0;
                 }
@@ -396,16 +377,16 @@ namespace traqpaq_GUI
 
             public class SavedTrack
             {
-                private byte[] trackReadBuff = new byte[32];
+                private byte[] trackReadBuff = new byte[Constants.TRACKLIST_SIZE];
                 SavedTrackReader parent;
-                short index;
+                ushort index;
                 public string trackName { get; set; }
                 public int Longitute { get; set; }
                 public int Latitude { get; set; }
                 public ushort Heading { get; set; }
                 public bool isEmpty { get; set; }
 
-                public SavedTrack(SavedTrackReader parent, short index)
+                public SavedTrack(SavedTrackReader parent, ushort index)
                 {
                     this.parent = parent;
                     this.index = index;
@@ -416,15 +397,14 @@ namespace traqpaq_GUI
                 /// <returns>True if successful, false if there was an error</returns>
                 public bool readTrack()
                 {
-                    byte upperIndex = (byte)((index >> 8) & 0xFF);
-                    byte lowerIndex = (byte)(index & 0xFF);
-                    if (parent.traqpaq.sendCommand(usbCommand.USB_CMD_READ_SAVED_TRACKS, trackReadBuff, upperIndex, lowerIndex))
+                    byte[] byteIndex = BetterBitConverter.GetBytes(index);
+                    if (parent.traqpaq.sendCommand(USBcommand.USB_CMD_READ_SAVED_TRACKS, trackReadBuff, byteIndex[0], byteIndex[1]))
                     {
-                        trackName = Encoding.ASCII.GetString(trackReadBuff, 0, 20);
-                        Longitute = trackReadBuff[20] << 24 | trackReadBuff[21] << 16 | trackReadBuff[22] << 8 | trackReadBuff[23];
-                        Latitude = trackReadBuff[24] << 24 | trackReadBuff[25] << 16 | trackReadBuff[26] << 8 | trackReadBuff[27];
-                        Heading = (ushort)(trackReadBuff[28] << 8 | trackReadBuff[29]);
-                        isEmpty = (trackReadBuff[30] == 0xFF);  // true if empty
+                        this.trackName = Encoding.ASCII.GetString(trackReadBuff, 0, Constants.TRACKLIST_NAME_STRLEN);
+                        this.Longitute = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LONGITUDE);
+                        this.Latitude = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LATITUDE);
+                        this.Heading = BetterBitConverter.ToUInt16(trackReadBuff, Constants.TRACKLIST_COURSE);
+                        this.isEmpty = (trackReadBuff[Constants.TRACKLIST_ISEMPTY] == 0xFF);  // true if empty
                         return true;
                     }
                     else return false;
@@ -451,7 +431,7 @@ namespace traqpaq_GUI
             public class RecordTable
             {
                 RecordTableReader parent;
-                byte[] readBuffer = new byte[16];
+                byte[] readBuffer = new byte[Constants.RECORD_TABLE_SIZE];
                 public bool RecordEmpty { get; set; }
                 public byte TrackID { get; set; }
                 public uint DateStamp { get; set; }
@@ -465,16 +445,13 @@ namespace traqpaq_GUI
 
                 public bool readRecordTable(byte index)
                 {
-                    byte length = 16;
-                    if (parent.traqpaq.sendCommand(usbCommand.USB_CMD_READ_RECORDTABLE, readBuffer, length, index))
-                    {   // set all the properties
-                        int idx = 0;
-                        this.RecordEmpty = readBuffer[idx++] == 0xFF;   // true if empty
-                        this.TrackID = readBuffer[idx++];
-                        idx = 4;    // skip 2 reserved bytes
-                        this.DateStamp = (uint)(readBuffer[idx++] << 24 | readBuffer[idx++] << 16 | readBuffer[idx++] << 8 | readBuffer[idx++]);
-                        this.StartAddress = (uint)(readBuffer[idx++] << 24 | readBuffer[idx++] << 16 | readBuffer[idx++] << 8 | readBuffer[idx++]);
-                        this.EndAddress = (uint)(readBuffer[idx++] << 24 | readBuffer[idx++] << 16 | readBuffer[idx++] << 8 | readBuffer[idx++]);                        
+                    if (parent.traqpaq.sendCommand(USBcommand.USB_CMD_READ_RECORDTABLE, readBuffer, (byte)Constants.RECORD_TABLE_SIZE, index))
+                    {   
+                        this.RecordEmpty = readBuffer[Constants.RECORD_EMPTY] == 0xFF;   // true if empty
+                        this.TrackID = readBuffer[Constants.RECORD_TRACK_ID];
+                        this.DateStamp = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_DATESTAMP);
+                        this.StartAddress = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_START_ADDRESS);
+                        this.EndAddress = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_END_ADDRESS);
                         return true;
                     }
                     else return false;
@@ -526,15 +503,15 @@ namespace traqpaq_GUI
                 this.traqpaq = parent;
                 this.recordTable = recordTable;
                 // allocate the recordData array, 256 bytes per page
-                this.numPages = (recordTable.EndAddress - recordTable.StartAddress) / 256;
+                this.numPages = (recordTable.EndAddress - recordTable.StartAddress) / Constants.MEMORY_PAGE_SIZE;
                 this.recordData = new RecordDataPage[numPages];
             }
 
             public class RecordDataPage
             {
                 RecordDataReader parent;
-                byte[] dataPage = new byte[256];
-                public int utc { get; set; }
+                byte[] dataPage = new byte[Constants.MEMORY_PAGE_SIZE];
+                public uint utc { get; set; }
                 public ushort hdop { get; set; }
                 public byte GPSmode { get; set; }
                 public byte Satellites { get; set; }
@@ -550,7 +527,7 @@ namespace traqpaq_GUI
                     public int Latitude { get; set; }
                     public int Longitude { get; set; }
                     public bool lapDetected { get; set; }
-                    public int Altitude { get; set; }
+                    public ushort Altitude { get; set; }
                     public double Speed { get; set; }
                     public int Heading { get; set; }
                 }
@@ -563,21 +540,19 @@ namespace traqpaq_GUI
                         // extract the data from the dataPage byte array
                         //TODO convert props to usable value, see GPS decoder ring
                         int idx = 0;    // use to keep track of the index of the dataPage byte
-                        this.utc = dataPage[idx++] << 24 | dataPage[idx++] << 16 | dataPage[idx++] << 8 | dataPage[idx++];
-                        this.hdop = (ushort)(dataPage[idx++] << 8 | dataPage[idx++]);
-                        this.GPSmode = dataPage[idx++];
-                        this.Satellites = dataPage[idx++];
-                        idx += 8;   // 8 bytes are reserved
+                        this.utc = BetterBitConverter.ToUInt32(dataPage, Constants.RECORD_DATA_UTC);
+                        this.hdop = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_HDOP);
+                        this.GPSmode = dataPage[Constants.RECORD_DATA_MODE];
+                        this.Satellites = dataPage[Constants.RECORD_DATA_SATELLITES];
                         // set the array of tRecordData structs
-                        for (int i = 0; i < RECORD_DATA_PER_PAGE; i++)
+                        for (int i = 0; i < Constants.RECORD_DATA_PER_PAGE; i++)
                         {
-                            this.RecordData[i].Latitude = dataPage[idx++] << 24 | dataPage[idx++] << 16 | dataPage[idx++] << 8 | dataPage[idx++];
-                            this.RecordData[i].Longitude = dataPage[idx++] << 24 | dataPage[idx++] << 16 | dataPage[idx++] << 8 | dataPage[idx++];
-                            this.RecordData[i].lapDetected = dataPage[idx++] > 0;   // 0x00 means lap not detected. True if lap is detected
-                            idx++;  // reserved byte
-                            this.RecordData[i].Altitude = (dataPage[idx++] << 8 | dataPage[idx++]);
-                            this.RecordData[i].Speed = (dataPage[idx++] << 8 | dataPage[idx++]) * SPEED_FACTOR;
-                            this.RecordData[i].Heading = (dataPage[idx++] << 8 | dataPage[idx++]);
+                            this.RecordData[i].Latitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LATITUDE * (i + 1));
+                            this.RecordData[i].Longitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LONGITUDE * (i + 1));
+                            this.RecordData[i].lapDetected = dataPage[Constants.RECORD_DATA_LAP_DETECTED * (i + 1)] == 0x01;   // 0x00 means lap not detected. True if lap is detected
+                            this.RecordData[i].Altitude = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_ALTITUDE * (i + 1));
+                            this.RecordData[i].Speed = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_SPEED * (i + 1)) * Constants.SPEED_FACTOR;
+                            this.RecordData[i].Heading = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_COURSE * (i + 1));
                         }
                     }
                     return true;
@@ -593,7 +568,7 @@ namespace traqpaq_GUI
                 for (int i = 0; i < numPages; i++)
                 {
                     this.recordData[i] = new RecordDataPage(this);
-                    this.recordData[i].readRecordDataPage((int)this.recordTable.StartAddress + (i* 256));
+                    this.recordData[i].readRecordDataPage((int)this.recordTable.StartAddress + (i * Constants.MEMORY_PAGE_SIZE));
                 }
                 return true;
             }
@@ -606,7 +581,7 @@ namespace traqpaq_GUI
             public bool eraseAllRecordData()
             {
                 byte[] readBuffer = new byte[1];
-                if (traqpaq.sendCommand(usbCommand.USB_CMD_ERASE_RECORDDATA, readBuffer))
+                if (traqpaq.sendCommand(USBcommand.USB_CMD_ERASE_RECORDDATA, readBuffer))
                     return readBuffer[0] > 0;   // true if successful
                 return false;
             }
@@ -619,7 +594,7 @@ namespace traqpaq_GUI
         public bool writeDefaultPrefs()
         {
             byte[] readBuff = new byte[1];
-            if (sendCommand(usbCommand.USB_CMD_WRITE_USERPREFS, readBuff))
+            if (sendCommand(USBcommand.USB_CMD_WRITE_USERPREFS, readBuff))
                 return readBuff[0] > 0x00;  //TODO verify that this is the correct value for success
             else return false;
         }
@@ -633,7 +608,7 @@ namespace traqpaq_GUI
         public bool eraseFlash(byte index)
         {
             byte[] readBuff = new byte[1];
-            if (sendCommand(usbCommand.USB_DBG_DF_SECTOR_ERASE, readBuff, index))
+            if (sendCommand(USBcommand.USB_DBG_DF_SECTOR_ERASE, readBuff, index))
                 return readBuff[0] > 0x00;  //TODO verify that this is the correct value for success
             else return false;
         }
@@ -645,7 +620,7 @@ namespace traqpaq_GUI
         public bool isFlashBusy()
         {
             byte[] readBuff = new byte[1];
-            if (sendCommand(usbCommand.USB_DBG_DF_BUSY, readBuff))
+            if (sendCommand(USBcommand.USB_DBG_DF_BUSY, readBuff))
                 return readBuff[0] > 0x00;  //TODO verify that this is the correct value for busy
             else return false;
         }
@@ -657,7 +632,7 @@ namespace traqpaq_GUI
         public bool eraseChip()
         {
             byte[] readBuff = new byte[1];
-            if (sendCommand(usbCommand.USB_DBG_DF_CHIP_ERASE, readBuff))
+            if (sendCommand(USBcommand.USB_DBG_DF_CHIP_ERASE, readBuff))
                 return readBuff[0] > 0x00;  //TODO verify that this is the correct value for success
             else return false;
         }
@@ -665,7 +640,7 @@ namespace traqpaq_GUI
         public bool isFlashFull()
         {
             byte[] readBuff = new byte[1];
-            if (sendCommand(usbCommand.USB_DBG_DF_IS_FLASH_FULL, readBuff))
+            if (sendCommand(USBcommand.USB_DBG_DF_IS_FLASH_FULL, readBuff))
                 return readBuff[0] > 0x00;  //TODO verify that this is the correct value for success
             else return false;
         }
@@ -677,7 +652,7 @@ namespace traqpaq_GUI
         public int getFlashPercentUsed()
         {
             byte[] readBuff = new byte[1];
-            if (sendCommand(usbCommand.USB_DBG_DF_USED_SPACE, readBuff))
+            if (sendCommand(USBcommand.USB_DBG_DF_USED_SPACE, readBuff))
                 return readBuff[0];  //TODO verify that this is the correct value for success
             else return -1;
         }
@@ -686,11 +661,11 @@ namespace traqpaq_GUI
         /// Read the last received GPS latitude
         /// </summary>
         /// <returns>The last GPS latitude as unsigned integer, or 0 if request fails</returns>
-        public uint getLastGPS_lat()
+        public int getLastGPS_lat()
         {
             byte[] readBuff = new byte[4];
-            if (sendCommand(usbCommand.USB_DBG_GPS_LATITUDE, readBuff))
-                return BitConverter.ToUInt32(readBuff, 0);
+            if (sendCommand(USBcommand.USB_DBG_GPS_LATITUDE, readBuff))
+                return BetterBitConverter.ToInt32(readBuff, 0);
             else return 0;
         }
 
@@ -698,11 +673,11 @@ namespace traqpaq_GUI
         /// Read the last received GPS longitude
         /// </summary>
         /// <returns>The last GPS longitude as unsigned integer, or 0 if request fails</returns>
-        public uint getLastGPS_long()
+        public int getLastGPS_long()
         {
             byte[] readBuff = new byte[4];
-            if (sendCommand(usbCommand.USB_DBG_GPS_LONGITUDE, readBuff))
-                return BitConverter.ToUInt32(readBuff, 0);
+            if (sendCommand(USBcommand.USB_DBG_GPS_LONGITUDE, readBuff))
+                return BetterBitConverter.ToInt32(readBuff, 0);
             else return 0;
         }
 
@@ -710,11 +685,11 @@ namespace traqpaq_GUI
         /// Read the last received GPS heading
         /// </summary>
         /// <returns>The last GPS heading as unsigned integer, or 0 if request fails</returns>
-        public uint getLastGPS_heading()
+        public int getLastGPS_heading()
         {
             byte[] readBuff = new byte[4];
-            if (sendCommand(usbCommand.USB_DBG_GPS_COURSE, readBuff))
-                return BitConverter.ToUInt32(readBuff, 0);
+            if (sendCommand(USBcommand.USB_DBG_GPS_COURSE, readBuff))
+                return BetterBitConverter.ToInt32(readBuff, 0);
             else return 0;
         }
         #endregion
