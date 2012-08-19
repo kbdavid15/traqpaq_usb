@@ -28,144 +28,184 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.versionButton = new System.Windows.Forms.Button();
-            this.closeButton = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.outLabel = new System.Windows.Forms.Label();
-            this.readRecordTableButton = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.label1 = new System.Windows.Forms.Label();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.trackIDcolumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.trackNameColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.recordIDcolumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.dateColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.startColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.endColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.versionButton = new System.Windows.Forms.Button();
+            this.readButton = new System.Windows.Forms.Button();
+            this.latColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.longColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // versionButton
+            // tableLayoutPanel1
             // 
-            this.versionButton.Location = new System.Drawing.Point(12, 227);
-            this.versionButton.Name = "versionButton";
-            this.versionButton.Size = new System.Drawing.Size(109, 23);
-            this.versionButton.TabIndex = 0;
-            this.versionButton.Text = "Show Version";
-            this.versionButton.UseVisualStyleBackColor = true;
-            this.versionButton.Click += new System.EventHandler(this.versionButton_Click);
-            // 
-            // closeButton
-            // 
-            this.closeButton.Location = new System.Drawing.Point(208, 227);
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 1;
-            this.closeButton.Text = "Close";
-            this.closeButton.UseVisualStyleBackColor = true;
-            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.listView1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.outLabel, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 2);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 21.18227F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 78.81773F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(808, 346);
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // outLabel
             // 
             this.outLabel.AutoSize = true;
-            this.outLabel.Location = new System.Drawing.Point(9, 9);
+            this.outLabel.Location = new System.Drawing.Point(3, 0);
             this.outLabel.Name = "outLabel";
             this.outLabel.Size = new System.Drawing.Size(45, 13);
-            this.outLabel.TabIndex = 2;
+            this.outLabel.TabIndex = 8;
             this.outLabel.Text = "Version:";
-            // 
-            // readRecordTableButton
-            // 
-            this.readRecordTableButton.Location = new System.Drawing.Point(127, 227);
-            this.readRecordTableButton.Name = "readRecordTableButton";
-            this.readRecordTableButton.Size = new System.Drawing.Size(75, 23);
-            this.readRecordTableButton.TabIndex = 3;
-            this.readRecordTableButton.Text = "Read";
-            this.readRecordTableButton.UseVisualStyleBackColor = true;
-            this.readRecordTableButton.Click += new System.EventHandler(this.readRecordTableButton_Click);
+            this.outLabel.Click += new System.EventHandler(this.versionButton_Click);
             // 
             // listView1
             // 
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader6,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader5});
+            this.trackIDcolumnHeader,
+            this.trackNameColumnHeader,
+            this.recordIDcolumnHeader,
+            this.dateColumnHeader,
+            this.startColumnHeader,
+            this.endColumnHeader,
+            this.latColumnHeader,
+            this.longColumnHeader});
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
-            this.listView1.Location = new System.Drawing.Point(8, 117);
+            this.listView1.Location = new System.Drawing.Point(3, 68);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(487, 97);
-            this.listView1.TabIndex = 4;
+            this.listView1.Size = new System.Drawing.Size(802, 238);
+            this.listView1.TabIndex = 14;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             // 
-            // label1
+            // trackIDcolumnHeader
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 101);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Saved Runs";
+            this.trackIDcolumnHeader.Text = "Track ID";
             // 
-            // columnHeader1
+            // trackNameColumnHeader
             // 
-            this.columnHeader1.Text = "Track ID";
+            this.trackNameColumnHeader.Text = "Track Name";
+            this.trackNameColumnHeader.Width = 82;
             // 
-            // columnHeader2
+            // recordIDcolumnHeader
             // 
-            this.columnHeader2.Text = "Record ID";
+            this.recordIDcolumnHeader.Text = "Record ID";
+            this.recordIDcolumnHeader.Width = 84;
             // 
-            // columnHeader3
+            // dateColumnHeader
             // 
-            this.columnHeader3.Text = "Datestamp";
+            this.dateColumnHeader.Text = "Datestamp";
+            this.dateColumnHeader.Width = 89;
             // 
-            // columnHeader4
+            // startColumnHeader
             // 
-            this.columnHeader4.Text = "Start Address";
+            this.startColumnHeader.Text = "Start Address";
+            this.startColumnHeader.Width = 101;
             // 
-            // columnHeader5
+            // endColumnHeader
             // 
-            this.columnHeader5.Text = "End Address";
+            this.endColumnHeader.Text = "End Address";
+            this.endColumnHeader.Width = 117;
             // 
-            // columnHeader6
+            // tableLayoutPanel2
             // 
-            this.columnHeader6.Text = "Track Name";
-            this.columnHeader6.Width = 82;
+            this.tableLayoutPanel2.ColumnCount = 4;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 101F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.versionButton, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.readButton, 1, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 312);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(802, 31);
+            this.tableLayoutPanel2.TabIndex = 15;
+            // 
+            // versionButton
+            // 
+            this.versionButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.versionButton.Location = new System.Drawing.Point(3, 3);
+            this.versionButton.Name = "versionButton";
+            this.versionButton.Size = new System.Drawing.Size(94, 25);
+            this.versionButton.TabIndex = 7;
+            this.versionButton.Text = "Show Version";
+            this.versionButton.UseVisualStyleBackColor = true;
+            this.versionButton.Click += new System.EventHandler(this.versionButton_Click);
+            // 
+            // readButton
+            // 
+            this.readButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.readButton.Location = new System.Drawing.Point(103, 3);
+            this.readButton.Name = "readButton";
+            this.readButton.Size = new System.Drawing.Size(93, 25);
+            this.readButton.TabIndex = 8;
+            this.readButton.Text = "Read";
+            this.readButton.UseVisualStyleBackColor = true;
+            this.readButton.Click += new System.EventHandler(this.readButton_Click);
+            // 
+            // latColumnHeader
+            // 
+            this.latColumnHeader.Text = "Latitude";
+            this.latColumnHeader.Width = 84;
+            // 
+            // longColumnHeader
+            // 
+            this.longColumnHeader.Text = "Longitude";
+            this.longColumnHeader.Width = 90;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 262);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.listView1);
-            this.Controls.Add(this.readRecordTableButton);
-            this.Controls.Add(this.outLabel);
-            this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.versionButton);
+            this.ClientSize = new System.Drawing.Size(808, 346);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "traq|paq";
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button versionButton;
-        private System.Windows.Forms.Button closeButton;
-        private System.Windows.Forms.Label outLabel;
-        private System.Windows.Forms.Button readRecordTableButton;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ColumnHeader trackIDcolumnHeader;
+        private System.Windows.Forms.ColumnHeader trackNameColumnHeader;
+        private System.Windows.Forms.ColumnHeader recordIDcolumnHeader;
+        private System.Windows.Forms.ColumnHeader dateColumnHeader;
+        private System.Windows.Forms.ColumnHeader startColumnHeader;
+        private System.Windows.Forms.ColumnHeader endColumnHeader;
+        private System.Windows.Forms.ColumnHeader latColumnHeader;
+        private System.Windows.Forms.ColumnHeader longColumnHeader;
+        private System.Windows.Forms.Label outLabel;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Button versionButton;
+        private System.Windows.Forms.Button readButton;
+
     }
 }
 

@@ -34,12 +34,6 @@ namespace traqpaq_GUI
         /// <param name="e"></param>
         private void versionButton_Click(object sender, EventArgs e)
         {
-            //outLabel.Text += " " + traqpaq.get_sw_version();
-            /*outLabel.Text += "" + traqpaq.reqApplicationVersion().ToString();
-            outLabel.Text += "\nHardware Version: " + traqpaq.reqHardwareVersion().ToString();
-            outLabel.Text += "\nSerial#: " + traqpaq.reqSerialNumber().ToString();
-            outLabel.Text += "\nTester ID: " + traqpaq.reqTesterID().ToString();
-            */
             outLabel.Text += traqpaq.myOTPreader.ApplicationVersion;
             //TODO consider scrapping this subclass and make it part of the traqpaqDevice class
 
@@ -57,14 +51,15 @@ namespace traqpaq_GUI
             {
                 lViewConstruct = new string[] { table.TrackID.ToString(),
                     traqpaq.trackList[table.TrackID].trackName, traqpaq.recordTableList.IndexOf(table).ToString(), 
-                    table.DateStamp.ToString(), table.StartAddress.ToString(), table.EndAddress.ToString() };
+                    table.DateStamp.ToString(), table.StartAddress.ToString(), table.EndAddress.ToString(),
+                    traqpaq.trackList[table.TrackID].Latitude.ToString(), traqpaq.trackList[table.TrackID].Longitute.ToString() };
                 lViewItem = new ListViewItem(lViewConstruct);
                 lViewItem.Tag = table;
                 listView1.Items.Add(lViewItem);
             }
         }
 
-        private void readRecordTableButton_Click(object sender, EventArgs e)
+        private void readButton_Click(object sender, EventArgs e)
         {
             // get the selected list view object
             TraqpaqDevice.RecordTableReader.RecordTable table;
@@ -73,7 +68,6 @@ namespace traqpaq_GUI
             else return;
             TraqpaqDevice.RecordDataReader dataReader = new TraqpaqDevice.RecordDataReader(traqpaq, table);
             dataReader.readRecordData();
-            //TODO use the data reader
         }
     }
 }

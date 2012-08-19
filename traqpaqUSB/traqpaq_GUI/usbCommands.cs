@@ -100,6 +100,7 @@ namespace traqpaq_GUI
         public const double BATT_INST_CURRENT_FACTOR = 0.625;    // (mAmps)
         public const double BATT_ACCUM_CURRENT_FACTOR = 0.25;    // (mAmp hours)
         public const double SPEED_FACTOR = 0.5144;               // (meters/second)
+        public const double LATITUDE_LONGITUDE_COORD = 1000000; // Converts the lat and long as ints to coordinates
         
         
         public const int TIMEOUT = 250;                          // usb timeout in ms

@@ -13,7 +13,7 @@ namespace traqpaq_GUI
     {
         int PID, VID;   // use to set the PID and VID for the USB device. will be used to locate the device
         public UsbDevice MyUSBDevice;
-        public static UsbDeviceFinder traqpaqDeviceFinder;
+        private static UsbDeviceFinder traqpaqDeviceFinder;
         UsbEndpointReader reader;
         UsbEndpointWriter writer;
         ErrorCode ec = ErrorCode.None;        
@@ -381,8 +381,8 @@ namespace traqpaq_GUI
                 SavedTrackReader parent;
                 ushort index;
                 public string trackName { get; set; }
-                public int Longitute { get; set; }
-                public int Latitude { get; set; }
+                public double Longitute { get; set; }
+                public double Latitude { get; set; }
                 public ushort Heading { get; set; }
                 public bool isEmpty { get; set; }
 
@@ -401,8 +401,8 @@ namespace traqpaq_GUI
                     if (parent.traqpaq.sendCommand(USBcommand.USB_CMD_READ_SAVED_TRACKS, trackReadBuff, byteIndex[0], byteIndex[1]))
                     {
                         this.trackName = Encoding.ASCII.GetString(trackReadBuff, 0, Constants.TRACKLIST_NAME_STRLEN);
-                        this.Longitute = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LONGITUDE);
-                        this.Latitude = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LATITUDE);
+                        this.Longitute = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LONGITUDE) / Constants.LATITUDE_LONGITUDE_COORD;
+                        this.Latitude = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LATITUDE) / Constants.LATITUDE_LONGITUDE_COORD;
                         this.Heading = BetterBitConverter.ToUInt16(trackReadBuff, Constants.TRACKLIST_COURSE);
                         this.isEmpty = (trackReadBuff[Constants.TRACKLIST_ISEMPTY] == 0xFF);  // true if empty
                         return true;
@@ -491,7 +491,7 @@ namespace traqpaq_GUI
         /// record table object.
         /// </summary>
         public class RecordDataReader
-        {   //TODO record data class
+        {
             RecordTableReader.RecordTable recordTable;
             TraqpaqDevice traqpaq;
             //public List<RecordDataPage> recordData = new List<RecordDataPage>();
@@ -524,8 +524,8 @@ namespace traqpaq_GUI
 
                 public struct tRecordData
                 {
-                    public int Latitude { get; set; }
-                    public int Longitude { get; set; }
+                    public double Latitude { get; set; }
+                    public double Longitude { get; set; }
                     public bool lapDetected { get; set; }
                     public ushort Altitude { get; set; }
                     public double Speed { get; set; }
@@ -539,7 +539,6 @@ namespace traqpaq_GUI
                     {
                         // extract the data from the dataPage byte array
                         //TODO convert props to usable value, see GPS decoder ring
-                        int idx = 0;    // use to keep track of the index of the dataPage byte
                         this.utc = BetterBitConverter.ToUInt32(dataPage, Constants.RECORD_DATA_UTC);
                         this.hdop = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_HDOP);
                         this.GPSmode = dataPage[Constants.RECORD_DATA_MODE];
@@ -547,8 +546,8 @@ namespace traqpaq_GUI
                         // set the array of tRecordData structs
                         for (int i = 0; i < Constants.RECORD_DATA_PER_PAGE; i++)
                         {
-                            this.RecordData[i].Latitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LATITUDE * (i + 1));
-                            this.RecordData[i].Longitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LONGITUDE * (i + 1));
+                            this.RecordData[i].Latitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LATITUDE * (i + 1)) / Constants.LATITUDE_LONGITUDE_COORD;
+                            this.RecordData[i].Longitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LONGITUDE * (i + 1)) / Constants.LATITUDE_LONGITUDE_COORD;
                             this.RecordData[i].lapDetected = dataPage[Constants.RECORD_DATA_LAP_DETECTED * (i + 1)] == 0x01;   // 0x00 means lap not detected. True if lap is detected
                             this.RecordData[i].Altitude = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_ALTITUDE * (i + 1));
                             this.RecordData[i].Speed = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_SPEED * (i + 1)) * Constants.SPEED_FACTOR;
