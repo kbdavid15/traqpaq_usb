@@ -68,6 +68,19 @@ namespace traqpaq_GUI
             else return;
             TraqpaqDevice.RecordDataReader dataReader = new TraqpaqDevice.RecordDataReader(traqpaq, table);
             dataReader.readRecordData();
+
+            // dump data to text file
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Kyle\Documents\GitHub\traqpaq_usb_driver\output.txt"))
+            {
+                foreach (TraqpaqDevice.RecordDataReader.RecordDataPage page in dataReader.recordDataPages)
+                {
+                    foreach (TraqpaqDevice.RecordDataReader.RecordDataPage.tRecordData data in page.RecordData)
+                    {
+                        file.WriteLine(data.Latitude + ", " + data.Longitude);
+                    }
+                }
+            }
+
         }
     }
 }

@@ -74,12 +74,12 @@ namespace traqpaq_GUI
 
 
         // Record Data Offsets (to be multiplied by the index of the tRecordData struct)
-        public const int RECORD_DATA_LATITUDE = 16;
-        public const int RECORD_DATA_LONGITUDE = 20;
-        public const int RECORD_DATA_LAP_DETECTED = 24;
-        public const int RECORD_DATA_ALTITUDE = 26;
-        public const int RECORD_DATA_SPEED = 28;
-        public const int RECORD_DATA_COURSE = 30;
+        public const int RECORD_DATA_LATITUDE = 0;
+        public const int RECORD_DATA_LONGITUDE = 4;
+        public const int RECORD_DATA_LAP_DETECTED = 8;
+        public const int RECORD_DATA_ALTITUDE = 10;
+        public const int RECORD_DATA_SPEED = 12;
+        public const int RECORD_DATA_COURSE = 14;
 
 
         // TRACK LIST

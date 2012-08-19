@@ -495,7 +495,7 @@ namespace traqpaq_GUI
             RecordTableReader.RecordTable recordTable;
             TraqpaqDevice traqpaq;
             //public List<RecordDataPage> recordData = new List<RecordDataPage>();
-            public RecordDataPage[] recordData;
+            public RecordDataPage[] recordDataPages;
             uint numPages;
 
             public RecordDataReader(TraqpaqDevice parent, RecordTableReader.RecordTable recordTable)
@@ -504,7 +504,7 @@ namespace traqpaq_GUI
                 this.recordTable = recordTable;
                 // allocate the recordData array, 256 bytes per page
                 this.numPages = (recordTable.EndAddress - recordTable.StartAddress) / Constants.MEMORY_PAGE_SIZE;
-                this.recordData = new RecordDataPage[numPages];
+                this.recordDataPages = new RecordDataPage[numPages];
             }
 
             public class RecordDataPage
@@ -544,14 +544,15 @@ namespace traqpaq_GUI
                         this.GPSmode = dataPage[Constants.RECORD_DATA_MODE];
                         this.Satellites = dataPage[Constants.RECORD_DATA_SATELLITES];
                         // set the array of tRecordData structs
+                        this.RecordData = new tRecordData[Constants.RECORD_DATA_PER_PAGE];
                         for (int i = 0; i < Constants.RECORD_DATA_PER_PAGE; i++)
                         {
-                            this.RecordData[i].Latitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LATITUDE * (i + 1)) / Constants.LATITUDE_LONGITUDE_COORD;
-                            this.RecordData[i].Longitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LONGITUDE * (i + 1)) / Constants.LATITUDE_LONGITUDE_COORD;
-                            this.RecordData[i].lapDetected = dataPage[Constants.RECORD_DATA_LAP_DETECTED * (i + 1)] == 0x01;   // 0x00 means lap not detected. True if lap is detected
-                            this.RecordData[i].Altitude = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_ALTITUDE * (i + 1));
-                            this.RecordData[i].Speed = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_SPEED * (i + 1)) * Constants.SPEED_FACTOR;
-                            this.RecordData[i].Heading = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_COURSE * (i + 1));
+                            this.RecordData[i].Latitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LATITUDE * i + 16) / Constants.LATITUDE_LONGITUDE_COORD;
+                            this.RecordData[i].Longitude = BetterBitConverter.ToInt32(dataPage, Constants.RECORD_DATA_LONGITUDE * i + 16) / Constants.LATITUDE_LONGITUDE_COORD;
+                            this.RecordData[i].lapDetected = dataPage[Constants.RECORD_DATA_LAP_DETECTED * i + 16] == 0x01;   // 0x00 means lap not detected. True if lap is detected
+                            this.RecordData[i].Altitude = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_ALTITUDE * i + 16);
+                            this.RecordData[i].Speed = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_SPEED * i + 16) * Constants.SPEED_FACTOR;
+                            this.RecordData[i].Heading = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_COURSE * i + 16);
                         }
                     }
                     return true;
@@ -566,8 +567,8 @@ namespace traqpaq_GUI
             {
                 for (int i = 0; i < numPages; i++)
                 {
-                    this.recordData[i] = new RecordDataPage(this);
-                    this.recordData[i].readRecordDataPage((int)this.recordTable.StartAddress + (i * Constants.MEMORY_PAGE_SIZE));
+                    this.recordDataPages[i] = new RecordDataPage(this);
+                    this.recordDataPages[i].readRecordDataPage((int)this.recordTable.StartAddress + (i * Constants.MEMORY_PAGE_SIZE));
                 }
                 return true;
             }
