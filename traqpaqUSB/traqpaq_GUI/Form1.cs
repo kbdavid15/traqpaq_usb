@@ -70,13 +70,17 @@ namespace traqpaq_GUI
             dataReader.readRecordData();
 
             // dump data to text file
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Kyle\Documents\GitHub\traqpaq_usb_driver\output.txt"))
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Kyle\Documents\GitHub\traqpaq_usb_driver\output.csv"))
             {
+                file.WriteLine("Time (UTC),Latitude,Longitude,Lap Detected,Altitude (m),Speed (m/s),Course (deg),HDOP,Current Mode,Satellites");
+                int lapdetect;
                 foreach (TraqpaqDevice.RecordDataReader.RecordDataPage page in dataReader.recordDataPages)
                 {
                     foreach (TraqpaqDevice.RecordDataReader.RecordDataPage.tRecordData data in page.RecordData)
                     {
-                        file.WriteLine(data.Latitude + ", " + data.Longitude);
+                        if (data.lapDetected) lapdetect = 1;
+                        else lapdetect = 0;
+                        file.WriteLine(page.utc + "," + data.Latitude + "," + data.Longitude + "," + lapdetect + "," + data.Altitude + "," + data.Speed + "," + data.Heading + "," + page.hdop + "," + page.GPSmode + "," + page.Satellites);
                     }
                 }
             }

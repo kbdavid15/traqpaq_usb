@@ -99,9 +99,13 @@ namespace traqpaq_GUI
         public const double BATT_TEMP_FACTOR = 0.125;            // (°Celsius)
         public const double BATT_INST_CURRENT_FACTOR = 0.625;    // (mAmps)
         public const double BATT_ACCUM_CURRENT_FACTOR = 0.25;    // (mAmp hours)
-        public const double SPEED_FACTOR = 0.5144;               // (meters/second)
-        public const double LATITUDE_LONGITUDE_COORD = 1000000; // Converts the lat and long as ints to coordinates
-        
+        public const double SPEED_FACTOR = 0.005144;             // (meters/second)
+        public const double LATITUDE_LONGITUDE_COORD = 1000000;  // Converts the lat and long as ints to coordinates
+        public const double ALTITUDE_FACTOR = 10;                // Converts the altitude to meters
+        public const double COURSE_FACTOR = 100;                 // Converts course(heading) to degrees
+        public const double UTC_FACTOR = 1000;
+        public const double HDOP_FACTOR = 100;
+
         
         public const int TIMEOUT = 250;                          // usb timeout in ms
     }

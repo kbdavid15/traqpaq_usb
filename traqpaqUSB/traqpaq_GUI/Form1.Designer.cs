@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.outLabel = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
             this.trackIDcolumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.trackNameColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -37,11 +36,12 @@
             this.dateColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.startColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.endColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.latColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.longColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.outLabel = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.versionButton = new System.Windows.Forms.Button();
             this.readButton = new System.Windows.Forms.Button();
-            this.latColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.longColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -61,18 +61,8 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 21.18227F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 78.81773F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(808, 346);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(808, 248);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // outLabel
-            // 
-            this.outLabel.AutoSize = true;
-            this.outLabel.Location = new System.Drawing.Point(3, 0);
-            this.outLabel.Name = "outLabel";
-            this.outLabel.Size = new System.Drawing.Size(45, 13);
-            this.outLabel.TabIndex = 8;
-            this.outLabel.Text = "Version:";
-            this.outLabel.Click += new System.EventHandler(this.versionButton_Click);
             // 
             // listView1
             // 
@@ -88,10 +78,10 @@
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
-            this.listView1.Location = new System.Drawing.Point(3, 68);
+            this.listView1.Location = new System.Drawing.Point(3, 47);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(802, 238);
+            this.listView1.Size = new System.Drawing.Size(802, 161);
             this.listView1.TabIndex = 14;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -125,6 +115,26 @@
             this.endColumnHeader.Text = "End Address";
             this.endColumnHeader.Width = 117;
             // 
+            // latColumnHeader
+            // 
+            this.latColumnHeader.Text = "Latitude";
+            this.latColumnHeader.Width = 84;
+            // 
+            // longColumnHeader
+            // 
+            this.longColumnHeader.Text = "Longitude";
+            this.longColumnHeader.Width = 90;
+            // 
+            // outLabel
+            // 
+            this.outLabel.AutoSize = true;
+            this.outLabel.Location = new System.Drawing.Point(3, 0);
+            this.outLabel.Name = "outLabel";
+            this.outLabel.Size = new System.Drawing.Size(45, 13);
+            this.outLabel.TabIndex = 8;
+            this.outLabel.Text = "Version:";
+            this.outLabel.Click += new System.EventHandler(this.versionButton_Click);
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 4;
@@ -135,7 +145,7 @@
             this.tableLayoutPanel2.Controls.Add(this.versionButton, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.readButton, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 312);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 214);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -164,21 +174,11 @@
             this.readButton.UseVisualStyleBackColor = true;
             this.readButton.Click += new System.EventHandler(this.readButton_Click);
             // 
-            // latColumnHeader
-            // 
-            this.latColumnHeader.Text = "Latitude";
-            this.latColumnHeader.Width = 84;
-            // 
-            // longColumnHeader
-            // 
-            this.longColumnHeader.Text = "Longitude";
-            this.longColumnHeader.Width = 90;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(808, 346);
+            this.ClientSize = new System.Drawing.Size(808, 248);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "traq|paq";
