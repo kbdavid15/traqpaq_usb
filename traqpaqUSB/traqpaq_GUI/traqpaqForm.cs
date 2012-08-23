@@ -228,5 +228,56 @@ namespace traqpaq_GUI
             if (sd.FileName != string.Empty)
                 kml.Save(sd.FileName);
         }
+
+        /// <summary>
+        /// Read the record data and plot on the chart
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonPlot_Click(object sender, EventArgs e)
+        {
+            // get the selected list view object
+            TraqpaqDevice.RecordTableReader.RecordTable table;
+            if (listView1.SelectedItems.Count == 1)
+                table = (TraqpaqDevice.RecordTableReader.RecordTable)listView1.SelectedItems[0].Tag;
+            else return;
+            TraqpaqDevice.RecordDataReader dataReader = new TraqpaqDevice.RecordDataReader(traqpaq, table);
+            dataReader.readRecordData();
+            List<double> latitudes = new List<double>();
+            List<double> longitudes = new List<double>();
+
+            foreach (TraqpaqDevice.RecordDataReader.RecordDataPage page in dataReader.recordDataPages)
+                foreach (TraqpaqDevice.RecordDataReader.RecordDataPage.tRecordData data in page.RecordData)
+                {
+                    latitudes.Add(data.Latitude);
+                    longitudes.Add(data.Longitude);
+                }
+            // normalize the points to plot on the chart
+            double[] normLatitudes = NormalizeData(latitudes, 0, 100);
+            double[] normLongitudes = NormalizeData(longitudes, 0, 100);
+            this.Latitudes = normLatitudes;
+            this.Longitudes = normLongitudes;
+
+            // plot the points on the chart
+            chart1.Series.Clear();
+            chart1.Series.Add(new Series("Coordinates"));
+            chart1.Series[0].ChartType = SeriesChartType.Point;
+            // add the points to the chart when the timer ticks
+            System.Timers.Timer timer = new System.Timers.Timer(5);
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
+            timer.SynchronizingObject = this;
+            timer.Start();
+        }
+
+        /// <summary>
+        /// Load the google earth form, sending it the data to plot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonGoogleEarth_Click(object sender, EventArgs e)
+        {
+            GoogleEarth ge = new GoogleEarth();
+            ge.Show();
+        }
     }
 }
