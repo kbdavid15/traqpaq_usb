@@ -138,11 +138,9 @@ namespace traqpaq_GUI
                     latitudes.Add(Convert.ToDouble(s[1]));
                     longitudes.Add(Convert.ToDouble(s[2]));
                 }
-                // normalize the points to plot on the chart
-                double[] normLatitudes = NormalizeData(latitudes, 0, 100);
-                double[] normLongitudes = NormalizeData(longitudes, 0, 100);
-                this.Latitudes = normLatitudes;
-                this.Longitudes = normLongitudes;
+
+                this.Latitudes = latitudes.ToArray();
+                this.Longitudes = longitudes.ToArray();
 
                 // plot the points on the chart
                 chart1.Series.Clear();
