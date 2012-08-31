@@ -114,8 +114,7 @@ namespace traqpaq_GUI
 
             // save the KML file
             KmlFile kml = KmlFile.Create(ls, false);
-            saveFileDialog1.ShowDialog();
-            if (saveFileDialog1.FileName != string.Empty)
+            if (saveFileDialog1.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
                 kml.Save(saveFileDialog1.FileName);
         }
 
@@ -126,8 +125,7 @@ namespace traqpaq_GUI
         /// <param name="e"></param>
         private void buttonPlotText_Click(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog();
-            if (openFileDialog1.FileName != string.Empty)
+            if (openFileDialog1.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
             {
                 List<double> latitudes = new List<double>();
                 List<double> longitudes = new List<double>();
@@ -197,8 +195,8 @@ namespace traqpaq_GUI
             string[] lines;
             OpenFileDialog fd = new OpenFileDialog();
             fd.Filter = "Comma Separated Value (*.csv)|*.csv";
-            fd.ShowDialog();
-            if (fd.FileName != string.Empty)
+
+            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
                 lines = File.ReadAllLines(fd.FileName);
             else return;
 
@@ -222,8 +220,7 @@ namespace traqpaq_GUI
             // Save the KML file
             SaveFileDialog sd = new SaveFileDialog();
             sd.Filter = "KML files (*.kml)|*.kml|All files (*.*)|*.*";
-            sd.ShowDialog();
-            if (sd.FileName != string.Empty)
+            if (sd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
                 kml.Save(sd.FileName);
         }
 
