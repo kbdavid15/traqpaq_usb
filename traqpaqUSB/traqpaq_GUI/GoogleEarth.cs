@@ -17,8 +17,15 @@ namespace traqpaq_GUI
         public GoogleEarth()
         {
             InitializeComponent();
-            webBrowser.Url = new Uri(@"C:\Users\Kyle\Documents\GitHub\traqpaq_usb_driver\traqpaqUSB\traqpaq_GUI\test\testGE.html");
-            loadGE();
+            //webBrowser.Url = new Uri(traqpaqResources.testGE);
+            //webBrowser.DocumentText = traqpaqResources.testGE;
+            string result = loadGE();
+            // write to file
+            StreamWriter f = new StreamWriter(@"C:\Users\Kyle\traqpaq_usb_driver\traqpaqUSB\traqpaq_GUI\test\test.html");
+            f.Write(result);
+            f.Close();
+            f.Dispose();
+            webBrowser.DocumentText = loadGE();
         }
 
         public void plotData(IEnumerable<double> longitudes, IEnumerable<double> latitudes)
@@ -26,11 +33,9 @@ namespace traqpaq_GUI
             
         }
 
-        public void loadGE()
+        public string loadGE()
         {
-            // create a new html file that loads google earth
-            string name = "testGE.html";
-
+            // Create an html file that loads Google Earth
             StringWriter stringWriter = new StringWriter();
 
             using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
@@ -38,10 +43,10 @@ namespace traqpaq_GUI
                 writer.RenderBeginTag(HtmlTextWriterTag.Html);
                 writer.RenderBeginTag(HtmlTextWriterTag.Head);
                 //writer.AddAttribute(HtmlTextWriterAttribute.Title, "Sample");
-                writer.RenderBeginTag(HtmlTextWriterTag.Script);
+                //writer.RenderBeginTag(HtmlTextWriterTag.Script);
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "text/javascript");
                 writer.AddAttribute(HtmlTextWriterAttribute.Src, "https://www.google.com/jsapi");
-                writer.RenderEndTag(); // closes the <script> tag
+                //writer.RenderEndTag(); // closes the <script> tag
 
                 // main GE code. start new script tag
                 writer.RenderBeginTag(HtmlTextWriterTag.Script);
@@ -49,12 +54,23 @@ namespace traqpaq_GUI
                 writer.WriteLine("function initCB(instance) {");
                 writer.WriteLine("ge = instance;");
                 writer.WriteLine("ge.getWindow().setVisibility(true);\n}");
+                writer.WriteLine("\nfunction failureCB(errorCode) {\n}\n");
+                writer.WriteLine("google.setOnLoadCallback(init);");
+                writer.RenderEndTag();  // closes script tag
 
                 writer.RenderEndTag();  // closes head tag
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Body);
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.AddAttribute(HtmlTextWriterAttribute.Id, "map3d");
+                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height: 400px; width: 600px;");
+                writer.RenderEndTag();  // close div tag
+                writer.RenderEndTag();  // close body tag
                 writer.RenderEndTag();  // closes html tag
-                
+
             }
-            MessageBox.Show(stringWriter.ToString());
+
+            return stringWriter.ToString();
         }
     }
 }
