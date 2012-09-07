@@ -10,6 +10,9 @@ using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Windows.Interop;
+using SharpKml.Base;
+using SharpKml.Dom;
+using SharpKml.Engine;
 
 namespace traqpaq_GUI
 {
@@ -19,21 +22,84 @@ namespace traqpaq_GUI
         {
             InitializeComponent();
             //webBrowser.DocumentText = traqpaqResources.testGE;
+            string path = Directory.GetCurrentDirectory() + @"../../..\test\test.html";
+            StreamWriter f = new StreamWriter(path); // "../" means up one level from current directory
             string result = loadGE();
-            // write to file
-            StreamWriter f = new StreamWriter(@"../..\test\test.html"); // "../" means up one level from current directory
+            // write to file            
             f.Write(result);
             f.Close();
             f.Dispose();
             // Open in Notepad
-            System.Diagnostics.Process.Start("notepad.exe", @"../..\test\test.html");
+            System.Diagnostics.Process.Start("notepad.exe", path);
 
-            webBrowser.DocumentText = loadGE();
+            webBrowser.DocumentText = result;
         }
 
         public void plotData(IEnumerable<double> longitudes, IEnumerable<double> latitudes)
         {
             
+        }
+
+        /// <summary>
+        /// Simulates the output kml from file.
+        /// Opens the output.csv file and creates a kml string, which is used in the generated jscript
+        /// </summary>
+        /// <returns>KML string to be used by parseKML()</returns>
+        private IEnumerable<string> getKML()
+        {
+            string[] lines;
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.Filter = "Comma Separated Value (*.csv)|*.csv";
+
+            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+                lines = File.ReadAllLines(fd.FileName);
+            else return null;
+
+            // Create the KML stuff
+            Kml kml = new Kml();
+            kml.AddNamespacePrefix("gx", "http://www.google.com/kml/ext/2.2");
+            Document doc = new Document();
+            Placemark pMark = new Placemark();
+            LineString ls = new LineString();
+            CoordinateCollection coordCollect = new CoordinateCollection();
+
+            // loop through the lines in the file
+            foreach (string line in lines)
+            {
+                // skip first line if header
+                string[] s = line.Split(',');
+                try
+                {
+                    coordCollect.Add(new Vector(Convert.ToDouble(s[1]), Convert.ToDouble(s[2])));
+                }
+                catch { }
+            }
+
+            // Add the coordinates to the line string
+            ls.Coordinates = coordCollect;
+
+            // Add the line string to the placemark
+            pMark.Geometry = ls;
+
+            // Add the placemark to the document
+            doc.AddFeature(pMark);
+
+            // Add the document to the kml object
+            kml.Feature = doc;
+
+            // Create the KML file
+            KmlFile kmlFile = KmlFile.Create(kml, false);
+
+            // Save the KML file
+            SaveFileDialog sd = new SaveFileDialog();
+            sd.Filter = "KML files (*.kml)|*.kml|All files (*.*)|*.*";
+            if (sd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+            {
+                kmlFile.Save(sd.FileName);
+                string[] allLines = File.ReadAllLines(sd.FileName);
+                return allLines;
+            }
+            return null;
         }
 
         public string loadGE()
@@ -97,8 +163,23 @@ namespace traqpaq_GUI
                 writer.WriteLine("\t}");  // closes the finished function
                 writer.WriteLine();
                 // fetch the KML
-                writer.WriteLine("\tvar url = 'http://sketchup.google.com/' + '3dwarehouse/download?mid=28b27372e2016cca82bddec656c63017&rtyp=k2';");
-                writer.WriteLine("\tgoogle.earth.fetchKml(ge, url, finished);");
+                //writer.WriteLine("\tvar url = 'http://sketchup.google.com/' + '3dwarehouse/download?mid=28b27372e2016cca82bddec656c63017&rtyp=k2';");
+                //writer.WriteLine("\tgoogle.earth.fetchKml(ge, url, finished);");
+                //Parse KML
+                List<string> kmlFile = getKML().ToList();
+                writer.WriteLine("\tvar kmlString = ''");
+                // add each line to the file
+                foreach (string s in kmlFile)
+                {
+                    string writeIt = "\t\t+ '" + s + "'";
+                    if (kmlFile.LastIndexOf(s) == kmlFile.Count - 1)
+                    {
+                        writeIt += ";";
+                    }
+                    writer.WriteLine(writeIt);
+                }
+                writer.WriteLine("\tvar kmlObject = ge.parseKml(kmlString);");
+                writer.WriteLine("\tfinished(kmlObject);");
                 writer.WriteLine("}");  // closes the initCB function
                 writer.WriteLine();
 

@@ -201,6 +201,10 @@ namespace traqpaq_GUI
             else return;
 
             // Create the KML stuff
+            Kml kml = new Kml();
+            kml.AddNamespacePrefix("gx", "http://www.google.com/kml/ext/2.2");
+            Document doc = new Document();
+            Placemark pMark = new Placemark();
             LineString ls = new LineString();
             CoordinateCollection coordCollect = new CoordinateCollection();
 
@@ -219,14 +223,23 @@ namespace traqpaq_GUI
             // Add the coordinates to the line string
             ls.Coordinates = coordCollect;
 
+            // Add the line string to the placemark
+            pMark.Geometry = ls;
+
+            // Add the placemark to the document
+            doc.AddFeature(pMark);
+                        
+            // Add the document to the kml object
+            kml.Feature = doc;
+
             // Create the KML file
-            KmlFile kml = KmlFile.Create(ls, false);
+            KmlFile kmlFile = KmlFile.Create(kml, false);
             
             // Save the KML file
             SaveFileDialog sd = new SaveFileDialog();
             sd.Filter = "KML files (*.kml)|*.kml|All files (*.*)|*.*";
             if (sd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
-                kml.Save(sd.FileName);
+                kmlFile.Save(sd.FileName);
         }
 
         /// <summary>
