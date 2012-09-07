@@ -18,11 +18,10 @@ namespace traqpaq_GUI
         public GoogleEarth()
         {
             InitializeComponent();
-            //webBrowser.Url = new Uri(traqpaqResources.testGE);
             //webBrowser.DocumentText = traqpaqResources.testGE;
             string result = loadGE();
             // write to file
-            StreamWriter f = new StreamWriter(@"../..\test\test.html");
+            StreamWriter f = new StreamWriter(@"../..\test\test.html"); // "../" means up one level from current directory
             f.Write(result);
             f.Close();
             f.Dispose();
@@ -65,33 +64,56 @@ namespace traqpaq_GUI
                 writer.WriteLine("function init() {");
                 writer.WriteLine("\tgoogle.earth.createInstance('map3d', initCB, failureCB);");
                 writer.WriteLine("}");
+                writer.WriteLine();
+
+                // failure callback function
+                writer.WriteLine("function failureCB(errorCode) { }");
+                writer.WriteLine();
 
                 // initialize callback function
                 writer.WriteLine("function initCB(instance) {");
                 writer.WriteLine("\tge = instance;");
                 writer.WriteLine("\tge.getWindow().setVisibility(true);");
                 // add a navigation control
-                writer.WriteLine("ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);");
+                writer.WriteLine("\tge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);");
                 // add some layers
-                writer.WriteLine("ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);");
-                writer.WriteLine("ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);");
-                writer.WriteLine("}");
+                writer.WriteLine("\tge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);");
+                writer.WriteLine("\tge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);");
+                // finished function (called after google earth loads)
+                writer.WriteLine("\tfunction finished(object) {");
+                writer.WriteLine("\t\tif (!object) {");
+                // wrap alerts in API callbacks and event handlers
+                // in a setTimeout to prevent deadlock in some browsers
+                writer.WriteLine("\t\t\tsetTimeout(function() {");
+                writer.WriteLine("\t\t\t\talert('Bad or null KML.');");
+                writer.WriteLine("\t\t\t}, 0);");
+                writer.WriteLine("\t\t\treturn;");
+                writer.WriteLine("\t\t}");    // closes the if statement
+                writer.WriteLine();
+                writer.WriteLine("\t\tge.getFeatures().appendChild(object);");
+                writer.WriteLine("\t\tvar la = ge.createLookAt('');");
+                writer.WriteLine("\t\tla.set(37.77976, -122.418307, 25, ge.ALTITUDE_RELATIVE_TO_GROUND,180, 60, 500);");
+                writer.WriteLine("\t\tge.getView().setAbstractView(la);");
+                writer.WriteLine("\t}");  // closes the finished function
+                writer.WriteLine();
+                // fetch the KML
+                writer.WriteLine("\tvar url = 'http://sketchup.google.com/' + '3dwarehouse/download?mid=28b27372e2016cca82bddec656c63017&rtyp=k2';");
+                writer.WriteLine("\tgoogle.earth.fetchKml(ge, url, finished);");
+                writer.WriteLine("}");  // closes the initCB function
+                writer.WriteLine();
 
-                // failure callback function
-                writer.WriteLine("function failureCB(errorCode) {\n}\n");
-                writer.WriteLine("google.setOnLoadCallback(init);");
                 writer.RenderEndTag();  // closes script tag
-
                 writer.RenderEndTag();  // closes head tag
 
+                // HTML body
+                writer.AddAttribute("onload"    , "init()");
                 writer.RenderBeginTag(HtmlTextWriterTag.Body);                
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, "map3d");
-                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height: 400px; width: 600px;");
+                //writer.AddAttribute(HtmlTextWriterAttribute.Style, "height: 400px; width: 600px;");   // not specifying the size allows it to fit to window
                 writer.RenderBeginTag(HtmlTextWriterTag.Div);
                 writer.RenderEndTag();  // close div tag
                 writer.RenderEndTag();  // close body tag
                 writer.RenderEndTag();  // closes html tag
-
             }
 
             return stringWriter.ToString();

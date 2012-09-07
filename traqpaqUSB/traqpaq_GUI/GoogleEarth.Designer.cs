@@ -38,14 +38,14 @@
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
             this.webBrowser.ScrollBarsEnabled = false;
-            this.webBrowser.Size = new System.Drawing.Size(637, 386);
+            this.webBrowser.Size = new System.Drawing.Size(592, 366);
             this.webBrowser.TabIndex = 0;
             // 
             // GoogleEarth
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(637, 386);
+            this.ClientSize = new System.Drawing.Size(592, 366);
             this.Controls.Add(this.webBrowser);
             this.Name = "GoogleEarth";
             this.Text = "Google Earth";

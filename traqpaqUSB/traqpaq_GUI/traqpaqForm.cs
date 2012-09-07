@@ -207,8 +207,13 @@ namespace traqpaq_GUI
             // loop through the lines in the file
             foreach (string line in lines)
             {
+                // skip first line if header
                 string[] s = line.Split(',');
-                coordCollect.Add(new Vector(Convert.ToDouble(s[1]), Convert.ToDouble(s[2])));
+                try
+                {
+                    coordCollect.Add(new Vector(Convert.ToDouble(s[1]), Convert.ToDouble(s[2])));
+                }
+                catch { }
             }
 
             // Add the coordinates to the line string

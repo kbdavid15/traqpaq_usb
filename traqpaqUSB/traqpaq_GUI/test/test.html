@@ -10,21 +10,37 @@
 			function init() {
 				google.earth.createInstance('map3d', initCB, failureCB);
 			}
+
+			function failureCB(errorCode) { }
+
 			function initCB(instance) {
 				ge = instance;
 				ge.getWindow().setVisibility(true);
-			ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
-			ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
-			ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
-			}
-			function failureCB(errorCode) {
-}
+				ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+				ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
+				ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
+				function finished(object) {
+					if (!object) {
+						setTimeout(function() {
+							alert('Bad or null KML.');
+						}, 0);
+						return;
+					}
 
-			google.setOnLoadCallback(init);
+					ge.getFeatures().appendChild(object);
+					var la = ge.createLookAt('');
+					la.set(37.77976, -122.418307, 25, ge.ALTITUDE_RELATIVE_TO_GROUND,180, 60, 500);
+					ge.getView().setAbstractView(la);
+				}
+
+				var url = 'http://sketchup.google.com/' + '3dwarehouse/download?mid=28b27372e2016cca82bddec656c63017&rtyp=k2';
+				google.earth.fetchKml(ge, url, finished);
+			}
+
 
 		</script>
-	</head><body>
-		<div id="map3d" style="height: 400px; width: 600px;">
+	</head><body onload="init()">
+		<div id="map3d">
 
 		</div>
 	</body>
