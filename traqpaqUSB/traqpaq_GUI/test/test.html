@@ -8,14 +8,15 @@
 			var ge
 			google.load("earth", "1");
 			function init() {
-	google.earth.createInstance('map3d', initCB, failureCB);
-}
-
+				google.earth.createInstance('map3d', initCB, failureCB);
+			}
 			function initCB(instance) {
 				ge = instance;
 				ge.getWindow().setVisibility(true);
-}
-
+			ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+			ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
+			ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
+			}
 			function failureCB(errorCode) {
 }
 
