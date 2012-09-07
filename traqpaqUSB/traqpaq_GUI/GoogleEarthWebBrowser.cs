@@ -16,11 +16,10 @@ using SharpKml.Engine;
 
 namespace traqpaq_GUI
 {
-    public partial class GoogleEarth : Form
+    class GoogleEarthWebBrowser : WebBrowser
     {
-        public GoogleEarth()
+        public GoogleEarthWebBrowser()
         {
-            InitializeComponent();
             //webBrowser.DocumentText = traqpaqResources.testGE;
             string path = Directory.GetCurrentDirectory() + @"../../..\test\test.html";
             StreamWriter f = new StreamWriter(path); // "../" means up one level from current directory
@@ -30,9 +29,9 @@ namespace traqpaq_GUI
             f.Close();
             f.Dispose();
             // Open in Notepad
-            System.Diagnostics.Process.Start("notepad.exe", path);
+            //System.Diagnostics.Process.Start("notepad.exe", path);
 
-            webBrowser.DocumentText = result;
+            this.DocumentText = result;
         }
 
         public void plotData(IEnumerable<double> longitudes, IEnumerable<double> latitudes)

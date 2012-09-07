@@ -133,8 +133,12 @@ namespace traqpaq_GUI
                 foreach (string line in lines)
                 {
                     string[] s = line.Split(',');
-                    latitudes.Add(Convert.ToDouble(s[1]));
-                    longitudes.Add(Convert.ToDouble(s[2]));
+                    try
+                    {
+                        latitudes.Add(Convert.ToDouble(s[1]));
+                        longitudes.Add(Convert.ToDouble(s[2]));
+                    }
+                    catch { }
                 }
 
                 this.Latitudes = latitudes.ToArray();
@@ -289,8 +293,12 @@ namespace traqpaq_GUI
         /// <param name="e"></param>
         private void buttonGoogleEarth_Click(object sender, EventArgs e)
         {
-            GoogleEarth ge = new GoogleEarth();
-            ge.Show();
+            //GoogleEarth ge = new GoogleEarth();
+            //ge.Show();
+            GoogleEarthWebBrowser ge = new GoogleEarthWebBrowser();
+            ge.Dock = DockStyle.Fill;
+            ge.ScrollBarsEnabled = false;
+            tabPageGoogleEarth.Controls.Add(ge);            
         }
     }
 }

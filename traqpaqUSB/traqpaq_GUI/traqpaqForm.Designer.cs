@@ -47,13 +47,18 @@
             this.buttonOutputCSV = new System.Windows.Forms.Button();
             this.buttonPlotText = new System.Windows.Forms.Button();
             this.buttonOutputKMLfromFile = new System.Windows.Forms.Button();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.buttonPlot = new System.Windows.Forms.Button();
             this.buttonGoogleEarth = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPageChart = new System.Windows.Forms.TabPage();
+            this.tabPageGoogleEarth = new System.Windows.Forms.TabPage();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPageChart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,7 +69,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.listView1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.chart1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tabControl1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -218,24 +223,6 @@
             this.buttonOutputKMLfromFile.UseVisualStyleBackColor = true;
             this.buttonOutputKMLfromFile.Click += new System.EventHandler(this.buttonOutputKMLfromFile_Click);
             // 
-            // chart1
-            // 
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(3, 3);
-            this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(690, 297);
-            this.chart1.TabIndex = 16;
-            this.chart1.Text = "chart1";
-            // 
             // buttonPlot
             // 
             this.buttonPlot.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -258,6 +245,56 @@
             this.buttonGoogleEarth.UseVisualStyleBackColor = true;
             this.buttonGoogleEarth.Click += new System.EventHandler(this.buttonGoogleEarth_Click);
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPageGoogleEarth);
+            this.tabControl1.Controls.Add(this.tabPageChart);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(690, 297);
+            this.tabControl1.TabIndex = 16;
+            // 
+            // tabPageChart
+            // 
+            this.tabPageChart.Controls.Add(this.chart1);
+            this.tabPageChart.Location = new System.Drawing.Point(4, 22);
+            this.tabPageChart.Name = "tabPageChart";
+            this.tabPageChart.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageChart.Size = new System.Drawing.Size(682, 271);
+            this.tabPageChart.TabIndex = 0;
+            this.tabPageChart.Text = "Chart";
+            this.tabPageChart.UseVisualStyleBackColor = true;
+            // 
+            // tabPageGoogleEarth
+            // 
+            this.tabPageGoogleEarth.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGoogleEarth.Name = "tabPageGoogleEarth";
+            this.tabPageGoogleEarth.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageGoogleEarth.Size = new System.Drawing.Size(682, 271);
+            this.tabPageGoogleEarth.TabIndex = 1;
+            this.tabPageGoogleEarth.Text = "Google Earth";
+            this.tabPageGoogleEarth.UseVisualStyleBackColor = true;
+            // 
+            // chart1
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(3, 3);
+            this.chart1.Name = "chart1";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
+            this.chart1.Size = new System.Drawing.Size(676, 265);
+            this.chart1.TabIndex = 17;
+            this.chart1.Text = "chart1";
+            // 
             // traqpaqForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -268,6 +305,8 @@
             this.Text = "traq|paq";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPageChart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
 
@@ -289,13 +328,16 @@
         private System.Windows.Forms.Button buttonTest;
         private System.Windows.Forms.Button buttonOutputCSV;
         private System.Windows.Forms.Button buttonPlotText;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button buttonOutputKML;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button buttonOutputKMLfromFile;
         private System.Windows.Forms.Button buttonPlot;
         private System.Windows.Forms.Button buttonGoogleEarth;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPageChart;
+        private System.Windows.Forms.TabPage tabPageGoogleEarth;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
 
     }
 }

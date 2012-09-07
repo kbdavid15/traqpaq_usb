@@ -19,24 +19,29 @@
 				ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
 				ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
 				ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
-				function finished(object) {
-					if (!object) {
+				function finished(kmlObject) {
+					if (!kmlObject) {
 						setTimeout(function() {
 							alert('Bad or null KML.');
 						}, 0);
 						return;
 					}
 
-					ge.getFeatures().appendChild(object);
-					var la = ge.createLookAt('');
-					la.set(37.77976, -122.418307, 25, ge.ALTITUDE_RELATIVE_TO_GROUND,180, 60, 500);
-					ge.getView().setAbstractView(la);
+					ge.getFeatures().appendChild(kmlObject);
+					if (kmlObject.getAbstractView())
+						ge.getView().setAbstractView(kmlObject.getAbstractView());
 				}
 
 				var kmlString = ''
 					+ '<?xml version="1.0" encoding="utf-8"?>'
 					+ '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns="http://www.opengis.net/kml/2.2">'
 					+ '  <Document>'
+					+ '    <LookAt>'
+					+ '      <longitude>-83.7166015</longitude>'
+					+ '      <latitude>43.015348</latitude>'
+					+ '      <range>1000</range>'
+					+ '      <altitudeMode>relativeToGround</altitudeMode>'
+					+ '    </LookAt>'
 					+ '    <Placemark>'
 					+ '      <LineString>'
 					+ '        <coordinates>-83.716601,43.015351'
