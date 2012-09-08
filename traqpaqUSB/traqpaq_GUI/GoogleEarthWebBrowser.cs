@@ -20,6 +20,11 @@ namespace traqpaq_GUI
     {
         public GoogleEarthWebBrowser()
         {
+            
+        }
+
+        public void Start()
+        {
             //webBrowser.DocumentText = traqpaqResources.testGE;
             string path = Directory.GetCurrentDirectory() + @"../../..\test\test.html";
             StreamWriter f = new StreamWriter(path); // "../" means up one level from current directory
@@ -30,8 +35,8 @@ namespace traqpaq_GUI
             f.Dispose();
             // Open in Notepad
             //System.Diagnostics.Process.Start("notepad.exe", path);
-
             this.DocumentText = result;
+            //TODO long term: host html on redline-electronics.com and then use this.Document.InvokeScript() to call a function that loads the KML file
         }
 
         public void plotData(IEnumerable<double> longitudes, IEnumerable<double> latitudes)
@@ -171,6 +176,7 @@ namespace traqpaq_GUI
                 // fetch the KML
                 //writer.WriteLine("\tvar url = 'http://sketchup.google.com/' + '3dwarehouse/download?mid=28b27372e2016cca82bddec656c63017&rtyp=k2';");
                 //writer.WriteLine("\tgoogle.earth.fetchKml(ge, url, finished);");
+
                 //Parse KML
                 List<string> kmlFile = getKML().ToList();
                 writer.WriteLine("\tvar kmlString = ''");

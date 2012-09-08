@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.GEPlugin">
+      <HintPath>lib\Interop.GEPlugin.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="LibUsbDotNet">
       <HintPath>lib\LibUsbDotNet.dll</HintPath>
     </Reference>

@@ -16,7 +16,7 @@ namespace traqpaq_GUI
         public double[] Latitudes { get; set; }
         public double[] Longitudes { get; set; }
         public int CoordinateIndex = 0;
-
+        GoogleEarthWebBrowser ge = new GoogleEarthWebBrowser();
         public traqpaqForm()
         {
             InitializeComponent();
@@ -27,6 +27,11 @@ namespace traqpaq_GUI
                 populateListView();
             }
             catch { /*MessageBox.Show("Device not found.", "Error");*/ }
+
+            // Set up the Google Earth stuff
+            ge.Dock = DockStyle.Fill;
+            ge.ScrollBarsEnabled = false;
+            tabPageGoogleEarth.Controls.Add(ge);  
         }
 
         private void populateListView()
@@ -293,12 +298,7 @@ namespace traqpaq_GUI
         /// <param name="e"></param>
         private void buttonGoogleEarth_Click(object sender, EventArgs e)
         {
-            //GoogleEarth ge = new GoogleEarth();
-            //ge.Show();
-            GoogleEarthWebBrowser ge = new GoogleEarthWebBrowser();
-            ge.Dock = DockStyle.Fill;
-            ge.ScrollBarsEnabled = false;
-            tabPageGoogleEarth.Controls.Add(ge);            
+            ge.Start();
         }
     }
 }
