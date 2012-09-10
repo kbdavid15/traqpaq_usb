@@ -1,0 +1,54 @@
+﻿
+metadata
+ID	name	desc	time	keywords	minlat	minlon	maxlat	maxlon	
+1			2012-09-09T00:26:16Z		42.147880755364895	-83.351099649444222	42.183878598734736	-83.30027136951685	
+
+author
+ID	name	email	
+
+copyright
+year	license	author	
+
+link
+metadataID	authorID	wptID	rteptID	trkptID	rteID	trkID	text	type	href	
+1							"Garmin International"		http://www.garmin.com	
+
+rte
+ID	name	cmt	desc	src	number	type	IsAutoNamed	DisplayColor	TransportationMode	
+
+rtept
+ID	rteID	lat	lon	ele	time	magvar	geoidheight	name	cmt	desc	src	sym	type	fix	sat	hdop	vdop	pdop	ageofdgpsdata	dgpsid	DepartureTime	StopDuration	ArrivalTime	CalculationMode	ElevationMode	NamedRoad_Name	NamedRoad_Id	NamedRoad_ProductId	
+
+wpt
+ID	lat	lon	ele	time	magvar	geoidheight	name	cmt	desc	src	sym	type	fix	sat	hdop	vdop	pdop	ageofdgpsdata	dgpsid	Proximity	Temperature	Depth	DisplayMode	Samples	Expiration	
+
+Address
+wptID	StreetAddress1	StreetAddress2	City	State	Country	PostalCode	
+
+PhoneNumber
+wptID	Category	value	
+
+Categories
+wptID	Category	
+
+trk
+ID	name	cmt	desc	src	number	type	DisplayColor	
+1	"Track 001"						"DarkGray"	
+
+trkseg
+ID	trkID	
+1	1	
+
+trkpt
+ID	trksegID	lat	lon	ele	time	magvar	geoidheight	name	cmt	desc	src	sym	type	fix	sat	hdop	vdop	pdop	ageofdgpsdata	dgpsid	Temperature	Depth	wtemp	hr	cad	
+1	1	42.183878598734736	-83.329568216577172																							
+2	1	42.173325028270483	-83.347569946199656																							
+3	1	42.160747395828366	-83.351099649444222																							
+4	1	42.151928711682558	-83.342098826542497																							
+5	1	42.147880755364895	-83.323214733973145																							
+6	1	42.153808102011681	-83.313684426248074																							
+7	1	42.164939939975739	-83.30027136951685																							
+8	1	42.174626151099801	-83.305565966293216																							
+9	1	42.182866651564837	-83.318802500143647																							
+10	1	42.183878598734736	-83.329391777515411																							
+11	1	42.183878598734736	-83.329391777515411																							

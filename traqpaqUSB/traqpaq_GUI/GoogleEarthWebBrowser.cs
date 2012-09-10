@@ -34,7 +34,7 @@ namespace traqpaq_GUI
             f.Close();
             f.Dispose();
             // Open in Notepad
-            //System.Diagnostics.Process.Start("notepad.exe", path);
+            System.Diagnostics.Process.Start("notepad.exe", path);
             this.DocumentText = result;
             //TODO long term: host html on redline-electronics.com and then use this.Document.InvokeScript() to call a function that loads the KML file
         }
@@ -74,13 +74,16 @@ namespace traqpaq_GUI
                 string[] s = line.Split(',');
                 try
                 {
-                    coordCollect.Add(new Vector(Convert.ToDouble(s[1]), Convert.ToDouble(s[2])));
+                    coordCollect.Add(new Vector(Convert.ToDouble(s[1]), Convert.ToDouble(s[2]), Convert.ToDouble(s[4])));
                 }
                 catch { }
             }
 
             // Add the coordinates to the line string
             ls.Coordinates = coordCollect;
+            ls.AltitudeMode = AltitudeMode.Absolute;
+            ls.Extrude = true;
+            ls.Tessellate = true;
 
             // Add the line string to the placemark
             pMark.Geometry = ls;
