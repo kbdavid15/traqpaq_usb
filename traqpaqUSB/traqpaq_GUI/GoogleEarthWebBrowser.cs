@@ -32,6 +32,12 @@ namespace traqpaq_GUI
             //TODO long term: host html on redline-electronics.com and then use this.Document.InvokeScript() to call a function that loads the KML file
         }
 
+        public void loadKML(string kml)
+        {
+            // call js function to load kml
+            this.Document.InvokeScript("getKML", new string[] { kml });
+        }
+
         private string getKMLstring()
         {
             string[] lines;

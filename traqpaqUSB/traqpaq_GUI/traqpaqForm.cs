@@ -37,7 +37,7 @@ namespace traqpaq_GUI
         {
             ListViewItem lViewItem;
             string[] lViewConstruct;
-            foreach (TraqpaqDevice.RecordTableReader.RecordTable table in traqpaq.recordTableList)
+            foreach (var table in traqpaq.recordTableList)
             {
                 lViewConstruct = new string[] { table.TrackID.ToString(),
                     traqpaq.trackList[table.TrackID].trackName, traqpaq.recordTableList.IndexOf(table).ToString(), 
@@ -76,9 +76,9 @@ namespace traqpaq_GUI
             {
                 file.WriteLine("Time (UTC),Latitude,Longitude,Lap Detected,Altitude (m),Speed (m/s),Course (deg),HDOP,Current Mode,Satellites");
                 int lapdetect;
-                foreach (TraqpaqDevice.RecordDataReader.RecordDataPage page in dataReader.recordDataPages)
+                foreach (var page in dataReader.recordDataPages)
                 {
-                    foreach (TraqpaqDevice.RecordDataReader.RecordDataPage.tRecordData data in page.RecordData)
+                    foreach (var data in page.RecordData)
                     {
                         if (data.lapDetected) lapdetect = 1;
                         else lapdetect = 0;
@@ -298,6 +298,49 @@ namespace traqpaq_GUI
         private void buttonGoogleEarth_Click(object sender, EventArgs e)
         {
             ge.Start();
+        }
+
+        /// <summary>
+        /// Plot the gps coordinates that are contained in the track files from Dad
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonPlotGPS_Click(object sender, EventArgs e)
+        {
+            // show open file dialog to find the file (just csv for now)
+            //TODO look into other gps file formats
+            OpenFileDialog oFd = new OpenFileDialog();
+            if (oFd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+            {
+                // read file into array
+                string[] file;
+                try
+                {
+                    file = File.ReadAllLines(oFd.FileName);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                List<double> latitudes = new List<double>();
+                List<double> longitudes = new List<double>();
+                for (int i = 0; i < file.Length; i++)
+                {
+                    if (i > 42)
+                    {
+                        string[] s = file[i].Split(',');
+                        latitudes.Add(double.Parse(s[2]));
+                        longitudes.Add(double.Parse(s[3]));
+                    }
+                }
+
+                // create kml string
+                string kml = KmlCreator.getKMLstring(latitudes, longitudes);
+
+                // show on Google Earth
+                ge.loadKML(kml);
+            }
         }
     }
 }

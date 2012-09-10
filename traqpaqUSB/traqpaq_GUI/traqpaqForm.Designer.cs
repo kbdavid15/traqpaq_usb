@@ -49,12 +49,13 @@
             this.buttonOutputKMLfromFile = new System.Windows.Forms.Button();
             this.buttonPlot = new System.Windows.Forms.Button();
             this.buttonGoogleEarth = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPageGoogleEarth = new System.Windows.Forms.TabPage();
+            this.tabPageChart = new System.Windows.Forms.TabPage();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPageChart = new System.Windows.Forms.TabPage();
-            this.tabPageGoogleEarth = new System.Windows.Forms.TabPage();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.buttonPlotGPS = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -145,14 +146,14 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 8;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 92F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 96F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 112F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 124F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 84F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 103F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 69F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 123F));
             this.tableLayoutPanel2.Controls.Add(this.buttonOutputKML, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.buttonTest, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.buttonOutputCSV, 1, 0);
@@ -160,6 +161,7 @@
             this.tableLayoutPanel2.Controls.Add(this.buttonOutputKMLfromFile, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.buttonPlot, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.buttonGoogleEarth, 6, 0);
+            this.tableLayoutPanel2.Controls.Add(this.buttonPlotGPS, 7, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 410);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -171,9 +173,9 @@
             // buttonOutputKML
             // 
             this.buttonOutputKML.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonOutputKML.Location = new System.Drawing.Point(182, 3);
+            this.buttonOutputKML.Location = new System.Drawing.Point(128, 3);
             this.buttonOutputKML.Name = "buttonOutputKML";
-            this.buttonOutputKML.Size = new System.Drawing.Size(90, 25);
+            this.buttonOutputKML.Size = new System.Drawing.Size(78, 25);
             this.buttonOutputKML.TabIndex = 11;
             this.buttonOutputKML.Text = "Output KML";
             this.buttonOutputKML.UseVisualStyleBackColor = true;
@@ -184,7 +186,7 @@
             this.buttonTest.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonTest.Location = new System.Drawing.Point(3, 3);
             this.buttonTest.Name = "buttonTest";
-            this.buttonTest.Size = new System.Drawing.Size(81, 25);
+            this.buttonTest.Size = new System.Drawing.Size(42, 25);
             this.buttonTest.TabIndex = 7;
             this.buttonTest.Text = "Test";
             this.buttonTest.UseVisualStyleBackColor = true;
@@ -193,9 +195,9 @@
             // buttonOutputCSV
             // 
             this.buttonOutputCSV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonOutputCSV.Location = new System.Drawing.Point(90, 3);
+            this.buttonOutputCSV.Location = new System.Drawing.Point(51, 3);
             this.buttonOutputCSV.Name = "buttonOutputCSV";
-            this.buttonOutputCSV.Size = new System.Drawing.Size(86, 25);
+            this.buttonOutputCSV.Size = new System.Drawing.Size(71, 25);
             this.buttonOutputCSV.TabIndex = 8;
             this.buttonOutputCSV.Text = "Output CSV";
             this.buttonOutputCSV.UseVisualStyleBackColor = true;
@@ -204,9 +206,9 @@
             // buttonPlotText
             // 
             this.buttonPlotText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonPlotText.Location = new System.Drawing.Point(278, 3);
+            this.buttonPlotText.Location = new System.Drawing.Point(212, 3);
             this.buttonPlotText.Name = "buttonPlotText";
-            this.buttonPlotText.Size = new System.Drawing.Size(106, 25);
+            this.buttonPlotText.Size = new System.Drawing.Size(84, 25);
             this.buttonPlotText.TabIndex = 9;
             this.buttonPlotText.Text = "Plot From Text";
             this.buttonPlotText.UseVisualStyleBackColor = true;
@@ -215,33 +217,33 @@
             // buttonOutputKMLfromFile
             // 
             this.buttonOutputKMLfromFile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonOutputKMLfromFile.Location = new System.Drawing.Point(390, 3);
+            this.buttonOutputKMLfromFile.Location = new System.Drawing.Point(302, 3);
             this.buttonOutputKMLfromFile.Name = "buttonOutputKMLfromFile";
-            this.buttonOutputKMLfromFile.Size = new System.Drawing.Size(118, 25);
+            this.buttonOutputKMLfromFile.Size = new System.Drawing.Size(97, 25);
             this.buttonOutputKMLfromFile.TabIndex = 12;
-            this.buttonOutputKMLfromFile.Text = "Output KML from file";
+            this.buttonOutputKMLfromFile.Text = "Output KMLfile";
             this.buttonOutputKMLfromFile.UseVisualStyleBackColor = true;
             this.buttonOutputKMLfromFile.Click += new System.EventHandler(this.buttonOutputKMLfromFile_Click);
             // 
             // buttonPlot
             // 
             this.buttonPlot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonPlot.Location = new System.Drawing.Point(514, 3);
+            this.buttonPlot.Location = new System.Drawing.Point(405, 3);
             this.buttonPlot.Name = "buttonPlot";
-            this.buttonPlot.Size = new System.Drawing.Size(49, 25);
+            this.buttonPlot.Size = new System.Drawing.Size(63, 25);
             this.buttonPlot.TabIndex = 13;
-            this.buttonPlot.Text = "Plot";
+            this.buttonPlot.Text = "Plot Chart";
             this.buttonPlot.UseVisualStyleBackColor = true;
             this.buttonPlot.Click += new System.EventHandler(this.buttonPlot_Click);
             // 
             // buttonGoogleEarth
             // 
             this.buttonGoogleEarth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonGoogleEarth.Location = new System.Drawing.Point(569, 3);
+            this.buttonGoogleEarth.Location = new System.Drawing.Point(474, 3);
             this.buttonGoogleEarth.Name = "buttonGoogleEarth";
-            this.buttonGoogleEarth.Size = new System.Drawing.Size(64, 25);
+            this.buttonGoogleEarth.Size = new System.Drawing.Size(56, 25);
             this.buttonGoogleEarth.TabIndex = 14;
-            this.buttonGoogleEarth.Text = "Google";
+            this.buttonGoogleEarth.Text = "Plot GE";
             this.buttonGoogleEarth.UseVisualStyleBackColor = true;
             this.buttonGoogleEarth.Click += new System.EventHandler(this.buttonGoogleEarth_Click);
             // 
@@ -256,6 +258,16 @@
             this.tabControl1.Size = new System.Drawing.Size(690, 297);
             this.tabControl1.TabIndex = 16;
             // 
+            // tabPageGoogleEarth
+            // 
+            this.tabPageGoogleEarth.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGoogleEarth.Name = "tabPageGoogleEarth";
+            this.tabPageGoogleEarth.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageGoogleEarth.Size = new System.Drawing.Size(682, 271);
+            this.tabPageGoogleEarth.TabIndex = 1;
+            this.tabPageGoogleEarth.Text = "Google Earth";
+            this.tabPageGoogleEarth.UseVisualStyleBackColor = true;
+            // 
             // tabPageChart
             // 
             this.tabPageChart.Controls.Add(this.chart1);
@@ -266,16 +278,6 @@
             this.tabPageChart.TabIndex = 0;
             this.tabPageChart.Text = "Chart";
             this.tabPageChart.UseVisualStyleBackColor = true;
-            // 
-            // tabPageGoogleEarth
-            // 
-            this.tabPageGoogleEarth.Location = new System.Drawing.Point(4, 22);
-            this.tabPageGoogleEarth.Name = "tabPageGoogleEarth";
-            this.tabPageGoogleEarth.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGoogleEarth.Size = new System.Drawing.Size(682, 271);
-            this.tabPageGoogleEarth.TabIndex = 1;
-            this.tabPageGoogleEarth.Text = "Google Earth";
-            this.tabPageGoogleEarth.UseVisualStyleBackColor = true;
             // 
             // chart1
             // 
@@ -294,6 +296,16 @@
             this.chart1.Size = new System.Drawing.Size(676, 265);
             this.chart1.TabIndex = 17;
             this.chart1.Text = "chart1";
+            // 
+            // buttonPlotGPS
+            // 
+            this.buttonPlotGPS.Location = new System.Drawing.Point(536, 3);
+            this.buttonPlotGPS.Name = "buttonPlotGPS";
+            this.buttonPlotGPS.Size = new System.Drawing.Size(75, 23);
+            this.buttonPlotGPS.TabIndex = 15;
+            this.buttonPlotGPS.Text = "Plot GPS";
+            this.buttonPlotGPS.UseVisualStyleBackColor = true;
+            this.buttonPlotGPS.Click += new System.EventHandler(this.buttonPlotGPS_Click);
             // 
             // traqpaqForm
             // 
@@ -338,6 +350,7 @@
         private System.Windows.Forms.TabPage tabPageChart;
         private System.Windows.Forms.TabPage tabPageGoogleEarth;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.Button buttonPlotGPS;
 
     }
 }
