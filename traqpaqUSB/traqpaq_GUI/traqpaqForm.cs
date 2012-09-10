@@ -171,6 +171,7 @@ namespace traqpaq_GUI
             {
                 System.Timers.Timer timer = sender as System.Timers.Timer;
                 timer.Stop();
+                timer.Dispose();
             }
         }
 
@@ -201,12 +202,14 @@ namespace traqpaq_GUI
         private void buttonOutputKMLfromFile_Click(object sender, EventArgs e)
         {
             string[] lines;
-            OpenFileDialog fd = new OpenFileDialog();
-            fd.Filter = "Comma Separated Value (*.csv)|*.csv";
+            using (OpenFileDialog fd = new OpenFileDialog())
+            {
+                fd.Filter = "Comma Separated Value (*.csv)|*.csv";
 
-            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
-                lines = File.ReadAllLines(fd.FileName);
-            else return;
+                if (fd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+                    lines = File.ReadAllLines(fd.FileName);
+                else return; 
+            }
 
             // Create the KML stuff
             Kml kml = new Kml();
@@ -244,10 +247,12 @@ namespace traqpaq_GUI
             KmlFile kmlFile = KmlFile.Create(kml, false);
             
             // Save the KML file
-            SaveFileDialog sd = new SaveFileDialog();
-            sd.Filter = "KML files (*.kml)|*.kml|All files (*.*)|*.*";
-            if (sd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
-                kmlFile.Save(sd.FileName);
+            using (SaveFileDialog sd = new SaveFileDialog())
+            {
+                sd.Filter = "KML files (*.kml)|*.kml|All files (*.*)|*.*";
+                if (sd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+                    kmlFile.Save(sd.FileName); 
+            }
         }
 
         /// <summary>
@@ -308,38 +313,40 @@ namespace traqpaq_GUI
         private void buttonPlotGPS_Click(object sender, EventArgs e)
         {
             // show open file dialog to find the file (just csv for now)
-            //TODO look into other gps file formats
-            OpenFileDialog oFd = new OpenFileDialog();
-            if (oFd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+            //TODO look into other gps file formats           
+            using (OpenFileDialog oFd = new OpenFileDialog())
             {
-                // read file into array
-                string[] file;
-                try
+                if (oFd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
                 {
-                    file = File.ReadAllLines(oFd.FileName);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-
-                List<double> latitudes = new List<double>();
-                List<double> longitudes = new List<double>();
-                for (int i = 0; i < file.Length; i++)
-                {
-                    if (i > 42)
+                    // read file into array
+                    string[] file;
+                    try
                     {
-                        string[] s = file[i].Split(',');
-                        latitudes.Add(double.Parse(s[2]));
-                        longitudes.Add(double.Parse(s[3]));
+                        file = File.ReadAllLines(oFd.FileName);
                     }
-                }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
 
-                // create kml string
-                string kml = KmlCreator.getKMLstring(latitudes, longitudes);
+                    List<double> latitudes = new List<double>();
+                    List<double> longitudes = new List<double>();
+                    for (int i = 0; i < file.Length; i++)
+                    {
+                        if (i > 42)
+                        {
+                            string[] s = file[i].Split(',');
+                            latitudes.Add(double.Parse(s[2]));
+                            longitudes.Add(double.Parse(s[3]));
+                        }
+                    }
 
-                // show on Google Earth
-                ge.loadKML(kml);
+                    // create kml string
+                    string kml = KmlCreator.getKMLstring(latitudes, longitudes);
+
+                    // show on Google Earth
+                    ge.loadKML(kml);
+                } 
             }
         }
     }

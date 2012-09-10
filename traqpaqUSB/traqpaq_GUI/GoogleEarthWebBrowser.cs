@@ -41,12 +41,14 @@ namespace traqpaq_GUI
         private string getKMLstring()
         {
             string[] lines;
-            OpenFileDialog fd = new OpenFileDialog();
-            fd.Filter = "Comma Separated Value (*.csv)|*.csv";
+            using (OpenFileDialog fd = new OpenFileDialog())
+            {
+                fd.Filter = "Comma Separated Value (*.csv)|*.csv";
 
-            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
-                lines = File.ReadAllLines(fd.FileName);
-            else return null;
+                if (fd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+                    lines = File.ReadAllLines(fd.FileName);
+                else return null; 
+            }
 
             // Create the KML stuff
             Kml kml = new Kml();
