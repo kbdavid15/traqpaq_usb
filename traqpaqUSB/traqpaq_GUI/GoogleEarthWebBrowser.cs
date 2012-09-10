@@ -35,7 +35,8 @@ namespace traqpaq_GUI
             f.Dispose();
             // Open in Notepad
             System.Diagnostics.Process.Start("notepad.exe", path);
-            this.DocumentText = result;
+            this.Navigate(new Uri("https://docs.google.com/open?id=0B14KSSuE0DtlSURyQmN1b3NCdWc"));
+            //this.DocumentText = result;
             //TODO long term: host html on redline-electronics.com and then use this.Document.InvokeScript() to call a function that loads the KML file
         }
 

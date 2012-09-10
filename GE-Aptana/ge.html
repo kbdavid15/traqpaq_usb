@@ -13,13 +13,47 @@
 		
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script type="text/javascript">
+			var ge;
+			google.load("earth", "1");
+			function init() {
+				google.earth.createInstance('map3d', initCB, failureCB);
+			}
 			
-		</script>
-		
+			function failureCB(errorCode) { }
+			
+			function initCB(instancs) {
+				ge = instance;
+				ge.getWindow().setVisibility(true);
+				// Add navigation control
+				ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+				// Add layers
+		        ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
+		        ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
+		        
+		        
+			}
+			
+			function getKML(KMLstring) {
+				var kmlObject = ge.parseKml(KMLstring);
+				// Check if KML file is valid
+				if (!kmlObject) {
+					setTimeout(function() {
+						alert('Bad or null kml.');
+					}, 0);
+					return;
+				}
+				
+				ge.getFeatures().appendChild(kmlObject);
+				if (kmlObject.getAbstractView()) {
+					ge.getView().setAbstractView(kmlObject.getAbstractView());
+				}
+				
+			}
+		</script>		
 	</head>
 
-	<body>
-		<div>
+	<body onload="init()">
+		<div id="map3d">
 			
 		</div>
 	</body>
