@@ -79,29 +79,20 @@ namespace traqpaq_GUI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;html&gt;
-        ///&lt;head&gt;
-        ///   &lt;title&gt;Sample&lt;/title&gt;
-        ///   &lt;script src=&quot;http://www.google.com/jsapi?key=&quot;My App key here&quot;&gt; &lt;/script&gt;
-        ///   &lt;script type=&quot;text/javascript&quot;&gt;
-        ///      var ge;
-        ///      google.load(&quot;earth&quot;, &quot;1&quot;);
-        ///
-        ///      function init() {
-        ///         google.earth.createInstance(&apos;map3d&apos;, initCB, failureCB);
-        ///      }
-        ///
-        ///      function initCB(instance) {
-        ///         ge = instance;
-        ///         ge.getWindow().setVisibility(true);
-        ///
-        ///ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
-        ///
-        ///	 ge.getLayerRoot().enableLaye [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;!--
+        ///You are free to copy and use this sample in accordance with the terms of the
+        ///Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
+        ///--&gt;
+        ///&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///	&lt;head&gt;
+        ///    	&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;
+        ///    	&lt;title&gt;GE&lt;/title&gt;
+        ///    	&lt;script src=&quot;http://www.google.com/jsapi?key=ABQIAAAAuPsJpk3MBtDpJ4G8cqBnjRRaGTYH6UMl8mA [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string testGE {
+        internal static string ge_1 {
             get {
-                return ResourceManager.GetString("testGE", resourceCulture);
+                return ResourceManager.GetString("ge_1", resourceCulture);
             }
         }
     }

@@ -106,6 +106,7 @@
     <EmbeddedResource Include="traqpaqResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>traqpaqResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -123,6 +124,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ge.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ge-1.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
