@@ -1,17 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<meta charset="utf-8" />
-
-		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
-		Remove this if you use the .htaccess -->
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
 		<title>ge</title>
-		<meta name="description" content="" />
-		<meta name="author" content="Kyle" />
-		
-		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script src="http://www.google.com/jsapi?key=ABQIAAAAuPsJpk3MBtDpJ4G8cqBnjRRaGTYH6UMl8mADNa0YKuWNNa8VNxQCzVBXTx2DYyXGsTOxpWhvIG7Djw" type="text/javascript"></script>
 		<script type="text/javascript">
 			var ge;
 			google.load("earth", "1");
@@ -21,7 +12,7 @@
 			
 			function failureCB(errorCode) { }
 			
-			function initCB(instancs) {
+			function initCB(instance) {
 				ge = instance;
 				ge.getWindow().setVisibility(true);
 				// Add navigation control
@@ -29,10 +20,26 @@
 				// Add layers
 		        ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
 		        ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
-		        
-		        
+		        function finished(object) {
+			        if (!object) {
+			        	// wrap alerts in API callbacks and event handlers
+			        	// in a setTimeout to prevent deadlock in some browsers
+			        	setTimeout(function() {
+			            	alert('Bad or null KML.');
+			        	}, 0);
+			        	return;
+			        }
+			        ge.getFeatures().appendChild(object);
+			        var la = ge.createLookAt('');
+			        la.set(37.77976, -122.418307, 25, ge.ALTITUDE_RELATIVE_TO_GROUND,
+			               180, 60, 500);
+			        ge.getView().setAbstractView(la);
+      			}
+			    // fetch the KML
+			    var url = 'http://sketchup.google.com/3dwarehouse/download?mid=28b27372e2016cca82bddec656c63017&rtyp=k2';
+			    google.earth.fetchKml(ge, url, finished);		        
 			}
-			
+					
 			function getKML(KMLstring) {
 				var kmlObject = ge.parseKml(KMLstring);
 				// Check if KML file is valid
@@ -41,20 +48,17 @@
 						alert('Bad or null kml.');
 					}, 0);
 					return;
-				}
-				
+				}				
 				ge.getFeatures().appendChild(kmlObject);
 				if (kmlObject.getAbstractView()) {
 					ge.getView().setAbstractView(kmlObject.getAbstractView());
-				}
-				
+				}				
 			}
 		</script>		
 	</head>
 
 	<body onload="init()">
-		<div id="map3d">
-			
-		</div>
+		
+		<div id="map3d"></div>
 	</body>
 </html>

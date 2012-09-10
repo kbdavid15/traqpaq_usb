@@ -61,6 +61,49 @@ namespace traqpaq_GUI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html lang=&quot;en&quot;&gt;
+        ///	&lt;head&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot; /&gt;
+        ///
+        ///		&lt;!-- Always force latest IE rendering engine (even in intranet) &amp; Chrome Frame
+        ///		Remove this if you use the .htaccess --&gt;
+        ///		&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
+        ///
+        ///		&lt;title&gt;ge&lt;/title&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot; /&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;Kyle&quot; /&gt;
+        ///		
+        ///		&lt;script type=&quot;text/javascript&quot; src=&quot;https://www.google.com/jsapi&quot;&gt;&lt;/script&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///			var ge;
+        ///			googl [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ge {
+            get {
+                return ResourceManager.GetString("ge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!--
+        ///You are free to copy and use this sample in accordance with the terms of the
+        ///Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
+        ///--&gt;
+        ///&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///  &lt;head&gt;
+        ///    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;
+        ///    &lt;title&gt;Google Earth API Sample&lt;/title&gt;
+        ///    &lt;script src=&quot;http://www.google.com/jsapi?key=ABQIAAAAuPsJpk3MBtDpJ4G8 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string test {
+            get {
+                return ResourceManager.GetString("test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///&lt;head&gt;
         ///   &lt;title&gt;Sample&lt;/title&gt;

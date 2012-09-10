@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+		<title>ge</title>
+		<meta name="description" content="" />
+		<meta name="author" content="Kyle" />
+		
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			var ge;
+			google.load("earth", "1");
+			function init() {
+				google.earth.createInstance('map3d', initCB, failureCB);
+			}
+			
+			function failureCB(errorCode) { }
+			
+			function initCB(instance) {
+				ge = instance;
+				ge.getWindow().setVisibility(true);
+				// Add navigation control
+				ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+				// Add layers
+		        ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
+		        ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
+		        
+		        
+			}
+			
+			function getKML(KMLstring) {
+				var kmlObject = ge.parseKml(KMLstring);
+				// Check if KML file is valid
+				if (!kmlObject) {
+					setTimeout(function() {
+						alert('Bad or null kml.');
+					}, 0);
+					return;
+				}
+				
+				ge.getFeatures().appendChild(kmlObject);
+				if (kmlObject.getAbstractView()) {
+					ge.getView().setAbstractView(kmlObject.getAbstractView());
+				}
+				
+			}
+		</script>		
+	</head>
+
+	<body onload="init()">
+		<div id="map3d">
+			
+		</div>
+	</body>
+</html>

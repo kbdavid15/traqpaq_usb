@@ -20,29 +20,98 @@ namespace traqpaq_GUI
     {
         public GoogleEarthWebBrowser()
         {
-            
+            this.DocumentText = traqpaqResources.test;
+            this.Dock = DockStyle.Fill;
+            this.ScrollBarsEnabled = false;
+            //this.Navigate("http://www.google.com");
         }
 
         public void Start()
         {
-            //webBrowser.DocumentText = traqpaqResources.testGE;
-            string path = Directory.GetCurrentDirectory() + @"../../..\test\test.html";
-            StreamWriter f = new StreamWriter(path); // "../" means up one level from current directory
-            string result = loadGE();
-            // write to file            
-            f.Write(result);
-            f.Close();
-            f.Dispose();
-            // Open in Notepad
-            System.Diagnostics.Process.Start("notepad.exe", path);
-            this.Navigate(new Uri("https://docs.google.com/open?id=0B14KSSuE0DtlSURyQmN1b3NCdWc"));
-            //this.DocumentText = result;
-            //TODO long term: host html on redline-electronics.com and then use this.Document.InvokeScript() to call a function that loads the KML file
+            // call js function to load kml
+            this.Document.InvokeScript("getKML", new string[] { getKMLstring() });
+
+            ////webBrowser.DocumentText = traqpaqResources.testGE;
+            //string path = Directory.GetCurrentDirectory() + @"../../..\test\test.html";
+            //StreamWriter f = new StreamWriter(path); // "../" means up one level from current directory
+            //string result = loadGE();
+            //// write to file            
+            //f.Write(result);
+            //f.Close();
+            //f.Dispose();
+            //// Open in Notepad
+            //System.Diagnostics.Process.Start("notepad.exe", path);
+            //this.Navigate(new Uri("https://docs.google.com/open?id=0B14KSSuE0DtlSURyQmN1b3NCdWc"));
+            ////this.DocumentText = result;
+            ////TODO long term: host html on redline-electronics.com and then use this.Document.InvokeScript() to call a function that loads the KML file
         }
 
         public void plotData(IEnumerable<double> longitudes, IEnumerable<double> latitudes)
         {
             
+        }
+
+        private string getKMLstring()
+        {
+            string[] lines;
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.Filter = "Comma Separated Value (*.csv)|*.csv";
+
+            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+                lines = File.ReadAllLines(fd.FileName);
+            else return null;
+
+            // Create the KML stuff
+            Kml kml = new Kml();
+            kml.AddNamespacePrefix("gx", "http://www.google.com/kml/ext/2.2");
+            Document doc = new Document();
+            Placemark pMark = new Placemark();
+            LineString ls = new LineString();
+            CoordinateCollection coordCollect = new CoordinateCollection();
+
+            // loop through the lines in the file
+            foreach (string line in lines)
+            {
+                // skip first line if header
+                string[] s = line.Split(',');
+                try
+                {
+                    coordCollect.Add(new Vector(Convert.ToDouble(s[1]), Convert.ToDouble(s[2]), Convert.ToDouble(s[4])));
+                }
+                catch { }
+            }
+
+            // Add the coordinates to the line string
+            ls.Coordinates = coordCollect;
+            ls.AltitudeMode = AltitudeMode.Absolute;
+            ls.Extrude = true;
+            ls.Tessellate = true;
+
+            // Add the line string to the placemark
+            pMark.Geometry = ls;
+
+            // Generate a LookAt object to center the view on the placemark
+            LookAt lookAt = pMark.CalculateLookAt();
+            doc.Viewpoint = lookAt;
+
+            // Add the placemark to the document
+            doc.AddFeature(pMark);
+
+            // Add the document to the kml object
+            kml.Feature = doc;
+
+            // Create the KML file
+            KmlFile kmlFile = KmlFile.Create(kml, false);
+
+            // Save the KML file
+            SaveFileDialog sd = new SaveFileDialog();
+            sd.Filter = "KML files (*.kml)|*.kml|All files (*.*)|*.*";
+            if (sd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+            {
+                kmlFile.Save(sd.FileName);
+                return File.ReadAllText(sd.FileName);                
+            }
+            return null;
         }
 
         /// <summary>
