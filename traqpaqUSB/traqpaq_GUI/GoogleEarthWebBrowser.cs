@@ -20,35 +20,16 @@ namespace traqpaq_GUI
     {
         public GoogleEarthWebBrowser()
         {
-            this.DocumentText = traqpaqResources.test;
+            this.DocumentText = traqpaqResources.ge;
             this.Dock = DockStyle.Fill;
             this.ScrollBarsEnabled = false;
-            //this.Navigate("http://www.google.com");
         }
 
         public void Start()
         {
             // call js function to load kml
             this.Document.InvokeScript("getKML", new string[] { getKMLstring() });
-
-            ////webBrowser.DocumentText = traqpaqResources.testGE;
-            //string path = Directory.GetCurrentDirectory() + @"../../..\test\test.html";
-            //StreamWriter f = new StreamWriter(path); // "../" means up one level from current directory
-            //string result = loadGE();
-            //// write to file            
-            //f.Write(result);
-            //f.Close();
-            //f.Dispose();
-            //// Open in Notepad
-            //System.Diagnostics.Process.Start("notepad.exe", path);
-            //this.Navigate(new Uri("https://docs.google.com/open?id=0B14KSSuE0DtlSURyQmN1b3NCdWc"));
-            ////this.DocumentText = result;
-            ////TODO long term: host html on redline-electronics.com and then use this.Document.InvokeScript() to call a function that loads the KML file
-        }
-
-        public void plotData(IEnumerable<double> longitudes, IEnumerable<double> latitudes)
-        {
-            
+            //TODO long term: host html on redline-electronics.com and then use this.Document.InvokeScript() to call a function that loads the KML file
         }
 
         private string getKMLstring()
