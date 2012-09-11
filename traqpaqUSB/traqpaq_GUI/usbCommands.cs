@@ -33,6 +33,10 @@ namespace traqpaq_GUI
 
     public static class Constants
     {
+        // Product ID and Vendor ID (still need to register for valid ones)
+        public const int PID = 0x1000;
+        public const int VID = 0xAAAA;
+
         // Dataflash Page Size
         public const int MEMORY_PAGE_SIZE = 256;
 

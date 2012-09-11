@@ -11,7 +11,6 @@ namespace traqpaq_GUI
 {
     public class TraqpaqDevice
     {
-        int PID, VID;   // use to set the PID and VID for the USB device. will be used to locate the device
         public UsbDevice MyUSBDevice;
         private static UsbDeviceFinder traqpaqDeviceFinder;
         UsbEndpointReader reader;
@@ -19,22 +18,19 @@ namespace traqpaq_GUI
         ErrorCode ec = ErrorCode.None;        
         public Battery battery;
         public SavedTrackReader trackReader;
-        public List<TraqpaqDevice.SavedTrackReader.SavedTrack> trackList { get; set; }
+        public List<TraqpaqDevice.SavedTrackReader.SavedTrack> trackList;
         RecordTableReader tableReader;
         public List<RecordTableReader.RecordTable> recordTableList;
         public RecordDataReader dataReader;
-        public OTPreader myOTPreader { get; set; }
+        public OTPreader myOTPreader;
 
         /// <summary>
         /// Class constructor for the traq|paq
         /// </summary>
         public TraqpaqDevice()
         {
-            this.PID = 0x1000;
-            this.VID = 0xAAAA;
-
             // find the device
-            traqpaqDeviceFinder = new UsbDeviceFinder(this.VID, this.PID);
+            traqpaqDeviceFinder = new UsbDeviceFinder(Constants.VID, Constants.PID);
 
             // open the device
             this.MyUSBDevice = UsbDevice.OpenUsbDevice(traqpaqDeviceFinder);

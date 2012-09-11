@@ -9,10 +9,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Web;
 using System.Web.UI;
-using System.Windows.Interop;
-using SharpKml.Base;
-using SharpKml.Dom;
-using SharpKml.Engine;
 
 namespace traqpaq_GUI
 {

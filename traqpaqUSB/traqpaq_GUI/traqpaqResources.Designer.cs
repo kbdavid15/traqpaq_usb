@@ -70,7 +70,8 @@ namespace traqpaq_GUI {
         ///	&lt;head&gt;
         ///    	&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;
         ///    	&lt;title&gt;GE&lt;/title&gt;
-        ///    	&lt;script src=&quot;http://www.google.com/jsapi?key=ABQIAAAAuPsJpk3MBtDpJ4G8cqBnjRRaGTYH6UMl8mA [rest of string was truncated]&quot;;.
+        ///    	&lt;script src=&quot;http://www.google.com/jsapi&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+        ///    	&lt;script [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ge {
             get {
