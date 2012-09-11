@@ -20,11 +20,11 @@ namespace traqpaq_GUI
     {
         public GoogleEarthWebBrowser()
         {
-            this.DocumentText = traqpaqResources.ge_1;
+            //this.DocumentText = traqpaqResources.ge;
+            this.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/ge.html");
             this.Dock = DockStyle.Fill;
             this.ScrollBarsEnabled = false;
         }
-
 
         public void loadKML(string kml)
         {

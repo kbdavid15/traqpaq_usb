@@ -28,8 +28,14 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
 	
 			function failureCallback(errorCode) {
 			}
-	
+			
+			//This function is called from C#
 			function getKML(KMLstring) {
+				// make sure the GE plugin has loaded
+				if (!ge) {
+					return;
+				}
+				
 				var kmlObject = ge.parseKml(KMLstring);
 				// Check if KML file is valid
 				if (!kmlObject) {
@@ -49,4 +55,3 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
     	<div id="map3d"></div>
 	</body>
 </html>
-​
