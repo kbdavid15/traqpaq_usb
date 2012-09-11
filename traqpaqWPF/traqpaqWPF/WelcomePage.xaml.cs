@@ -15,16 +15,13 @@ using System.Windows.Shapes;
 namespace traqpaqWPF
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for WelcomePage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WelcomePage : Page
     {
-        public Page[] pages = { new WelcomePage(), new DataPage() };
-
-        public MainWindow()
+        public WelcomePage()
         {
             InitializeComponent();
-            frame1.Navigate(pages[1]);
         }
     }
 }
