@@ -61,7 +61,7 @@ namespace traqpaq_GUI
             {
                 ls.AltitudeMode = AltitudeMode.Absolute;
             }
-            ls.Extrude = true;
+            ls.Extrude = false;
             ls.Tessellate = true;
 
             // Add the line string to the placemark

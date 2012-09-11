@@ -17,6 +17,7 @@ namespace traqpaq_GUI
         public double[] Longitudes { get; set; }
         public int CoordinateIndex = 0;
         GoogleEarthWebBrowser ge;
+        
         public traqpaqForm()
         {
             InitializeComponent();
@@ -302,7 +303,34 @@ namespace traqpaq_GUI
         /// <param name="e"></param>
         private void buttonGoogleEarth_Click(object sender, EventArgs e)
         {
-            ge.Start();
+            string[] lines;
+            using (OpenFileDialog fd = new OpenFileDialog())
+            {
+                fd.Filter = "Comma Separated Value (*.csv)|*.csv";
+
+                if (fd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+                    lines = File.ReadAllLines(fd.FileName);
+                else return;
+            }
+
+            List<double> latitudes = new List<double>();
+            List<double> longitudes = new List<double>();
+            List<double> altitudes = new List<double>();
+
+            // loop through the lines in the file
+            foreach (string line in lines)
+            {
+                // skip first line if header
+                string[] s = line.Split(',');
+                if (lines[0] != line)
+                {
+                    latitudes.Add(double.Parse(s[1]));
+                    longitudes.Add(double.Parse(s[2]));
+                    altitudes.Add(double.Parse(s[4]));
+                }
+            }
+            ge.loadKML(KmlCreator.getKMLstring(latitudes,longitudes,altitudes));            
+
         }
 
         /// <summary>
