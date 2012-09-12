@@ -19,9 +19,22 @@ namespace traqpaqWPF
     /// </summary>
     public partial class WelcomePage : Page
     {
-        public WelcomePage()
+        MainWindow main;
+
+        public WelcomePage(MainWindow main)
         {
             InitializeComponent();
+            this.main = main;
+        }
+
+        private void buttonLogBook_Click(object sender, RoutedEventArgs e)
+        {
+            main.navigatePage(PageName.RECORDS);
+        }
+
+        private void buttonUpload_Click(object sender, RoutedEventArgs e)
+        {
+            main.navigatePage(PageName.UPLOAD);
         }
     }
 }

@@ -14,25 +14,14 @@ using System.Windows.Shapes;
 
 namespace traqpaqWPF
 {
-    public enum PageName { WELCOME, RECORDS, UPLOAD, DATA };
-
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for UploadPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class UploadPage : Page
     {
-        public Page[] pages;
-
-        public MainWindow()
+        public UploadPage()
         {
             InitializeComponent();
-            pages = new Page[] { new WelcomePage(this), new RecordTablePage(), new UploadPage(), new DataPage() };
-            navigatePage(PageName.WELCOME);
-        }
-
-        public void navigatePage(PageName p)
-        {
-            frame1.Navigate(pages[(int)p]);
         }
     }
 }
