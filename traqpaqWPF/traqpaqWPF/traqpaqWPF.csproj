@@ -65,6 +65,7 @@
     <Compile Include="DataPage.xaml.cs">
       <DependentUpon>DataPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions.cs" />
     <Compile Include="GoogleEarthWebBrowser.xaml.cs">
       <DependentUpon>GoogleEarthWebBrowser.xaml</DependentUpon>
     </Compile>

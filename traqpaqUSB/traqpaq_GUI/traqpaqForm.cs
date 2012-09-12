@@ -313,7 +313,7 @@ namespace traqpaq_GUI
                 else return;
             }
 
-            List<double> latitudes = new List<double>();
+            List<double> latitudes = new List<double>();    
             List<double> longitudes = new List<double>();
             List<double> altitudes = new List<double>();
 

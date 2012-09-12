@@ -5,7 +5,16 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="451"
-	Title="DataPage">
+      DataContext="{Binding RelativeSource={RelativeSource Self}}"
+	  Title="DataPage">
+    
+    <Page.Resources>
+        <DataTemplate x:Key="CheckBoxCell">
+            <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
+                  Content="{Binding Path=Name}" />
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid Name="mainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100*" />
@@ -17,7 +26,20 @@
                 <RowDefinition Height="150*" />
             </Grid.RowDefinitions>
             <GridSplitter Height="3" Name="gridSplitter2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Grid.Row="0" />
+            <ListView Name="listViewLaps" ItemsSource="{Binding LapCollection}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Lap">
+                            <DataTemplate>
+                                <CheckBox 
+                            </DataTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Time" DisplayMemberBinding="{Binding LapTime}" />
+                        <GridViewColumn Header="Color" DisplayMemberBinding="{Binding LapColor}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
-        <GridSplitter Grid.Column="0" Name="gridSplitter1" HorizontalAlignment="Right" Width="3"/>
+        <GridSplitter Grid.Column="0" Name="gridSplitter1" HorizontalAlignment="Right" Width="3" />
     </Grid>
 </Page>

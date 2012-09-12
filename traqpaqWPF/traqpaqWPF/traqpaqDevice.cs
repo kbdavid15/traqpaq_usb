@@ -5,6 +5,7 @@ using System.Text;
 using LibUsbDotNet;
 using LibUsbDotNet.Main;
 using LibUsbDotNet.Info;
+using LibUsbDotNet.DeviceNotify;
 
 namespace traqpaqWPF
 {
@@ -35,7 +36,7 @@ namespace traqpaqWPF
             this.MyUSBDevice = UsbDevice.OpenUsbDevice(traqpaqDeviceFinder);
 
             // If the device is open and ready
-            if (MyUSBDevice == null) throw new Exception("Device Not Found.");
+            if (MyUSBDevice == null) throw new TraqPaqNotConnectedException("Device not found");
 
             this.reader = MyUSBDevice.OpenEndpointReader(ReadEndpointID.Ep01);
             this.writer = MyUSBDevice.OpenEndpointWriter(WriteEndpointID.Ep02);
