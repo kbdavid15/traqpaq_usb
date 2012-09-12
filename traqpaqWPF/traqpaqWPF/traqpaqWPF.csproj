@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CustomColorPicker">
+      <HintPath>lib\CustomColorPicker.dll</HintPath>
+    </Reference>
     <Reference Include="LibUsbDotNet">
       <HintPath>lib\LibUsbDotNet.dll</HintPath>
     </Reference>

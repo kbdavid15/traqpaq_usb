@@ -7,7 +7,14 @@
             <RowDefinition Height="285*" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
-        <Frame Name="frame1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden" />
-        <StatusBar Height="23" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Grid.Row="1" />
+        <Frame Name="frame1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden" />
+        <StatusBar Height="23" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Grid.Row="1">
+            <StatusBarItem Name="statusBarItemProgress" VerticalContentAlignment="Stretch">
+                <ProgressBar Name="progressBar1" Width="100" />
+            </StatusBarItem>            
+            <Separator Width="1" Background="Gray" HorizontalAlignment="Left" />
+            <StatusBarItem Name="statusBarItemTraqpaq" Width="150" HorizontalAlignment="Left"/>
+            <Separator Width="1" HorizontalAlignment="Left" Background="Gray" Grid.Column="1"/>
+        </StatusBar>
     </Grid>
 </Window>

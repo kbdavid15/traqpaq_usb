@@ -15,6 +15,7 @@ using LibUsbDotNet;
 using LibUsbDotNet.Main;
 using LibUsbDotNet.Info;
 using LibUsbDotNet.DeviceNotify;
+using LibUsbDotNet.DeviceNotify.Info;
 
 namespace traqpaqWPF
 {
@@ -27,6 +28,11 @@ namespace traqpaqWPF
     {
         public Page[] pages;
         public TraqpaqDevice traqpaq;
+        /// <summary>
+        /// Used to detect when a device is connected, 
+        /// if it is not connected already when the program is started.
+        /// </summary>
+        public IDeviceNotifier deviceNotifier;
         /// <summary>
         /// Use this list to save the previous pages that the user has visited.
         /// </summary>
@@ -44,14 +50,18 @@ namespace traqpaqWPF
             try
             {
                 traqpaq = new TraqpaqDevice();
+                // update status bar
+                statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.myOTPreader.SerialNumber;
             }
-            catch (TraqPaqNotConnectedException e)
+            catch (TraqPaqNotConnectedException)
             {
                 // Device not found
                 traqpaq = null;
-                IDeviceNotifier deviceNotifier = DeviceNotifier.OpenDeviceNotifier();
+                // update status bar
+                statusBarItemTraqpaq.Content = "Device not found";
+                // Set up event handler to wait for a usb device to connect to
+                deviceNotifier = DeviceNotifier.OpenDeviceNotifier();
                 deviceNotifier.OnDeviceNotify += new EventHandler<DeviceNotifyEventArgs>(deviceNotifier_OnDeviceNotify);
-
             }
 
             // Create the pages and save to array
@@ -68,8 +78,24 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         void deviceNotifier_OnDeviceNotify(object sender, DeviceNotifyEventArgs e)
         {
-            //TODO test to see if this handler fires when the device is plugged in
-            throw new NotImplementedException();
+            // Detected a device, try to see if it is the traqpaq
+            if (e.EventType == EventType.DeviceArrival)  // check for device arrival
+            {
+                if (traqpaq == null)
+                {//TODO could also check for specifics with the e.Device..... properties
+                    // try to connect again
+                    try
+                    {
+                        traqpaq = new TraqpaqDevice();
+                    }
+                    catch (TraqPaqNotConnectedException) { }    // Silently fail
+                }                
+            }
+            else
+            {
+                //TODO use this to disconnect the device. The event handler would need to be created regardless
+                //of wether or not the device is connected at first though.
+            }
         }
 
         public void navigatePage(PageName p)

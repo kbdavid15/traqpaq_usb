@@ -51,9 +51,25 @@ namespace traqpaqWPF
             //mainGrid.Children.Add(geBrowser);
             //Grid.SetColumn(geBrowser, 1);
 
-            _LapCollection.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = "red" });
-
+            _LapCollection.Add(new LapInfo { LapNo = "1", LapTime = "2:30" });
+            _LapCollection.Add(new LapInfo { LapNo = "2", LapTime = "2:24" });
             
+        }
+
+        /// <summary>
+        /// Runs when a Checkbox in the lapListView is Checked or Unchecked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void LapCheckBox_Un_Checked(object sender, EventArgs e)
+        {
+            // get the selected items and update the infobox
+            foreach (LapInfo item in listViewLaps.SelectedItems)
+            {
+                // use this to determine average lap time, average speed, max speed, etc
+
+            }
+            MessageBox.Show("checked and unchecked");
         }
     }
 }
