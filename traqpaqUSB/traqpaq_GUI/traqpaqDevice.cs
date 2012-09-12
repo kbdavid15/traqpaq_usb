@@ -55,9 +55,6 @@ namespace traqpaq_GUI
             tableReader = new RecordTableReader(this);
             tableReader.readRecordTable();
             this.recordTableList = tableReader.recordTable;
-
-            //TODO figure out how to use the record data reader class
-
         }
 
         #region sendCommand
@@ -215,7 +212,7 @@ namespace traqpaq_GUI
                     //TODO figure out how to return this value
                     return readBuff;
                 }
-                return readBuff;
+                else return null;
             }
 
             /// <summary>
@@ -538,7 +535,6 @@ namespace traqpaq_GUI
                     if (parent.traqpaq.readRecordData(dataPage, length, (ushort)index))
                     {
                         // extract the data from the dataPage byte array
-                        //TODO convert props to usable value, see GPS decoder ring
                         this.utc = BetterBitConverter.ToUInt32(dataPage, Constants.RECORD_DATA_UTC) / Constants.UTC_FACTOR;
                         this.hdop = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_HDOP) / Constants.HDOP_FACTOR;
                         this.GPSmode = dataPage[Constants.RECORD_DATA_MODE];
