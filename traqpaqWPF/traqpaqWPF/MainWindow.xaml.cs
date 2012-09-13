@@ -68,7 +68,7 @@ namespace traqpaqWPF
             pages = new Page[] { new WelcomePage(this), new RecordTablePage(), new UploadPage(), new DataPage() };
 
             // Go to the welcome page
-            navigatePage(PageName.DATA);
+            navigatePage(PageName.WELCOME);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace traqpaqWPF
                         traqpaq = new TraqpaqDevice();
                     }
                     catch (TraqPaqNotConnectedException) { }    // Silently fail
-                }                
+                }
             }
             else
             {
@@ -101,6 +101,6 @@ namespace traqpaqWPF
         public void navigatePage(PageName p)
         {
             frame1.Navigate(pages[(int)p]);
-        }
+        }        
     }
 }

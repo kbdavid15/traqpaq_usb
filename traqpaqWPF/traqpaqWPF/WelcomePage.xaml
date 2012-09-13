@@ -16,5 +16,6 @@
         <Button Content="Log Book" Grid.Row="1" Height="23" HorizontalAlignment="Center" Name="buttonLogBook" VerticalAlignment="Center" Width="75" Click="buttonLogBook_Click" />
         <Button Content="Upload" Grid.Row="2" Height="23" HorizontalAlignment="Center"  Name="buttonUpload" VerticalAlignment="Center" Width="75" Click="buttonUpload_Click" />
         <Image Name="image1" Stretch="Uniform" Source="/traqpaqWPF;component/Images/traqpaq.png" Margin="15,0" />
+        <Button Content="Data Page" Grid.Row="2" Height="23" HorizontalAlignment="Center" Name="buttonData" VerticalAlignment="Top" Width="75" Click="buttonData_Click" />
     </Grid>
 </Page>
