@@ -38,6 +38,11 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
             line.setMap(map);
 
             map.fitBounds(bounds);
+            return line;
+        }
+
+        function removeLine(line) {
+            line.setMap(null);
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);

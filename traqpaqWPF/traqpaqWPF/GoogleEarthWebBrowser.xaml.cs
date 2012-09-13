@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Web.Script.Serialization;
+using System.Web.Script;
 
 namespace traqpaqWPF
 {
@@ -21,7 +22,7 @@ namespace traqpaqWPF
     public partial class GoogleEarthWebBrowser : UserControl
     {
         JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
-
+        
         public GoogleEarthWebBrowser()
         {
             InitializeComponent();
@@ -36,12 +37,17 @@ namespace traqpaqWPF
             webBrowser.InvokeScript("getKML", new string[] { kml });
         }
 
-        public void addPoints(IEnumerable<double> lats, IEnumerable<double> longs, string color)
+        public object addPoints(IEnumerable<double> lats, IEnumerable<double> longs, string color)
         {
             string latitudes = jsSerializer.Serialize(lats);
             string longitudes = jsSerializer.Serialize(longs);
             string[] args = { latitudes, longitudes, color };
-            webBrowser.InvokeScript("addPoints", args);
+            return webBrowser.InvokeScript("addPoints", args);         
+        }
+
+        public void removeLap(object line)
+        {
+            webBrowser.InvokeScript("removeLine", new { line });
         }
 
     }

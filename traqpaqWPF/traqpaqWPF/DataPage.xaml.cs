@@ -66,7 +66,7 @@ namespace traqpaqWPF
         void LapCheckBox_Un_Checked(object sender, EventArgs e)
         {
             // get the selected items and update the infobox, also generate KML files to overlay on GE
-            foreach (LapInfo item in listViewLaps.SelectedItems)
+            foreach (LapInfo item in listViewLaps.Items)
             {
                 // use this to determine average lap time, average speed, max speed, etc
                 // show a message box with the selected color
@@ -79,6 +79,7 @@ namespace traqpaqWPF
                 //string kml = KmlCreator.getKMLstring(item.LapColor, latitudes, longitudes);
                 //geBrowser.loadKML(kml);
                 geBrowser.addPoints(latitudes, longitudes, "#" + item.LapColor.ToString().Substring(3));
+                //TODO test removal of lap
             }
         }
 
@@ -103,7 +104,7 @@ namespace traqpaqWPF
         }
 
         /// <summary>
-        /// 
+        /// Update the map with the new color
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
