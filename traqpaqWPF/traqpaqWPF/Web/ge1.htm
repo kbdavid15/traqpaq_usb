@@ -8,8 +8,9 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
     	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     	<title>GE</title>
     	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-    	<script type="text/javascript">            
+    	<script type="text/javascript">
     	    var ge;
+    	    var kmlObject;
     	    google.load("earth", "1");            
 
     	    function init() {
@@ -36,7 +37,7 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
     	            return;
     	        }
 
-    	        var kmlObject = ge.parseKml(KMLstring);
+    	        kmlObject = ge.parseKml(KMLstring);
     	        // Check if KML file is valid
     	        if (!kmlObject) {
     	            setTimeout(function () {

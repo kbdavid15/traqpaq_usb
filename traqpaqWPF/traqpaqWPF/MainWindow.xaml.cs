@@ -65,7 +65,7 @@ namespace traqpaqWPF
             }
 
             // Create the pages and save to array
-            pages = new Page[] { new WelcomePage(this), new RecordTablePage(), new UploadPage(), new DataPage() };
+            pages = new Page[] { new WelcomePage(this), new RecordTablePage(), new UploadPage(), new DataPage(this) };
 
             // Go to the welcome page
             navigatePage(PageName.WELCOME);

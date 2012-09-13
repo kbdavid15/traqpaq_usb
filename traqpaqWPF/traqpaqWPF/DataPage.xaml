@@ -18,7 +18,7 @@
                   Content="{Binding Path=Name}" Checked="LapCheckBox_Un_Checked" Unchecked="LapCheckBox_Un_Checked" />
         </DataTemplate>
         <DataTemplate x:Key="ColorPicker">
-            <xctk:ColorPicker Width="40" SelectedColor="{Binding Path=LapColor}"/>
+            <xctk:ColorPicker Width="40" SelectedColor="{Binding Path=LapColor}" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
         </DataTemplate>
     </Page.Resources>
 

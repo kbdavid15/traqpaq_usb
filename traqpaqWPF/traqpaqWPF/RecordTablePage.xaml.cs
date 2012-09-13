@@ -38,6 +38,16 @@ namespace traqpaqWPF
             InitializeComponent();
             _RecordTable.Add(new Record("Hi", "Today"));
         }
+
+        /// <summary>
+        /// Double clicking an item in the listview shows the Data page and passes the item to it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void listViewRecords_MouseDoubleClick(object sender, EventArgs e)
+        {
+
+        }
     }
 
     

@@ -5,12 +5,14 @@ using System.Text;
 using SharpKml.Base;
 using SharpKml.Dom;
 using SharpKml.Engine;
+using System.Windows.Media;
 
 namespace traqpaqWPF
 {
     public static class KmlCreator
     {
-        public static string getKMLstring(List<double> latitudes,
+        public static string getKMLstring(Color        lapColor,
+                                          List<double> latitudes,
                                           List<double> longitudes, 
                                           List<double> altitudes = null)
         {
@@ -33,7 +35,7 @@ namespace traqpaqWPF
             // Define the style
             style.Line = new LineStyle();
             style.Id = "redline";
-            style.Line.Color = new Color32(255, 0, 0, 255);
+            style.Line.Color = new Color32(lapColor.A, lapColor.B, lapColor.G, lapColor.R);
             style.Line.ColorMode = ColorMode.Random;
             style.Line.Width = 2;
             

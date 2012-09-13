@@ -13,7 +13,7 @@
             <RowDefinition Height="100*" />
             <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
-        <ListView Grid.Row="1" Name="listViewRecords" ItemsSource="{Binding RecordTable}" >
+        <ListView Grid.Row="1" Name="listViewRecords" ItemsSource="{Binding RecordTable}" MouseDoubleClick="listViewRecords_MouseDoubleClick" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Track Name" DisplayMemberBinding="{Binding trackName}"/>
