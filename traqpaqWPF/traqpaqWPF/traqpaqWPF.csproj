@@ -69,9 +69,6 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CustomColorPicker">
-      <HintPath>lib\CustomColorPicker.dll</HintPath>
-    </Reference>
     <Reference Include="LibUsbDotNet">
       <HintPath>lib\LibUsbDotNet.dll</HintPath>
     </Reference>
@@ -91,6 +88,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>lib\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

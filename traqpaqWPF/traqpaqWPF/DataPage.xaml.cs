@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
-using DropDownCustomColorPicker;
+using xe = Xceed.Wpf.Toolkit;
 
 namespace traqpaqWPF
 {
@@ -20,7 +20,7 @@ namespace traqpaqWPF
     {
         public string LapNo { get; set; }
         public string LapTime { get; set; }
-        public string LapColor { get; set; }
+        public Color LapColor { get; set; }
     }
 
     /// <summary>
@@ -35,8 +35,6 @@ namespace traqpaqWPF
         {
             get { return _LapCollection; }
         }
-
-        public List<CustomColorPicker> colorPickerList = new List<CustomColorPicker>();
         
         /// <summary>
         /// This page should not be created until a run is selected
@@ -50,14 +48,13 @@ namespace traqpaqWPF
             // if internet connection, use web browser to load google earth
             // otherwise, just plot the points
             //TODO figure this out, for now assume internet and fail gracefully
-            GoogleEarthWebBrowser geBrowser = new GoogleEarthWebBrowser();
-            mainGrid.Children.Add(geBrowser);
-            Grid.SetColumn(geBrowser, 1);
+            //GoogleEarthWebBrowser geBrowser = new GoogleEarthWebBrowser();
+            //mainGrid.Children.Add(geBrowser);
+            //Grid.SetColumn(geBrowser, 1);
 
-            _LapCollection.Add(new LapInfo { LapNo = "1", LapTime = "2:30" });
-            _LapCollection.Add(new LapInfo { LapNo = "2", LapTime = "2:24" });
-           
-            
+            _LapCollection.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = Colors.LawnGreen});
+            _LapCollection.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.LightSlateGray});
+
         }
 
         /// <summary>
@@ -71,16 +68,29 @@ namespace traqpaqWPF
             foreach (LapInfo item in listViewLaps.SelectedItems)
             {
                 // use this to determine average lap time, average speed, max speed, etc
-
+                // show a message box with the selected color
+                //MessageBox.Show(item.LapColor.ToString());
             }
         }
 
-        void ColorPicker_Loaded(object sender, EventArgs e)
+        /// <summary>
+        /// Select all the checkboxes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void LapHeaderCheckBox_Checked(object sender, EventArgs e)
         {
-            CustomColorPicker cp = sender as CustomColorPicker;
-            Color red = Color.FromRgb(255, 0, 0);
-            cp.SelectedColor = red;
-            //cp.HexValue = "#FF800000";
+            listViewLaps.SelectAll();
+        }
+
+        /// <summary>
+        /// Unselect all the checkboxes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void LapHeaderCheckBox_Unchecked(object sender, EventArgs e)
+        {
+            listViewLaps.SelectedItems.Clear();
         }
     }
 }

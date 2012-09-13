@@ -3,19 +3,22 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:cp="clr-namespace:DropDownCustomColorPicker;assembly=CustomColorPicker"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="300" d:DesignWidth="451"
       DataContext="{Binding RelativeSource={RelativeSource Self}}"
-	  Title="DataPage">
+	  Title="DataPage" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     
     <Page.Resources>
+        <DataTemplate x:Key="CheckBoxHeaderCell">
+            <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
+                  Content="{Binding Path=Name}" Checked="LapHeaderCheckBox_Checked" Unchecked="LapHeaderCheckBox_Unchecked" />
+        </DataTemplate>
         <DataTemplate x:Key="CheckBoxCell">
             <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
-                  Content="{Binding Path=Name}" Checked="LapCheckBox_Un_Checked" Unchecked="LapCheckBox_Un_Checked"/>
+                  Content="{Binding Path=Name}" Checked="LapCheckBox_Un_Checked" Unchecked="LapCheckBox_Un_Checked" />
         </DataTemplate>
         <DataTemplate x:Key="ColorPicker">
-            <cp:CustomColorPicker Width="40" Loaded="ColorPicker_Loaded" />
+            <xctk:ColorPicker Width="40" SelectedColor="{Binding Path=LapColor}"/>
         </DataTemplate>
     </Page.Resources>
 
@@ -33,10 +36,10 @@
             <ListView Name="listViewLaps" ItemsSource="{Binding LapCollection}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn HeaderTemplate="{StaticResource CheckBoxCell}" CellTemplate="{StaticResource CheckBoxCell}" />
+                        <GridViewColumn HeaderTemplate="{StaticResource CheckBoxHeaderCell}" CellTemplate="{StaticResource CheckBoxCell}" />
                         <GridViewColumn Header="Lap" DisplayMemberBinding="{Binding LapNo}" />
                         <GridViewColumn Header="Time" DisplayMemberBinding="{Binding LapTime}" />
-                        <GridViewColumn Header="Color" CellTemplate="{StaticResource ColorPicker}" />
+                        <GridViewColumn Header="Color" CellTemplate="{DynamicResource ColorPicker}" />
                     </GridView>
                 </ListView.View>
             </ListView>
