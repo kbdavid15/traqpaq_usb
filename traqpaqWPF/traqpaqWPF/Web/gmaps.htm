@@ -13,7 +13,7 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
     <script type="text/javascript">
         var map;
         // Use this to keep track of the lines added
-        var polylineArray = new Array(1);
+        var polylineArray = new Array();
 
         function initialize() {
             var mapDiv = document.getElementById('map-canvas');
@@ -22,41 +22,64 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
                 zoom: 3,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
+            
         }
 
-        function addPoints(latitudes, longitudes, color) {
-            var lat = eval(latitudes);
-            var long = eval(longitudes);
+        function addPoints(latitudes, longitudes, color, idx) {
+            // Eval all paramaters (might need to use JSON for security)
+            var lats = eval(latitudes);
+            var longs = eval(longitudes);
+            var index = eval(idx);
+
             var bounds = new google.maps.LatLngBounds();
             var path = new Array();
-            for (i = 0; i < lat.length; i++) {
-                path[i] = new google.maps.LatLng(lat[i], long[i]);
+            // Assign the coordinats to the path
+            for (i = 0; i < lats.length; i++) {
+                path[i] = new google.maps.LatLng(lats[i], longs[i]);
                 bounds.extend(path[i]);
             }
+            if (!polylineArray[index]) {
+                polylineArray[index] = new google.maps.Polyline({
+                    path: path,
+                    strokeColor: color,
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                });                
+            }
+            // Else, the line already exists
+            // Check if it is set to the map
+            if (!polylineArray[index].getMap()) {
+                polylineArray[index].setMap(map)
+            }
+            /*
             var line = new google.maps.Polyline({
                 path: path,
                 strokeColor: color,
                 strokeOpacity: 1.0,
                 strokeWeight: 2
             });
-
-            line.setMap(map);
-            //map.addOverlay(line);
-            map.fitBounds(bounds);
-            //alert(typeof line);
-            // add to array and return index
-            polylineArray.push(line);
-            return --polylineArray.length;          
+            line.setMap(map);   */
+            map.fitBounds(bounds);         
         }
 
-        function removeLine(lineIdx) {
-            //alert(lineIdx);
-            var i = eval(lineIdx);
-            i = i - 1;
-            //alert(i.toString());
-            polylineArray[i].setPath([]);
-            //map.removeOverlay(polylineArray[lineIdx]);
-            //alert(typeof polylineArray[i]);
+        function removeLine(lap) {
+            try {
+                // The problem was not with the object array, it was with the passed parameter
+                // Passing it as a string and then casting as number works
+                polylineArray[Number(lap)].setMap(null);                
+            }
+            catch (err) {
+                alert(err);
+            }
+        }
+
+        function changeColor(lap, color) {
+            try {
+                polylineArray[Number(lap)].setOptions({ strokeColor: color });
+            }
+            catch (err) {   // usually this error is a result of the lap not being on the map yet
+                //alert(err);
+            }
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);

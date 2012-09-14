@@ -18,7 +18,7 @@
                   Content="{Binding Path=Name}" Checked="LapCheckBox_Checked" Unchecked="LapCheckBox_Unchecked" />
         </DataTemplate>
         <DataTemplate x:Key="ColorPicker">
-            <xctk:ColorPicker Width="40" SelectedColor="{Binding Path=LapColor}" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
+            <xctk:ColorPicker Tag="{Binding LapNo}" Width="40" SelectedColor="{Binding Path=LapColor}" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
         </DataTemplate>
     </Page.Resources>
 
@@ -36,7 +36,7 @@
             <ListView Name="listViewLaps" ItemsSource="{Binding LapCollection}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn HeaderTemplate="{StaticResource CheckBoxHeaderCell}" CellTemplate="{StaticResource CheckBoxCell}" />
+                        <GridViewColumn HeaderTemplate="{StaticResource CheckBoxHeaderCell}" CellTemplate="{DynamicResource CheckBoxCell}" />
                         <GridViewColumn Header="Lap" DisplayMemberBinding="{Binding LapNo}" />
                         <GridViewColumn Header="Time" DisplayMemberBinding="{Binding LapTime}" />
                         <GridViewColumn Header="Color" CellTemplate="{DynamicResource ColorPicker}" />

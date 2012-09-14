@@ -22,7 +22,7 @@ namespace traqpaqWPF
         public string LapTime { get; set; }
         public Color LapColor { get; set; }
         public int LineIndex { get; set; }
-        public bool IsSelected { get; set; }
+       // public bool IsSelected { get; set; }
         public bool IsRendered { get; set; }
     }
 
@@ -81,7 +81,8 @@ namespace traqpaqWPF
                                                              -83.3188025, -83.32939178, -83.32939178 };
                 //string kml = KmlCreator.getKMLstring(item.LapColor, latitudes, longitudes);
                 //geBrowser.loadKML(kml);
-                item.LineIndex = geBrowser.addPoints(latitudes, longitudes, "#" + item.LapColor.ToString().Substring(3));
+                //MessageBox.Show(item.IsSelected.ToString());
+                geBrowser.addPoints(latitudes, longitudes, "#" + item.LapColor.ToString().Substring(3), item.LapNo);
                 item.IsRendered = true;
                 //TODO test removal of lap
             }
@@ -96,9 +97,9 @@ namespace traqpaqWPF
         {
             foreach (LapInfo item in listViewLaps.Items)
             {
-                if (!item.IsSelected && item.IsRendered && item.LineIndex != null)
+                if (!listViewLaps.SelectedItems.Contains(item) && item.IsRendered)
                 {
-                    geBrowser.removeLap(item.LineIndex);
+                    geBrowser.removeLap(item.LapNo);
                 }
             }
         }
@@ -110,6 +111,7 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         void LapHeaderCheckBox_Checked(object sender, EventArgs e)
         {
+            //TODO this checks the boxes but does not add to the selected items collection
             listViewLaps.SelectAll();
         }
 
@@ -125,12 +127,15 @@ namespace traqpaqWPF
 
         /// <summary>
         /// Update the map with the new color
+        /// Only matters if the lap is already rendered
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void ColorPicker_SelectedColorChanged(object sender, EventArgs e)
         {
-
+            xe.ColorPicker cp = sender as xe.ColorPicker;
+            string lapNo = (string)cp.Tag; // tag is bound to the lap number
+            geBrowser.changeColor(lapNo, "#" + cp.SelectedColor.ToString().Substring(3));
         }
     }
 }
