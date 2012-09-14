@@ -21,6 +21,9 @@ namespace traqpaqWPF
         public string LapNo { get; set; }
         public string LapTime { get; set; }
         public Color LapColor { get; set; }
+        public int LineIndex { get; set; }
+        public bool IsSelected { get; set; }
+        public bool IsRendered { get; set; }
     }
 
     /// <summary>
@@ -63,10 +66,10 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void LapCheckBox_Un_Checked(object sender, EventArgs e)
+        void LapCheckBox_Checked(object sender, EventArgs e)
         {
             // get the selected items and update the infobox, also generate KML files to overlay on GE
-            foreach (LapInfo item in listViewLaps.Items)
+            foreach (LapInfo item in listViewLaps.SelectedItems)
             {
                 // use this to determine average lap time, average speed, max speed, etc
                 // show a message box with the selected color
@@ -78,8 +81,25 @@ namespace traqpaqWPF
                                                              -83.3188025, -83.32939178, -83.32939178 };
                 //string kml = KmlCreator.getKMLstring(item.LapColor, latitudes, longitudes);
                 //geBrowser.loadKML(kml);
-                geBrowser.addPoints(latitudes, longitudes, "#" + item.LapColor.ToString().Substring(3));
+                item.LineIndex = geBrowser.addPoints(latitudes, longitudes, "#" + item.LapColor.ToString().Substring(3));
+                item.IsRendered = true;
                 //TODO test removal of lap
+            }
+        }
+
+        /// <summary>
+        /// Remove the lap from the map
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void LapCheckBox_Unchecked(object sender, EventArgs e)
+        {
+            foreach (LapInfo item in listViewLaps.Items)
+            {
+                if (!item.IsSelected && item.IsRendered && item.LineIndex != null)
+                {
+                    geBrowser.removeLap(item.LineIndex);
+                }
             }
         }
 

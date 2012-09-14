@@ -15,7 +15,7 @@
         </DataTemplate>
         <DataTemplate x:Key="CheckBoxCell">
             <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
-                  Content="{Binding Path=Name}" Checked="LapCheckBox_Un_Checked" Unchecked="LapCheckBox_Un_Checked" />
+                  Content="{Binding Path=Name}" Checked="LapCheckBox_Checked" Unchecked="LapCheckBox_Unchecked" />
         </DataTemplate>
         <DataTemplate x:Key="ColorPicker">
             <xctk:ColorPicker Width="40" SelectedColor="{Binding Path=LapColor}" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>

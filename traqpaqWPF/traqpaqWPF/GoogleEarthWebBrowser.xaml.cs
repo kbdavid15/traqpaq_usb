@@ -37,17 +37,17 @@ namespace traqpaqWPF
             webBrowser.InvokeScript("getKML", new string[] { kml });
         }
 
-        public object addPoints(IEnumerable<double> lats, IEnumerable<double> longs, string color)
+        public int addPoints(IEnumerable<double> lats, IEnumerable<double> longs, string color)
         {
             string latitudes = jsSerializer.Serialize(lats);
             string longitudes = jsSerializer.Serialize(longs);
             string[] args = { latitudes, longitudes, color };
-            return webBrowser.InvokeScript("addPoints", args);         
+            return (int)webBrowser.InvokeScript("addPoints", args);
         }
 
-        public void removeLap(object line)
+        public void removeLap(int lineIdx)
         {
-            webBrowser.InvokeScript("removeLine", new { line });
+            webBrowser.InvokeScript("removeLine", new string[] { lineIdx.ToString() });
         }
 
     }
