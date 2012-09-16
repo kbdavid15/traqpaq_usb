@@ -3,12 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="traq|paq" Height="525" Width="850">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25*" />
+            <ColumnDefinition Width="803*" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="285*" />
+            <RowDefinition Height="25*" />
+            <RowDefinition Height="438*" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
-        <Frame Name="frame1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden" />
-        <StatusBar Height="23" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Grid.Row="1">
+        <Frame Name="frame1" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2" />
+        <StatusBar Height="23" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Grid.Row="2" Grid.ColumnSpan="2">
             <StatusBarItem Name="statusBarItemProgress" VerticalContentAlignment="Stretch">
                 <ProgressBar Name="progressBar1" Width="100" />
             </StatusBarItem>            

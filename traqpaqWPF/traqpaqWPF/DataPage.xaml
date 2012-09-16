@@ -4,12 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
-      d:DesignHeight="300" d:DesignWidth="451"
+      d:DesignHeight="300" d:DesignWidth="450"
       DataContext="{Binding RelativeSource={RelativeSource Self}}"
 	  Title="DataPage" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     
     <Page.Resources>
-        <DataTemplate x:Key="CheckBoxHeaderCell">
+        <DataTemplate x:Key="CheckBoxHeaderCell" DataType="CheckBox">
             <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
                   Content="" Checked="LapHeaderCheckBox_Checked" Unchecked="LapHeaderCheckBox_Unchecked" />
         </DataTemplate>
@@ -18,18 +18,19 @@
                   Content="" Checked="LapCheckBox_Checked" Unchecked="LapCheckBox_Unchecked" />
         </DataTemplate>
         <DataTemplate x:Key="ColorPicker" DataType="xctk:ColorPicker">
-            <xctk:ColorPicker Tag="{Binding LapNo}" Width="40" SelectedColor="{Binding Path=LapColor}" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
+            <xctk:ColorPicker Tag="{Binding LapNo}" SelectedColor="{Binding Path=LapColor}" SelectedColorChanged="ColorPicker_SelectedColorChanged"
+                              Width="40" />
         </DataTemplate>
     </Page.Resources>
 
     <Grid Name="mainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100*" />
-            <ColumnDefinition Width="200*" />
+            <ColumnDefinition Width="150*" />
+            <ColumnDefinition Width="300*" />
         </Grid.ColumnDefinitions>
         <Grid Name="subGrid">
             <Grid.RowDefinitions>
-                <RowDefinition Height="200*" />
+                <RowDefinition Height="150*" />
                 <RowDefinition Height="150*" />
             </Grid.RowDefinitions>
             <GridSplitter Height="3" Name="gridSplitter2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Grid.Row="0" />

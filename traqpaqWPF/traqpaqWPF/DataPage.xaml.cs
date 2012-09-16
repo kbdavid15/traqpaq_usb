@@ -41,9 +41,9 @@ namespace traqpaqWPF
         List<double> latitudes2 = new List<double> { 42.1848786, 42.17432503, 42.1617474, 42.15292871, 
                                                             42.14888076, 42.1548081, 42.16593994, 42.17562615,
                                                             42.18386665, 42.1848786, 42.1848786};
-        List<double> longitudes2 = new List<double> { -83.32956822, -83.34756995, -83.35109965, -83.34209883,
-                                                             -83.32321473, -83.31368443, -83.30027137, -83.30556597,
-                                                             -83.3188025, -83.32939178, -83.32939178 };
+        List<double> longitudes2 = new List<double> { -83.32856822, -83.34656995, -83.35009965, -83.34109883,
+                                                             -83.32221473, -83.31268443, -83.30027137, -83.30456597,
+                                                             -83.3198025, -83.32839178, -83.32839178 };
         
         MainWindow main;
         GoogleEarthWebBrowser geBrowser;
@@ -67,6 +67,7 @@ namespace traqpaqWPF
             // otherwise, just plot the points
             //TODO figure this out, for now assume internet and fail gracefully
             geBrowser = new GoogleEarthWebBrowser();
+            geBrowser.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             mainGrid.Children.Add(geBrowser);
             Grid.SetColumn(geBrowser, 1);
 
