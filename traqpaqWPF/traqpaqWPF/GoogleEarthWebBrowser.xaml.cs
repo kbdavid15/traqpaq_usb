@@ -37,11 +37,11 @@ namespace traqpaqWPF
             webBrowser.InvokeScript("getKML", new string[] { kml });
         }
 
-        public void addPoints(IEnumerable<double> lats, IEnumerable<double> longs, string color, string lap)
+        public void addPoints(IEnumerable<double> lats, IEnumerable<double> longs, Color color, string lap)
         {
             string latitudes = jsSerializer.Serialize(lats);
             string longitudes = jsSerializer.Serialize(longs);
-            string[] args = { latitudes, longitudes, color, lap };
+            string[] args = { latitudes, longitudes, "#" + color.ToString().Substring(3), lap };
             webBrowser.InvokeScript("addPoints", args);
         }
 
@@ -50,9 +50,9 @@ namespace traqpaqWPF
             webBrowser.InvokeScript("removeLine", new string[] { lap });
         }
 
-        public void changeColor(string lap, string color)
+        public void changeColor(string lap, Color color)
         {
-            webBrowser.InvokeScript("changeColor", new string[] { lap, color });
+            webBrowser.InvokeScript("changeColor", new string[] { lap, "#" + color.ToString().Substring(3) });
         }
     }
 }

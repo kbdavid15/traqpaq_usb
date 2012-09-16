@@ -13,11 +13,11 @@
             <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
                   Content="" Checked="LapHeaderCheckBox_Checked" Unchecked="LapHeaderCheckBox_Unchecked" />
         </DataTemplate>
-        <DataTemplate x:Key="CheckBoxCell">
+        <DataTemplate x:Key="CheckBoxCell" DataType="CheckBox">
             <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
                   Content="" Checked="LapCheckBox_Checked" Unchecked="LapCheckBox_Unchecked" />
         </DataTemplate>
-        <DataTemplate x:Key="ColorPicker">
+        <DataTemplate x:Key="ColorPicker" DataType="xctk:ColorPicker">
             <xctk:ColorPicker Tag="{Binding LapNo}" Width="40" SelectedColor="{Binding Path=LapColor}" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
         </DataTemplate>
     </Page.Resources>
@@ -39,7 +39,7 @@
                         <GridViewColumn HeaderTemplate="{StaticResource CheckBoxHeaderCell}" CellTemplate="{DynamicResource CheckBoxCell}" />
                         <GridViewColumn Header="Lap" DisplayMemberBinding="{Binding LapNo}" />
                         <GridViewColumn Header="Time" DisplayMemberBinding="{Binding LapTime}" />
-                        <GridViewColumn Header="Color" CellTemplate="{DynamicResource ColorPicker}" />
+                        <GridViewColumn Header="Color" CellTemplate="{DynamicResource ColorPicker}"  />
                     </GridView>
                 </ListView.View>
             </ListView>

@@ -71,7 +71,7 @@ namespace traqpaqWPF
             Grid.SetColumn(geBrowser, 1);
 
             _LapCollection.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = Colors.LawnGreen, latitudes = latitudes1, longitudes = longitudes1 });
-            _LapCollection.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.LightSlateGray, latitudes = latitudes2, longitudes = longitudes2 });
+            _LapCollection.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.HotPink, latitudes = latitudes2, longitudes = longitudes2 });
 
         }
 
@@ -85,13 +85,10 @@ namespace traqpaqWPF
             // get the selected items and update the infobox, also generate KML files to overlay on GE
             foreach (LapInfo item in listViewLaps.SelectedItems)
             {
-                // use this to determine average lap time, average speed, max speed, etc
-                // show a message box with the selected color
-                
+                // use this to determine average lap time, average speed, max speed, etc                
                 //string kml = KmlCreator.getKMLstring(item.LapColor, latitudes, longitudes);
                 //geBrowser.loadKML(kml);
-                geBrowser.addPoints(item.latitudes, item.longitudes, "#" + item.LapColor.ToString().Substring(3), item.LapNo);
-                item.IsRendered = true;
+                plotLap(item);                
             }
         }
 
@@ -121,8 +118,12 @@ namespace traqpaqWPF
         {
             //TODO this checks the boxes but does not add to the selected items collection
             listViewLaps.SelectAll();
+            foreach (LapInfo item in listViewLaps.Items)
+            {
+                plotLap(item);
+            }
         }
-
+        
         /// <summary>
         /// Unselect all the checkboxes
         /// </summary>
@@ -143,7 +144,21 @@ namespace traqpaqWPF
         {
             xe.ColorPicker cp = sender as xe.ColorPicker;
             string lapNo = (string)cp.Tag; // tag is bound to the lap number
-            geBrowser.changeColor(lapNo, "#" + cp.SelectedColor.ToString().Substring(3));
+            geBrowser.changeColor(lapNo, cp.SelectedColor);
+        }
+
+        /// <summary>
+        /// Since the select all method on the list view does not plot the laps
+        /// use this function to plot them
+        /// </summary>
+        /// <param name="lap"></param>
+        private void plotLap(LapInfo lap)
+        {
+            if (!lap.IsRendered)
+            {
+                geBrowser.addPoints(lap.latitudes, lap.longitudes, lap.LapColor, lap.LapNo);
+                lap.IsRendered = true;
+            }
         }
     }
 }

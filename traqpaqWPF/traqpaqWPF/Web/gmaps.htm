@@ -30,11 +30,12 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
             var longs = eval(longitudes);
             var index = eval(idx);
             //TODO don't move the map when adding 2nd track
-            var bounds = new google.maps.LatLngBounds();
+            var bounds;
             var path = new Array();
 
             // Assign the coordinats to the path
             if (!polylineArray[index]) {
+                bounds = new google.maps.LatLngBounds();
                 for (i = 0; i < lats.length; i++) {
                     path[i] = new google.maps.LatLng(lats[i], longs[i]);
                     bounds.extend(path[i]);
@@ -51,7 +52,9 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
             if (!polylineArray[index].getMap()) {
                 polylineArray[index].setMap(map)
             }
-            map.fitBounds(bounds);         
+            if (bounds) {
+                map.fitBounds(bounds);
+            }
         }
 
         function removeLine(lap) {
