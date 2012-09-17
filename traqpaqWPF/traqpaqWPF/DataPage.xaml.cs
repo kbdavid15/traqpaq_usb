@@ -69,10 +69,10 @@ namespace traqpaqWPF
             geBrowser = new GoogleEarthWebBrowser();
             geBrowser.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             mainGrid.Children.Add(geBrowser);
-            Grid.SetColumn(geBrowser, 1);
+            Grid.SetColumn(geBrowser, 2);
 
             _LapCollection.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = Colors.LawnGreen, latitudes = latitudes1, longitudes = longitudes1 });
-            _LapCollection.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.HotPink, latitudes = latitudes2, longitudes = longitudes2 });
+            _LapCollection.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.Red, latitudes = latitudes2, longitudes = longitudes2 });
 
         }
 
@@ -87,9 +87,9 @@ namespace traqpaqWPF
             foreach (LapInfo item in listViewLaps.SelectedItems)
             {
                 // use this to determine average lap time, average speed, max speed, etc                
-                //string kml = KmlCreator.getKMLstring(item.LapColor, latitudes, longitudes);
-                //geBrowser.loadKML(kml);
-                plotLap(item);                
+                string kml = KmlCreator.getKMLstring(item.LapColor, item.latitudes, item.longitudes);
+                geBrowser.loadKML(kml, item.LapNo);
+                //plotLap(item);                
             }
         }
 

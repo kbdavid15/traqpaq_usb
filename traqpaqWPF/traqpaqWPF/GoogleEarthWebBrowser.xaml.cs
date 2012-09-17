@@ -26,15 +26,18 @@ namespace traqpaqWPF
         public GoogleEarthWebBrowser()
         {
             InitializeComponent();
+            // clear cache
+            Q326201CS.DeleteCache.ClearCache();
+
             //webBrowser.DocumentText = traqpaqResources.ge;
-            //webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/ge.html");
-            webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/gmaps.htm");
+            webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/ge1.htm");
+            //webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/gmaps.htm");
         }
 
-        public void loadKML(string kml)
+        public void loadKML(string kml, string lap)
         {
             // call js function to load kml
-            webBrowser.InvokeScript("getKML", new string[] { kml });
+            webBrowser.InvokeScript("getKML", new string[] { kml, lap });
         }
 
         public void addPoints(IEnumerable<double> lats, IEnumerable<double> longs, Color color, string lap)

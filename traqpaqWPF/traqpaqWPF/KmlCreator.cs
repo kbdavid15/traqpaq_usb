@@ -36,8 +36,16 @@ namespace traqpaqWPF
             style.Line = new LineStyle();
             style.Id = "redline";
             style.Line.Color = new Color32(lapColor.A, lapColor.B, lapColor.G, lapColor.R);
-            style.Line.ColorMode = ColorMode.Random;
+            //style.Line.ColorMode = ColorMode.Normal;
             style.Line.Width = 2;
+
+            // Define a new style
+            Style style2 = new Style();
+            style2.Line = new LineStyle();
+            style2.Id = "blueline";
+            style2.Line.Color = new Color32(Colors.LightBlue.A, Colors.LightBlue.B, Colors.LightBlue.G, Colors.LightBlue.R);
+            //style2.Line.ColorMode = ColorMode.Normal;
+            style2.Line.Width = 2;
             
             // add style to placemark
             pMark.StyleUrl = new Uri("#redline", UriKind.Relative);
@@ -72,6 +80,7 @@ namespace traqpaqWPF
             // Add the placemark and style to the document
             doc.AddFeature(pMark);
             doc.AddStyle(style);
+            doc.AddStyle(style2);
 
             // Add the document to the kml object
             kml.Feature = doc;
@@ -80,7 +89,7 @@ namespace traqpaqWPF
             KmlFile kmlFile = KmlFile.Create(kml, false);
 
             //TODO for debugging purposes, save the kml file to test folder.
-            //kmlFile.Save("test.kml");
+            kmlFile.Save("test.kml");
 
             // Return the KML file as a string
             return kmlFile.SaveString();

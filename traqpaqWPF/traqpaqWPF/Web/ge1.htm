@@ -10,7 +10,7 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
     	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
     	<script type="text/javascript">
     	    var ge;
-    	    var kmlObject;
+    	    var kmlArray = [];
     	    google.load("earth", "1");            
 
     	    function init() {
@@ -31,28 +31,55 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
     	    }
 
     	    //This function is called from C#
-    	    function getKML(KMLstring) {
+    	    function getKML(KMLstring, lapNum) {
     	        // make sure the GE plugin has loaded
     	        if (!ge) {
     	            return;
     	        }
+    	        var index = Number(lapNum);
+    	        if (!kmlArray[index]) {
+    	            kmlArray[index] = ge.parseKml(KMLstring);
+    	            // Check if KML file is valid
+    	            if (!kmlArray[index]) {
+    	                setTimeout(function () {
+    	                    alert('Bad or null kml.');
+    	                }, 0);
+    	                return;
+    	            }
+    	            ge.getFeatures().appendChild(kmlArray[index]);
+    	            if (kmlArray[index].getAbstractView()) {
+    	                ge.getView().setAbstractView(kmlArray[index].getAbstractView());
+    	            }
+    	        }
+    	        else {
+    	            kmlArray[index].setVisibility(true);
+    	        }
+    	    }
 
-    	        kmlObject = ge.parseKml(KMLstring);
-    	        // Check if KML file is valid
-    	        if (!kmlObject) {
-    	            setTimeout(function () {
-    	                alert('Bad or null kml.');
-    	            }, 0);
-    	            return;
+    	    function removeLine(lap) {
+    	        try {
+    	            // The problem was not with the object array, it was with the passed parameter
+    	            // Passing it as a string and then casting as number works
+    	            kmlArray[Number(lap)].setVisibility(false);
     	        }
-    	        ge.getFeatures().appendChild(kmlObject);
-    	        if (kmlObject.getAbstractView()) {
-    	            ge.getView().setAbstractView(kmlObject.getAbstractView());
+    	        catch (err) {
+    	            alert(err);
     	        }
+    	    }
+
+    	    function changeColor(lap, color) {
+    	        var index = Number(lap);
+    	        if (!ge || !kmlArray[index]) {
+    	            alert('GE object not found or KML object does not exist');
+                    return;
+                }
+                //try to change the color
+                //alert(typeof kmlArray[index]);
+                kmlArray[index].setStyleUrl('#blueline');
     	    }
 		</script>
 	</head>
-	<body onload="init()" style="font-family: arial, sans-serif; font-size: 13px; border: 0;">
+	<body onload="init()" style="font-family: arial, sans-serif; font-size: 13px; border: 0; margin: 0px;">
     	<div id="map3d"></div>
 	</body>
 </html>

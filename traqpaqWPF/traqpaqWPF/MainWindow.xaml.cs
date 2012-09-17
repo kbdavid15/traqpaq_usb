@@ -117,10 +117,10 @@ namespace traqpaqWPF
             {
                 frame1.GoBack();
                 if (!frame1.CanGoBack)
-                {
+                {   // if can't go back anymore, hide the back button
                     buttonBack.Visibility = System.Windows.Visibility.Hidden;
                 }
             }
-        }        
+        }
     }
 }

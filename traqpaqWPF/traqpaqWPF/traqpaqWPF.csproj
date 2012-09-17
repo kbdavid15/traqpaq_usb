@@ -115,6 +115,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BetterBitConverter.cs" />
+    <Compile Include="CacheClearer.cs" />
     <Compile Include="DataPage.xaml.cs">
       <DependentUpon>DataPage.xaml</DependentUpon>
     </Compile>
@@ -137,6 +138,10 @@
     <Page Include="DataPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\GlassButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="GoogleEarthWebBrowser.xaml">
       <SubType>Designer</SubType>
@@ -196,6 +201,7 @@
     <Resource Include="Images\traqpaq.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\back.png" />
     <Content Include="Web\fromMapsAPI.htm" />
     <Content Include="Web\ge1.htm" />
     <Content Include="Web\gmaps.htm" />
