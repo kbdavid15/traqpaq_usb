@@ -21,5 +21,6 @@
             <StatusBarItem Name="statusBarItemTraqpaq" Width="150" HorizontalAlignment="Left"/>
             <Separator Width="1" HorizontalAlignment="Left" Background="Gray" Grid.Column="1"/>
         </StatusBar>
+        <Button Content="←" Name="buttonBack" FontWeight="DemiBold" FontSize="14" Click="buttonBack_Click" />
     </Grid>
 </Window>

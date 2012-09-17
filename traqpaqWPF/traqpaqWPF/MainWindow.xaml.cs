@@ -100,7 +100,27 @@ namespace traqpaqWPF
 
         public void navigatePage(PageName p)
         {
+            if (p == PageName.WELCOME)
+            {
+                buttonBack.Visibility = System.Windows.Visibility.Hidden;
+            }
+            else
+            {
+                buttonBack.Visibility = System.Windows.Visibility.Visible;
+            }
             frame1.Navigate(pages[(int)p]);
+        }
+
+        private void buttonBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (frame1.CanGoBack)
+            {
+                frame1.GoBack();
+                if (!frame1.CanGoBack)
+                {
+                    buttonBack.Visibility = System.Windows.Visibility.Hidden;
+                }
+            }
         }        
     }
 }
