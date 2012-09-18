@@ -6,6 +6,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <WebBrowser Name="webBrowser" Margin="5,0,0,0"/>
+        <WebBrowser Name="webBrowser" />
     </Grid>
 </UserControl>

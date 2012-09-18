@@ -28,14 +28,14 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="312*" />
         </Grid.ColumnDefinitions>
-        <GridSplitter Grid.Column="1" Width="3" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Background="LightGray"/>
         <Grid Name="subGrid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="150*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="150*" />
             </Grid.RowDefinitions>
-            <GridSplitter Grid.Row="1" Height="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  />
+            <GridSplitter Grid.Row="1" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
             <ListView Name="listViewLaps" ItemsSource="{Binding LapCollection}">
                 <ListView.View>
                     <GridView>
