@@ -30,7 +30,7 @@
             <Separator Width="1" HorizontalAlignment="Left" Background="Gray" Grid.Column="1"/>
         </StatusBar>
         <Button Style="{StaticResource GlassButton}" Name="buttonBack" FontSize="12" Click="buttonBack_Click" 
-                FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black">
+                FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black" Margin="1">
             <Image Width="Auto" Height="18" Source="/traqpaqWPF;component/Images/white_arrow_transparent.png" />
         </Button>
     </Grid>
