@@ -21,10 +21,9 @@ namespace traqpaqWPF
         public string LapNo { get; set; }
         public string LapTime { get; set; }
         public Color LapColor { get; set; }
-        public int LineIndex { get; set; }
-        public bool IsRendered { get; set; }
         public List<double> latitudes;
         public List<double> longitudes;
+        public bool AreAllChecked = false;
     }
 
     /// <summary>
@@ -73,7 +72,6 @@ namespace traqpaqWPF
 
             _LapCollection.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = Colors.LawnGreen, latitudes = latitudes1, longitudes = longitudes1 });
             _LapCollection.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.Red, latitudes = latitudes2, longitudes = longitudes2 });
-
         }
 
         /// <summary>
@@ -84,13 +82,16 @@ namespace traqpaqWPF
         void LapCheckBox_Checked(object sender, EventArgs e)
         {
             // get the selected items and update the infobox, also generate KML files to overlay on GE
-            foreach (LapInfo item in listViewLaps.SelectedItems)
-            {
-                // use this to determine average lap time, average speed, max speed, etc                
-                string kml = KmlCreator.getKMLstring(item.LapColor, item.latitudes, item.longitudes);
-                geBrowser.loadKML(kml, item.LapNo);
-                //plotLap(item);                
-            }
+            //foreach (LapInfo item in listViewLaps.SelectedItems)
+            //{
+            //    // use this to determine average lap time, average speed, max speed, etc                
+            //    //string kml = KmlCreator.getKMLstring(item.LapColor, item.latitudes, item.longitudes);
+            //    //geBrowser.loadKML(kml, item.LapNo);
+            //    plotLap(item);                
+            //}
+            CheckBox cb = sender as CheckBox;
+            LapInfo lap = (LapInfo)cb.Tag;
+            geBrowser.addPoints(lap.latitudes, lap.longitudes, lap.LapColor, lap.LapNo);
         }
 
         /// <summary>
@@ -100,14 +101,8 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         void LapCheckBox_Unchecked(object sender, EventArgs e)
         {
-            foreach (LapInfo item in listViewLaps.Items)
-            {
-                if (!listViewLaps.SelectedItems.Contains(item) && item.IsRendered)
-                {
-                    geBrowser.removeLap(item.LapNo);
-                    item.IsRendered = false;
-                }
-            }
+            CheckBox cb = sender as CheckBox;
+            geBrowser.removeLap(((LapInfo)cb.Tag).LapNo);
         }
 
         /// <summary>
@@ -117,12 +112,7 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         void LapHeaderCheckBox_Checked(object sender, EventArgs e)
         {
-            //TODO this checks the boxes but does not add to the selected items collection
             listViewLaps.SelectAll();
-            foreach (LapInfo item in listViewLaps.Items)
-            {
-                plotLap(item);
-            }
         }
         
         /// <summary>
@@ -144,22 +134,8 @@ namespace traqpaqWPF
         void ColorPicker_SelectedColorChanged(object sender, EventArgs e)
         {
             xe.ColorPicker cp = sender as xe.ColorPicker;
-            string lapNo = (string)cp.Tag; // tag is bound to the lap number
-            geBrowser.changeColor(lapNo, cp.SelectedColor);
-        }
-
-        /// <summary>
-        /// Since the select all method on the list view does not plot the laps
-        /// use this function to plot them
-        /// </summary>
-        /// <param name="lap"></param>
-        private void plotLap(LapInfo lap)
-        {
-            if (!lap.IsRendered)
-            {
-                geBrowser.addPoints(lap.latitudes, lap.longitudes, lap.LapColor, lap.LapNo);
-                lap.IsRendered = true;
-            }
+            LapInfo lap = (LapInfo)cp.Tag;
+            geBrowser.changeColor(lap.LapNo, cp.SelectedColor);
         }
     }
 }

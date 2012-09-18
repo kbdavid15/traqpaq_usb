@@ -10,15 +10,14 @@
     
     <Page.Resources>
         <DataTemplate x:Key="CheckBoxHeaderCell" DataType="CheckBox">
-            <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
-                  Content="" Checked="LapHeaderCheckBox_Checked" Unchecked="LapHeaderCheckBox_Unchecked" />
+            <CheckBox Checked="LapHeaderCheckBox_Checked" Unchecked="LapHeaderCheckBox_Unchecked" />
         </DataTemplate>
         <DataTemplate x:Key="CheckBoxCell" DataType="CheckBox">
             <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
-                  Content="" Checked="LapCheckBox_Checked" Unchecked="LapCheckBox_Unchecked" />
+                  Tag="{Binding}" Checked="LapCheckBox_Checked" Unchecked="LapCheckBox_Unchecked" />
         </DataTemplate>
         <DataTemplate x:Key="ColorPicker" DataType="xctk:ColorPicker">
-            <xctk:ColorPicker Tag="{Binding LapNo}" SelectedColor="{Binding Path=LapColor}" SelectedColorChanged="ColorPicker_SelectedColorChanged"
+            <xctk:ColorPicker Tag="{Binding}" SelectedColor="{Binding Path=LapColor}" SelectedColorChanged="ColorPicker_SelectedColorChanged"
                               Width="40" />
         </DataTemplate>
     </Page.Resources>

@@ -12,11 +12,11 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25*" />
+            <ColumnDefinition Width="25" />
             <ColumnDefinition Width="803*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25*" />
+            <RowDefinition Height="25" />
             <RowDefinition Height="438*" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
@@ -31,7 +31,7 @@
         </StatusBar>
         <Button Style="{StaticResource GlassButton}" Name="buttonBack" FontSize="12" Click="buttonBack_Click" 
                 FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black">
-            <Image Width="12" Height="12" Source="Images\back.png" />
+            <Image Width="Auto" Height="18" Source="/traqpaqWPF;component/Images/white_arrow_transparent.png" />
         </Button>
     </Grid>
 </Window>
