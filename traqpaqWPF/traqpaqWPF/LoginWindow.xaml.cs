@@ -9,17 +9,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace traqpaqWPF
 {
     /// <summary>
-    /// Interaction logic for UploadPage.xaml
+    /// Interaction logic for LoginWindow.xaml
     /// </summary>
-    public partial class UploadPage : Page
+    public partial class LoginWindow : Window
     {
-        public UploadPage()
+        public LoginWindow()
         {
             InitializeComponent();
         }

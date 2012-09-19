@@ -19,7 +19,7 @@ using LibUsbDotNet.DeviceNotify.Info;
 
 namespace traqpaqWPF
 {
-    public enum PageName { WELCOME, RECORDS, UPLOAD, DATA };
+    public enum PageName { WELCOME, RECORDS, DATA };
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -65,7 +65,7 @@ namespace traqpaqWPF
             }
 
             // Create the pages and save to array
-            pages = new Page[] { new WelcomePage(this), new RecordTablePage(), new UploadPage(), new DataPage(this) };
+            pages = new Page[] { new WelcomePage(this), new RecordTablePage(), new DataPage(this) };
 
             // Go to the welcome page
             navigatePage(PageName.WELCOME);
@@ -121,6 +121,12 @@ namespace traqpaqWPF
                     buttonBack.Visibility = System.Windows.Visibility.Hidden;
                 }
             }
+        }
+
+        private void buttonLogin_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow login = new LoginWindow();
+            login.ShowDialog();
         }
     }
 }

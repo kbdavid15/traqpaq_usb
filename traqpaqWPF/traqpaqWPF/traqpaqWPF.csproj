@@ -124,18 +124,22 @@
       <DependentUpon>GoogleEarthWebBrowser.xaml</DependentUpon>
     </Compile>
     <Compile Include="KmlCreator.cs" />
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RecordTablePage.xaml.cs">
       <DependentUpon>RecordTablePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="traqpaqDevice.cs" />
-    <Compile Include="UploadPage.xaml.cs">
-      <DependentUpon>UploadPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="usbCommands.cs" />
     <Compile Include="WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
     <Page Include="DataPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -160,10 +164,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="RecordTablePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UploadPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

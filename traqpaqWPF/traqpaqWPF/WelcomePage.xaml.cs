@@ -32,11 +32,6 @@ namespace traqpaqWPF
             main.navigatePage(PageName.RECORDS);
         }
 
-        private void buttonUpload_Click(object sender, RoutedEventArgs e)
-        {
-            main.navigatePage(PageName.UPLOAD);
-        }
-
         private void buttonData_Click(object sender, RoutedEventArgs e)
         {
             main.navigatePage(PageName.DATA);
