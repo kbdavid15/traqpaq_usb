@@ -28,13 +28,13 @@ namespace Q326201CS
             [FieldOffset(28)]
             public uint dwSizeHigh;
             [FieldOffset(32)]
-            public FILETIME LastModifiedTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME LastModifiedTime;
             [FieldOffset(40)]
-            public FILETIME ExpireTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME ExpireTime;
             [FieldOffset(48)]
-            public FILETIME LastAccessTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME LastAccessTime;
             [FieldOffset(56)]
-            public FILETIME LastSyncTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME LastSyncTime;
             [FieldOffset(64)]
             public IntPtr lpHeaderInfo;
             [FieldOffset(68)]

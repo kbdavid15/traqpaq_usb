@@ -32,10 +32,12 @@ namespace traqpaqWPF
     {
         ObservableCollection<Record> _RecordTable = new ObservableCollection<Record>();
         public ObservableCollection<Record> RecordTable { get { return _RecordTable; } }
+        MainWindow main;
 
-        public RecordTablePage()
+        public RecordTablePage(MainWindow main)
         {
             InitializeComponent();
+            this.main = main;
             _RecordTable.Add(new Record("Hi", "Today"));
         }
 
@@ -46,9 +48,7 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         void listViewRecords_MouseDoubleClick(object sender, EventArgs e)
         {
-
+            main.navigatePage(PageName.DATA);
         }
-    }
-
-    
+    }    
 }

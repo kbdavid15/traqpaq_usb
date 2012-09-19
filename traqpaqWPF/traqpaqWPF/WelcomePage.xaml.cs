@@ -32,9 +32,24 @@ namespace traqpaqWPF
             main.navigatePage(PageName.RECORDS);
         }
 
-        private void buttonData_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Import a new session from the device
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonImport_Click(object sender, RoutedEventArgs e)
         {
-            main.navigatePage(PageName.DATA);
+
+        }
+
+        /// <summary>
+        /// Change user settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonSettings_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

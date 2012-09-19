@@ -143,6 +143,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\ButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\GlassButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -203,6 +207,9 @@
   <ItemGroup>
     <Resource Include="Images\back.png" />
     <Resource Include="Images\white_arrow_transparent.png" />
+    <Resource Include="Images\document_import.png" />
+    <Resource Include="Images\import.png" />
+    <Resource Include="Images\import1.png" />
     <Content Include="Web\fromMapsAPI.htm" />
     <Content Include="Web\ge1.htm" />
     <Content Include="Web\gmaps.htm" />

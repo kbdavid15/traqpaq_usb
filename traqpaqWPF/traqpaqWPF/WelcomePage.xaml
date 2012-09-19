@@ -4,17 +4,55 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="500" d:DesignWidth="750"
       Title="WelcomePage">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="110*" />
-            <RowDefinition Height="90*" />
-            <RowDefinition Height="100*" />
+            <RowDefinition Height="27" />
+            <RowDefinition Height="200*" />
+            <RowDefinition Height="50*" />
         </Grid.RowDefinitions>
-        <Button Content="Log Book" Grid.Row="1" Height="23" HorizontalAlignment="Center" Name="buttonLogBook" VerticalAlignment="Center" Width="75" Click="buttonLogBook_Click" />
-        <Image Name="image1" Stretch="Uniform" Source="/traqpaqWPF;component/Images/traqpaq.png" Margin="15,0" />
-        <Button Content="Data Page" Grid.Row="2" Height="23" HorizontalAlignment="Center" Name="buttonData" VerticalAlignment="Top" Width="75" Click="buttonData_Click" />
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="75*" />
+            </Grid.ColumnDefinitions>
+            <Button Name="buttonImport" Grid.Column="0" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Click="buttonImport_Click" IsTabStop="False">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/traqpaqWPF;component/Images/document_import.png" Margin="0,0,5,0" Height="Auto"/>
+                    <TextBlock Text="Import" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Button>
+            <Button Name="buttonLogBook" Grid.Column="1" Height="25" Content="Log Book" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="buttonLogBook_Click" Style="{StaticResource RedButton}" IsTabStop="False"/>
+            <Button Name="buttonSettings" Grid.Column="2" Height="25" Content="Settings" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="buttonSettings_Click" Style="{StaticResource RedButton}" IsTabStop="False"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="100*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*" />
+                <ColumnDefinition Width="100*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Recent Sessions" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="16"/>
+            <ListView Name="listViewRecentTracks" ItemsSource="{Binding RecentTracks}" Grid.Row="1" Style="{StaticResource ListViewStyle}" IsTabStop="False">
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}"/>
+                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Name="stackPanelSessionInfo" VerticalAlignment="Stretch">
+                <Label Name="labelTotalDistanceTraveled" Content="Total Distance Ridden: " />
+                <Label Name="labelTotalTimeUsed" Content="Total Time Riding: " />
+                <Label Name="labelAllTimeMaxSpeed" Content="Overall Max Speed: " /> 
+            </StackPanel>
+        </Grid>
+        <Image Name="image1" Stretch="Uniform" Source="/traqpaqWPF;component/Images/traqpaq.png" Grid.Row="2" />
     </Grid>
 </Page>

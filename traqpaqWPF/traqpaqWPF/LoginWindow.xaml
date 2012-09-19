@@ -3,20 +3,38 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="LoginWindow" Height="250" Width="300" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="109*" />
-            <ColumnDefinition Width="169*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45*" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="150*" />
+            <RowDefinition Height="55" />            
+            <RowDefinition Height="70*" />
+            <RowDefinition Height="86*" />
         </Grid.RowDefinitions>
-        <Label Content="Login" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
-        <Label Content="Username / Email" Grid.Row="1" Name="label2" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
-        <Label Content="Password" Grid.Row="2" Name="label3" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
-        <TextBox Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="textBoxUsername" Margin="0,0,5,2" />
-        <PasswordBox Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="passwordBox" Margin="0,0,5,2" />
+        <Label Content="Login" Grid.ColumnSpan="2" HorizontalAlignment="Center" Name="label1" VerticalAlignment="Bottom" FontSize="30"/>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*" />
+                <ColumnDefinition Width="100*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Username / Email" Grid.Row="0" Name="label2" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+            <Label Content="Password" Grid.Row="1" Name="label3" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+            <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Name="textBoxUsername" />
+            <PasswordBox Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Name="passwordBox" />
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="50*" />
+            </Grid.ColumnDefinitions>
+            <Button Name="buttonLogin" Content="Login" IsDefault="True" VerticalAlignment="Top" Width="60" Click="buttonLogin_Click" />
+            <Button Name="buttonSignUp" Content="Sign Up" Grid.Column="1" VerticalAlignment="Top" Width="60" Click="buttonSignUp_Click" />
+            <Button Name="buttonCancel" Content="Cancel" Grid.Column="2" IsCancel="True" VerticalAlignment="Top" Width="60" Click="buttonCancel_Click" />
+            
+        </Grid>
+        
+        
     </Grid>
 </Window>
