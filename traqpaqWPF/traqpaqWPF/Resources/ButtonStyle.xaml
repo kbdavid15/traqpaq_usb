@@ -4,7 +4,16 @@
         <Setter Property="Background" Value="#FFCC1317" />
         <Setter Property="BorderBrush" Value="Black" />
         <Setter Property="Foreground" Value="White" />
-        
+    </Style>
+    <Style x:Key="LoginButton" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Green" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style x:Key="LogoutButton" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Red" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="Foreground" Value="White" />
     </Style>
     <Style x:Key="ListViewStyle" TargetType="{x:Type ListView}">
         <Setter Property="LayoutTransform">

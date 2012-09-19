@@ -538,7 +538,6 @@ namespace traqpaqWPF
                     if (parent.traqpaq.readRecordData(dataPage, length, (ushort)index))
                     {
                         // extract the data from the dataPage byte array
-                        //TODO convert props to usable value, see GPS decoder ring
                         this.utc = BetterBitConverter.ToUInt32(dataPage, Constants.RECORD_DATA_UTC) / Constants.UTC_FACTOR;
                         this.hdop = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_HDOP) / Constants.HDOP_FACTOR;
                         this.GPSmode = dataPage[Constants.RECORD_DATA_MODE];
@@ -554,8 +553,9 @@ namespace traqpaqWPF
                             this.RecordData[i].Speed = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_SPEED + (i * Constants.RECORD_DATA_SIZE) + 16) * Constants.SPEED_FACTOR;
                             this.RecordData[i].Heading = BetterBitConverter.ToUInt16(dataPage, Constants.RECORD_DATA_COURSE + (i * Constants.RECORD_DATA_SIZE) + 16) / Constants.COURSE_FACTOR;
                         }
+                        return true;
                     }
-                    return true;
+                    else return false;
                 }
             }
 

@@ -24,10 +24,12 @@
                 <RowDefinition Height="100*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="100*" />
-            </Grid.RowDefinitions>
+            </Grid.RowDefinitions>            
+            <Canvas Name="canvasPreviewPane" Background="LightGray" Margin="5" ClipToBounds="True" SnapsToDevicePixels="True" />
             <GridSplitter Grid.Row="1" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+            <StackPanel Name="stackPanelStats" Grid.Row="2" Orientation="Vertical" />
         </Grid>
-        <ListView Grid.Row="1" Name="listViewRecords" Style="{StaticResource ListViewStyle}" ItemsSource="{Binding RecordTable}" MouseDoubleClick="listViewRecords_MouseDoubleClick" >
+        <ListView Grid.Row="1" Name="listViewRecords" Style="{StaticResource ListViewStyle}" ItemsSource="{Binding RecordTable}" MouseDoubleClick="listViewRecords_MouseDoubleClick" SelectionChanged="listViewRecords_SelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Track Name" DisplayMemberBinding="{Binding trackName}"/>

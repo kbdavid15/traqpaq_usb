@@ -72,10 +72,8 @@ namespace traqpaqWPF
         }
 
         /// <summary>
-        /// 
+        /// Called whenever a usb device is plugged in or unplugged
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         void deviceNotifier_OnDeviceNotify(object sender, DeviceNotifyEventArgs e)
         {
             // Detected a device, try to see if it is the traqpaq
@@ -123,10 +121,33 @@ namespace traqpaqWPF
             }
         }
 
+        /// <summary>
+        /// Show the login window and let the user attempt to login
+        /// </summary>
         private void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
             LoginWindow login = new LoginWindow();
-            login.ShowDialog();
+            if (login.ShowDialog() == true)
+            {
+                Label username = new Label();
+                username.Content = (string)login.Tag;
+                stackPanelLogin.Children.Add(username);
+                // change the login button to be the logout button
+                buttonLogin.Visibility = System.Windows.Visibility.Hidden;
+                buttonLogout.Visibility = System.Windows.Visibility.Visible;
+            }
+        }
+
+        /// <summary>
+        /// Button is only visible if the user is logged in.
+        /// If clicked, it logs the user out and shows the login button
+        /// </summary>
+        private void buttonLogout_Click(object sender, RoutedEventArgs e)
+        {
+            stackPanelLogin.Children.Clear();
+            // revert to the login button
+            buttonLogin.Visibility = System.Windows.Visibility.Visible;
+            buttonLogout.Visibility = System.Windows.Visibility.Hidden;
         }
     }
 }

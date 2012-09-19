@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Security;
 
 namespace traqpaqWPF
 {
@@ -18,14 +19,45 @@ namespace traqpaqWPF
     /// </summary>
     public partial class LoginWindow : Window
     {
+        /// <summary>
+        /// key is username, value is password
+        /// </summary>
+        Dictionary<string, string> loginDictionary = new Dictionary<string, string>();
         public LoginWindow()
         {
             InitializeComponent();
+            // Add dummy values to the login dictionary
+            loginDictionary["kbdavid15"] = "password1";
+            loginDictionary["ryan"] = "123";
+
         }
 
+        /// <summary>
+        /// Attempt to login with the username/password combination
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
-
+            //TODO set up login credentials database
+            //look into password management
+            try
+            {
+                if (loginDictionary[textBoxUsername.Text] == passwordBox.Password)
+                {
+                    Tag = textBoxUsername.Text;
+                    this.DialogResult = true;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Access denied");
+                }
+            }
+            catch (KeyNotFoundException)
+            {
+                MessageBox.Show("That username was not found in our records.");
+            }            
         }
 
         /// <summary>
