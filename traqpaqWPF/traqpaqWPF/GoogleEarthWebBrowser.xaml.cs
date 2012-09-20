@@ -26,7 +26,7 @@ namespace traqpaqWPF
         public GoogleEarthWebBrowser()
         {
             InitializeComponent();
-            // clear cache
+            //TODO clear cache is only for debugging, should be removed eventually
             Q326201CS.DeleteCache.ClearCache();
 
             //webBrowser.DocumentText = traqpaqResources.ge;
@@ -56,6 +56,11 @@ namespace traqpaqWPF
         public void changeColor(string lap, Color color)
         {
             webBrowser.InvokeScript("changeColor", new string[] { lap, "#" + color.ToString().Substring(3) });
+        }
+
+        public void clearLaps()
+        {
+            webBrowser.InvokeScript("clearPolyArray");
         }
     }
 }

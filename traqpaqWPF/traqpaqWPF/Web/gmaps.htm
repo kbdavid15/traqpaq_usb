@@ -130,6 +130,11 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
             }
         }
 
+        function clearPolyArray() {
+            // remove all the items from the polyline array
+            polylineArray = [];
+        }
+
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 </head>

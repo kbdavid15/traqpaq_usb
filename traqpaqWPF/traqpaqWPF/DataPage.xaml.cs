@@ -34,11 +34,11 @@ namespace traqpaqWPF
         /// <summary>
         /// This page should not be created until a run is selected
         /// </summary>
-        /// <param name="recordTable"></param>
+        /// <param name="main">The window that created this page</param>
         public DataPage(MainWindow main)
-        {
-            this.main = main;
+        {            
             InitializeComponent();
+            this.main = main;
 
             // if internet connection, use web browser to load google earth
             // otherwise, just plot the points
@@ -53,13 +53,12 @@ namespace traqpaqWPF
         /// This function must be called before using the page
         /// If the new record is the same as the current then nothing changes
         /// </summary>
-        /// <param name="record"></param>
+        /// <param name="record">Record object containing lap information</param>
         public void setRecord(Record record)
-        {
+        {//TODO allow more than one record to be set, and set up groups in the listview
             if (recordTable == null)
             {
                 this.recordTable = record;
-                _LapCollection.Clear();
                 // Add the laps to the Collection
                 foreach (LapInfo lap in recordTable.Laps)
                 {
@@ -69,7 +68,10 @@ namespace traqpaqWPF
             else if (!recordTable.Equals(record))
             {
                 this.recordTable = record;
+                // clear lap collection and javascript array
                 _LapCollection.Clear();
+                geBrowser.clearLaps();
+
                 // Add the laps to the Collection
                 foreach (LapInfo lap in recordTable.Laps)
                 {
@@ -81,8 +83,7 @@ namespace traqpaqWPF
         /// <summary>
         /// Runs when a Checkbox in the lapListView is Checked or Unchecked
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The CheckBox that was checked</param>
         void LapCheckBox_Checked(object sender, EventArgs e)
         {
             // get the selected items and update the infobox, also generate KML files to overlay on GE
@@ -101,8 +102,7 @@ namespace traqpaqWPF
         /// <summary>
         /// Remove the lap from the map
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The CheckBox that was unchecked</param>
         void LapCheckBox_Unchecked(object sender, EventArgs e)
         {
             CheckBox cb = sender as CheckBox;
@@ -112,8 +112,6 @@ namespace traqpaqWPF
         /// <summary>
         /// Select all the checkboxes
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         void LapHeaderCheckBox_Checked(object sender, EventArgs e)
         {
             listViewLaps.SelectAll();
@@ -122,8 +120,6 @@ namespace traqpaqWPF
         /// <summary>
         /// Unselect all the checkboxes
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         void LapHeaderCheckBox_Unchecked(object sender, EventArgs e)
         {
             listViewLaps.SelectedItems.Clear();
@@ -131,10 +127,7 @@ namespace traqpaqWPF
 
         /// <summary>
         /// Update the map with the new color
-        /// Only matters if the lap is already rendered
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         void ColorPicker_SelectedColorChanged(object sender, EventArgs e)
         {
             xe.ColorPicker cp = sender as xe.ColorPicker;

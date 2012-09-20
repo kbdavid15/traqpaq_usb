@@ -55,9 +55,6 @@ namespace traqpaqWPF
             tableReader = new RecordTableReader(this);
             tableReader.readRecordTable();
             this.recordTableList = tableReader.recordTable;
-
-            //TODO figure out how to use the record data reader class
-
         }
 
         #region sendCommand
