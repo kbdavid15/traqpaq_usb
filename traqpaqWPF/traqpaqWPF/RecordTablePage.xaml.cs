@@ -15,6 +15,17 @@ using System.Collections.ObjectModel;
 
 namespace traqpaqWPF
 {
+
+    public class LapInfo
+    {
+        public string LapNo { get; set; }
+        public string LapTime { get; set; }
+        public Color LapColor { get; set; }
+        public List<double> Latitudes { get; set; }
+        public List<double> Longitudes { get; set; }
+        public bool AreAllChecked = false;
+    }
+
     public class Record
     {
         public string trackName { get; set; }
@@ -27,19 +38,6 @@ namespace traqpaqWPF
             Laps = laps;
         }
     }
-
-    public class Coordinate
-    {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-
-        public Coordinate(double latitude, double longitude)
-        {
-            Latitude = latitude;
-            Longitude = longitude;
-        }
-    }
-
 
     /// <summary>
     /// Interaction logic for RecordTablePage.xaml
@@ -69,18 +67,9 @@ namespace traqpaqWPF
             InitializeComponent();
             this.main = main;
 
-            //// create the coordinates
-            //List<Coordinate> lap1 = new List<Coordinate>();
-            //List<Coordinate> lap2 = new List<Coordinate>();
-            //for (int i = 0; i < latitudes1.Count; i++)
-            //{
-            //    lap1.Add(new Coordinate(latitudes1[i], longitudes1[i]));
-            //    lap2.Add(new Coordinate(latitudes2[i], longitudes2[i]));
-            //}
-
             List<LapInfo> laps = new List<LapInfo>();
-            laps.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = Colors.LawnGreen, latitudes = latitudes1, longitudes = longitudes1 });
-            laps.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.Red, latitudes = latitudes2, longitudes = longitudes2 });
+            laps.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = Colors.LawnGreen, Latitudes = latitudes1, Longitudes = longitudes1 });
+            laps.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.Red, Latitudes = latitudes2, Longitudes = longitudes2 });
             _RecordTable.Add(new Record("Hi", "Today", laps));
         }
 
@@ -91,6 +80,10 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         void listViewRecords_MouseDoubleClick(object sender, EventArgs e)
         {
+            // construct the record data page
+            DataPage data = (DataPage)main.pages[(int)PageName.DATA];
+            data.setRecord((Record)listViewRecords.SelectedItem);
+            // Navigate to the page
             main.navigatePage(PageName.DATA);
         }
 
@@ -116,8 +109,8 @@ namespace traqpaqWPF
                 {
                     size = (int)canvasPreviewPane.RenderSize.Width;
                 }
-                double[] xCoord = NormalizeData(lap.latitudes, 10, size - 10);
-                double[] yCoord = NormalizeData(lap.longitudes, 10, size - 10);
+                double[] xCoord = NormalizeData(lap.Latitudes, 10, size - 10);
+                double[] yCoord = NormalizeData(lap.Longitudes, 10, size - 10);
                 for (int i = 0; i < xCoord.Length; i++)
                 {
                     polyline.Points.Add(new Point(xCoord[i], yCoord[i]));

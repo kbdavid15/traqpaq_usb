@@ -16,37 +16,17 @@ using xe = Xceed.Wpf.Toolkit;
 
 namespace traqpaqWPF
 {
-    public class LapInfo
-    {
-        public string LapNo { get; set; }
-        public string LapTime { get; set; }
-        public Color LapColor { get; set; }
-        public List<double> latitudes;
-        public List<double> longitudes;
-        public bool AreAllChecked = false;
-    }
-
+    
     /// <summary>
     /// Interaction logic for DataPage.xaml
     /// </summary>
     public partial class DataPage : Page
     {
-        List<double> latitudes1 = new List<double> { 42.1838786, 42.17332503, 42.1607474, 42.15192871, 
-                                                     42.14788076, 42.1538081, 42.16493994, 42.17462615,
-                                                     42.18286665, 42.1838786, 42.1838786};
-        List<double> longitudes1 = new List<double> { -83.32956822, -83.34756995, -83.35109965, -83.34209883,
-                                                      -83.32321473, -83.31368443, -83.30027137, -83.30556597,
-                                                      -83.3188025, -83.32939178, -83.32939178 };
-        List<double> latitudes2 = new List<double> { 42.1848786, 42.17432503, 42.1617474, 42.15292871, 
-                                                     42.14888076, 42.1548081, 42.16593994, 42.17562615,
-                                                     42.18386665, 42.1848786, 42.1848786};
-        List<double> longitudes2 = new List<double> { -83.32856822, -83.34656995, -83.35009965, -83.34109883,
-                                                      -83.32221473, -83.31268443, -83.30027137, -83.30456597,
-                                                      -83.3198025, -83.32839178, -83.32839178 };        
         MainWindow main;
         GoogleEarthWebBrowser geBrowser;
 
         //TraqpaqDevice.RecordTableReader.RecordTable recordTable;
+        Record recordTable;
 
         ObservableCollection<LapInfo> _LapCollection = new ObservableCollection<LapInfo>();
         public ObservableCollection<LapInfo> LapCollection { get { return _LapCollection; } }
@@ -59,7 +39,6 @@ namespace traqpaqWPF
         {
             this.main = main;
             InitializeComponent();
-            //this.recordTable = recordTable;
 
             // if internet connection, use web browser to load google earth
             // otherwise, just plot the points
@@ -68,9 +47,35 @@ namespace traqpaqWPF
             geBrowser.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             mainGrid.Children.Add(geBrowser);
             Grid.SetColumn(geBrowser, 2);
+        }
 
-            _LapCollection.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = Colors.LawnGreen, latitudes = latitudes1, longitudes = longitudes1 });
-            _LapCollection.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.Red, latitudes = latitudes2, longitudes = longitudes2 });
+        /// <summary>
+        /// This function must be called before using the page
+        /// If the new record is the same as the current then nothing changes
+        /// </summary>
+        /// <param name="record"></param>
+        public void setRecord(Record record)
+        {
+            if (recordTable == null)
+            {
+                this.recordTable = record;
+                _LapCollection.Clear();
+                // Add the laps to the Collection
+                foreach (LapInfo lap in recordTable.Laps)
+                {
+                    _LapCollection.Add(lap);
+                }
+            }
+            else if (!recordTable.Equals(record))
+            {
+                this.recordTable = record;
+                _LapCollection.Clear();
+                // Add the laps to the Collection
+                foreach (LapInfo lap in recordTable.Laps)
+                {
+                    _LapCollection.Add(lap);
+                }
+            }
         }
 
         /// <summary>
@@ -90,7 +95,7 @@ namespace traqpaqWPF
             //}
             CheckBox cb = sender as CheckBox;
             LapInfo lap = (LapInfo)cb.Tag;
-            geBrowser.addPoints(lap.latitudes, lap.longitudes, lap.LapColor, lap.LapNo);
+            geBrowser.addPoints(lap.Latitudes, lap.Longitudes, lap.LapColor, lap.LapNo);
         }
 
         /// <summary>
