@@ -205,14 +205,14 @@
     <Resource Include="Images\traqpaq.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Web\gmapsCSharp.js" />
     <Resource Include="Images\back.png" />
     <Resource Include="Images\white_arrow_transparent.png" />
     <Resource Include="Images\document_import.png" />
     <Resource Include="Images\import.png" />
     <Resource Include="Images\import1.png" />
-    <Content Include="Web\fromMapsAPI.htm" />
-    <Content Include="Web\ge1.htm" />
-    <Content Include="Web\gmaps.htm" />
+    <None Include="Web\ge1.htm" />
+    <None Include="Web\gmaps.htm" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
