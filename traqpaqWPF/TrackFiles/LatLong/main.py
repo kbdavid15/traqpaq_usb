@@ -4,7 +4,7 @@ Created on Sep 20, 2012
 @author: tew
 '''
 import random
-f = open('C:/users/kyle/traqpaq_usb/trackfilesfromdad/flinttrack.csv', 'r')
+f = open('../flinttrack.csv', 'r')
 
 #read file into a 2d array, splitting on comma separation
 lines = f.readlines()
