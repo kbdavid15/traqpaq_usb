@@ -39,7 +39,7 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         private void buttonImport_Click(object sender, RoutedEventArgs e)
         {
-
+            main.navigatePage(PageName.IMPORT);
         }
 
         /// <summary>
@@ -49,7 +49,8 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         private void buttonSettings_Click(object sender, RoutedEventArgs e)
         {
-
+            SettingsWindow settings = new SettingsWindow();
+            settings.ShowDialog();
         }
     }
 }

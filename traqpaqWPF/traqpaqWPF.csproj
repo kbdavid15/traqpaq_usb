@@ -123,12 +123,18 @@
     <Compile Include="GoogleEarthWebBrowser.xaml.cs">
       <DependentUpon>GoogleEarthWebBrowser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImportPage.xaml.cs">
+      <DependentUpon>ImportPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="KmlCreator.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="RecordTablePage.xaml.cs">
       <DependentUpon>RecordTablePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="traqpaqDevice.cs" />
     <Compile Include="usbCommands.cs" />
@@ -139,11 +145,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ImportPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\ButtonStyle.xaml">
+    <Page Include="Resources\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -168,6 +178,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="RecordTablePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

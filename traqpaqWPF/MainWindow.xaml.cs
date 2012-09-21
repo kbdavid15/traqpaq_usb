@@ -19,7 +19,7 @@ using LibUsbDotNet.DeviceNotify.Info;
 
 namespace traqpaqWPF
 {
-    public enum PageName { WELCOME, RECORDS, DATA };
+    public enum PageName { WELCOME, RECORDS, DATA, IMPORT };
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -65,7 +65,7 @@ namespace traqpaqWPF
             }
 
             // Create the pages and save to array
-            pages = new Page[] { new WelcomePage(this), new RecordTablePage(this), new DataPage(this) };
+            pages = new Page[] { new WelcomePage(this), new RecordTablePage(this), new DataPage(this), new ImportPage(this) };
 
             // Go to the welcome page
             navigatePage(PageName.WELCOME);

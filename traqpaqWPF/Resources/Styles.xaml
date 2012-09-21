@@ -21,5 +21,9 @@
                 <ScaleTransform ScaleX="1.15" ScaleY="1.15" />
             </Setter.Value>
         </Setter>
+    </Style>   
+    <Style TargetType="{x:Type Label}">
+        <!-- This style changes the properties of all labels in the project -->
+        <Setter Property="FontFamily" Value="Calibri" />
     </Style>
 </ResourceDictionary>
