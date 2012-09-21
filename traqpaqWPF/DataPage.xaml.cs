@@ -26,7 +26,7 @@ namespace traqpaqWPF
         GoogleEarthWebBrowser geBrowser;
 
         //TraqpaqDevice.RecordTableReader.RecordTable recordTable;
-        Record recordTable;
+        Record[] recordTable;
 
         ObservableCollection<LapInfo> _LapCollection = new ObservableCollection<LapInfo>();
         public ObservableCollection<LapInfo> LapCollection { get { return _LapCollection; } }
@@ -54,26 +54,23 @@ namespace traqpaqWPF
         /// If the new record is the same as the current then nothing changes
         /// </summary>
         /// <param name="record">Record object containing lap information</param>
-        public void setRecord(Record record)
-        {//TODO allow more than one record to be set, and set up groups in the listview
-            if (recordTable == null)
+        public void setRecord(Record[] records)
+        {//TODO allow more than one record to be set, and set up groups in the listview            
+            if (recordTable != null)
             {
-                this.recordTable = record;
-                // Add the laps to the Collection
-                foreach (LapInfo lap in recordTable.Laps)
+                if (!recordTable.Equals(records))
                 {
-                    _LapCollection.Add(lap);
+                    // clear lap collection and javascript array
+                    _LapCollection.Clear();
+                    geBrowser.clearLaps();
                 }
             }
-            else if (!recordTable.Equals(record))
-            {
-                this.recordTable = record;
-                // clear lap collection and javascript array
-                _LapCollection.Clear();
-                geBrowser.clearLaps();
-
-                // Add the laps to the Collection
-                foreach (LapInfo lap in recordTable.Laps)
+            //TODO rethink how js stores the array because it won't work with 2 tracks that both have lap 1, 2...
+            this.recordTable = records;
+            // Add the laps to the Collection
+            foreach (Record r in recordTable)
+            {                
+                foreach (LapInfo lap in r.Laps)
                 {
                     _LapCollection.Add(lap);
                 }

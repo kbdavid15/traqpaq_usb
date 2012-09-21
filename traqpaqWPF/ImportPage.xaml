@@ -8,6 +8,6 @@
 	  Title="ImportPage">
     
     <Grid>
-        
+        <Label Content="Import Page" />
     </Grid>
 </Page>

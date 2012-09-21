@@ -37,6 +37,13 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label Content="Log Book" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Bottom" FontSize="26" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="50*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Log Book" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Bottom" FontSize="26" />
+            <Button Name="buttonDataPage" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Content="Next" Click="buttonDataPage_Click" />
+        </Grid>        
     </Grid>
 </Page>

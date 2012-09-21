@@ -27,6 +27,9 @@ namespace traqpaqWPF
             this.main = main;
         }
 
+        /// <summary>
+        /// Show the log page (record page)
+        /// </summary>
         private void buttonLogBook_Click(object sender, RoutedEventArgs e)
         {
             main.navigatePage(PageName.RECORDS);
@@ -35,8 +38,6 @@ namespace traqpaqWPF
         /// <summary>
         /// Import a new session from the device
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void buttonImport_Click(object sender, RoutedEventArgs e)
         {
             main.navigatePage(PageName.IMPORT);
@@ -45,8 +46,6 @@ namespace traqpaqWPF
         /// <summary>
         /// Change user settings
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void buttonSettings_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow settings = new SettingsWindow();

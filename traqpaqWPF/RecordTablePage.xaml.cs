@@ -16,29 +16,6 @@ using System.Collections.ObjectModel;
 namespace traqpaqWPF
 {
 
-    public class LapInfo
-    {
-        public string LapNo { get; set; }
-        public string LapTime { get; set; }
-        public Color LapColor { get; set; }
-        public List<double> Latitudes { get; set; }
-        public List<double> Longitudes { get; set; }
-        public bool AreAllChecked = false;
-    }
-
-    public class Record
-    {
-        public string trackName { get; set; }
-        public string DateStamp { get; set; }
-        public List<LapInfo> Laps { get; set; }
-        public Record(string trackname, string date, List<LapInfo> laps)
-        {
-            trackName = trackname;
-            DateStamp = date;
-            Laps = laps;
-        }
-    }
-
     /// <summary>
     /// Interaction logic for RecordTablePage.xaml
     /// </summary>
@@ -76,14 +53,14 @@ namespace traqpaqWPF
             this.main = main;
 
             List<LapInfo> laps = new List<LapInfo>();
-            laps.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = Colors.LawnGreen, Latitudes = latitudes1, Longitudes = longitudes1 });
-            laps.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.Red, Latitudes = latitudes2, Longitudes = longitudes2 });
+            laps.Add(new LapInfo { LapNo = "1", LapTime = "2:30", LapColor = Colors.LawnGreen, Latitudes = latitudes1, Longitudes = longitudes1, Track = "Airport" });
+            laps.Add(new LapInfo { LapNo = "2", LapTime = "2:24", LapColor = Colors.Red, Latitudes = latitudes2, Longitudes = longitudes2, Track = "Airport" });
             List<LapInfo> flintLaps = new List<LapInfo>();
-            flintLaps.Add(new LapInfo { LapNo = "1", LapTime = "6:32:13", LapColor = Colors.Honeydew, Latitudes = flintLat1, Longitudes = flintLong1 });
-            flintLaps.Add(new LapInfo { LapNo = "2", LapTime = "6:36:42", LapColor = Colors.Indigo, Latitudes = flintLat2, Longitudes = flintLong2 });
-            flintLaps.Add(new LapInfo { LapNo = "3", LapTime = "5:59:02", LapColor = Colors.NavajoWhite, Latitudes = flintLat3, Longitudes = flintLong3 });
+            flintLaps.Add(new LapInfo { LapNo = "1", LapTime = "6:32:13", LapColor = Colors.Honeydew, Latitudes = flintLat1, Longitudes = flintLong1, Track = "Flint" });
+            flintLaps.Add(new LapInfo { LapNo = "2", LapTime = "6:36:42", LapColor = Colors.Indigo, Latitudes = flintLat2, Longitudes = flintLong2, Track = "Flint" });
+            flintLaps.Add(new LapInfo { LapNo = "3", LapTime = "5:59:02", LapColor = Colors.NavajoWhite, Latitudes = flintLat3, Longitudes = flintLong3, Track = "Flint" });
 
-            _RecordTable.Add(new Record("Hi", "Today", laps));
+            _RecordTable.Add(new Record("Airport", "8/30/2012", laps));
             _RecordTable.Add(new Record("Flint", "9/20/2012", flintLaps));
         }
 
@@ -100,11 +77,7 @@ namespace traqpaqWPF
             {
                 if (obj.GetType() == typeof(ListViewItem))
                 {
-                    // construct the record data page
-                    DataPage data = (DataPage)main.pages[(int)PageName.DATA];
-                    data.setRecord((Record)listViewRecords.SelectedItem);
-                    // Navigate to the page
-                    main.navigatePage(PageName.DATA);
+                    goToDataPage(new Record[] { (Record)listViewRecords.SelectedItem });                    
                     break;
                 }
                 obj = VisualTreeHelper.GetParent(obj);
@@ -164,5 +137,54 @@ namespace traqpaqWPF
                 .Select(n => ((1 - n) * min + n * max))
                 .ToArray();
         }
-    }    
+
+        private void buttonDataPage_Click(object sender, RoutedEventArgs e)
+        {
+            Record[] records = new Record[listViewRecords.SelectedItems.Count];
+            for (int i = 0; i < listViewRecords.SelectedItems.Count; i++)
+            {
+                records[i] = (Record)listViewRecords.SelectedItems[i];
+            }
+            goToDataPage(records);
+        }
+
+        /// <summary>
+        /// This function is called by the double click event and the datapage button click event
+        /// </summary>
+        /// <param name="records">Array of Record objects</param>
+        private void goToDataPage(Record[] records)
+        {
+            // construct the record data page
+            DataPage data = (DataPage)main.pages[(int)PageName.DATA];
+            data.setRecord(records);
+            // Navigate to the page
+            main.navigatePage(PageName.DATA);
+        }
+    }
+    /// <summary>
+    /// Dummy class for adding info to the record
+    /// </summary>
+    public class LapInfo
+    {
+        public string LapNo { get; set; }
+        public string LapTime { get; set; }
+        public Color LapColor { get; set; }
+        public List<double> Latitudes { get; set; }
+        public List<double> Longitudes { get; set; }
+        public bool AreAllChecked = false;
+        public string Track { get; set; }
+    }
+
+    public class Record
+    {
+        public string trackName { get; set; }
+        public string DateStamp { get; set; }
+        public List<LapInfo> Laps { get; set; }
+        public Record(string trackname, string date, List<LapInfo> laps)
+        {
+            trackName = trackname;
+            DateStamp = date;
+            Laps = laps;
+        }
+    }
 }
