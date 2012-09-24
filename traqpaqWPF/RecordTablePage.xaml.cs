@@ -91,7 +91,6 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         void listViewRecords_SelectionChanged(object sender, EventArgs e)
         {
-            canvasPreviewPane.Children.Clear();
             Record session = (Record)listViewRecords.SelectedItem;
             foreach (LapInfo lap in session.Laps)
             {
@@ -99,13 +98,13 @@ namespace traqpaqWPF
                 polyline.Stroke = Brushes.Black;
                 // find the smallest dimension, width or height, and use that to calculate the points
                 int size;
-                if (canvasPreviewPane.RenderSize.Width > canvasPreviewPane.RenderSize.Height)
+                if (viewboxPreviewPane.RenderSize.Width > viewboxPreviewPane.RenderSize.Height)
                 {
-                    size = (int)canvasPreviewPane.RenderSize.Height;
+                    size = (int)viewboxPreviewPane.RenderSize.Height;
                 }
                 else
                 {
-                    size = (int)canvasPreviewPane.RenderSize.Width;
+                    size = (int)viewboxPreviewPane.RenderSize.Width;
                 }
                 double[] xCoord = NormalizeData(lap.Latitudes, 10, size - 10);
                 double[] yCoord = NormalizeData(lap.Longitudes, 10, size - 10);
@@ -114,8 +113,8 @@ namespace traqpaqWPF
                     polyline.Points.Add(new Point(xCoord[i], yCoord[i]));
                 }
 
-                // Add the polyline to the canvas
-                canvasPreviewPane.Children.Add(polyline);
+                // Add the polyline to the viewbox
+                viewboxPreviewPane.Child = polyline;
             }            
         }
 

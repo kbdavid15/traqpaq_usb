@@ -79,6 +79,7 @@ namespace traqpaqWPF
             // Detected a device, try to see if it is the traqpaq
             if (e.EventType == EventType.DeviceArrival)  // check for device arrival
             {
+                //MessageBox.Show(e.Device.IdProduct.ToString() + "\n" + e.Device.IdVendor.ToString());
                 if (traqpaq == null)
                 {//TODO could also check for specifics with the e.Device..... properties
                     // try to connect again

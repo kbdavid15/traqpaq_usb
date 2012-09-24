@@ -69,7 +69,7 @@ namespace traqpaqWPF
             this.recordTable = records;
             // Add the laps to the Collection
             foreach (Record r in recordTable)
-            {                
+            {
                 foreach (LapInfo lap in r.Laps)
                 {
                     _LapCollection.Add(lap);
