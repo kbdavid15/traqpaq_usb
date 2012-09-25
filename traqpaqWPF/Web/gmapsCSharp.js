@@ -53,9 +53,9 @@ function CenterMapControl(controlDiv) {
     // Setup the click event listeners:
     google.maps.event.addDomListener(controlUI, 'click', function () {
         var bounds = new google.maps.LatLngBounds();
-        for (var i = 0; i < polylineArray.length; i++) {
-            if (polylineArray[i] != null) {
-                var path = polylineArray[i].getPath();
+        for (var key in polylineArray) {
+            if (polylineArray[key] != null) {
+                var path = polylineArray[key].getPath();
                 for (var j = 0; j < path.getLength(); j++) {
                     bounds.extend(path.getAt(j));
                 }
