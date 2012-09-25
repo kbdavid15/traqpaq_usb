@@ -93,7 +93,7 @@ namespace traqpaqWPF
             //}
             CheckBox cb = sender as CheckBox;
             LapInfo lap = (LapInfo)cb.Tag;
-            geBrowser.addPoints(lap.Latitudes, lap.Longitudes, lap.LapColor, lap.LapNo);
+            geBrowser.addPoints(lap.Latitudes, lap.Longitudes, lap.LapColor, lap.Track, lap.LapNo);
         }
 
         /// <summary>
@@ -103,7 +103,8 @@ namespace traqpaqWPF
         void LapCheckBox_Unchecked(object sender, EventArgs e)
         {
             CheckBox cb = sender as CheckBox;
-            geBrowser.removeLap(((LapInfo)cb.Tag).LapNo);
+            LapInfo lap = (LapInfo)cb.Tag;
+            geBrowser.removeLap(lap.Track, lap.LapNo);
         }
 
         /// <summary>
@@ -129,7 +130,7 @@ namespace traqpaqWPF
         {
             xe.ColorPicker cp = sender as xe.ColorPicker;
             LapInfo lap = (LapInfo)cp.Tag;
-            geBrowser.changeColor(lap.LapNo, cp.SelectedColor);
+            geBrowser.changeColor(lap.Track, lap.LapNo, cp.SelectedColor);
         }
     }
 }

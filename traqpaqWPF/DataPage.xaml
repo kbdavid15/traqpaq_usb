@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:data='clr-namespace:System.Windows.Data;assembly=PresentationFramework'
       mc:Ignorable="d"
       d:DesignHeight="500" d:DesignWidth="750"
       DataContext="{Binding RelativeSource={RelativeSource Self}}"
@@ -22,7 +23,7 @@
         </DataTemplate>
         <CollectionViewSource x:Key="src" Source="{Binding LapCollection}">
             <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="Track" />
+                <data:PropertyGroupDescription PropertyName="Track" />
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
     </Page.Resources>
@@ -42,6 +43,31 @@
             </Grid.RowDefinitions>
             <GridSplitter Grid.Row="1" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
             <ListView Name="listViewLaps" ItemsSource="{Binding Source={StaticResource src}}" Style="{StaticResource ListViewStyle}">
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Margin" Value="0,0,0,5"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Expander IsExpanded="True" BorderBrush="#FFA4B97F" BorderThickness="0,0,0,1">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="100"/>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <Expander.Content>
+                                                    <ItemsPresenter />
+                                                </Expander.Content>
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListView.GroupStyle>
                 <ListView.View>
                     <GridView>
                         <GridViewColumn HeaderTemplate="{StaticResource CheckBoxHeaderCell}" CellTemplate="{DynamicResource CheckBoxCell}" />

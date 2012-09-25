@@ -87,8 +87,6 @@ namespace traqpaqWPF
         /// <summary>
         /// When the selected record changes, update the canvas preview and the stats pane
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         void listViewRecords_SelectionChanged(object sender, EventArgs e)
         {
             Record session = (Record)listViewRecords.SelectedItem;
@@ -119,7 +117,7 @@ namespace traqpaqWPF
         }
 
         /// <summary>
-        /// Normalize a set of data
+        /// Normalize a set of data. Used to show a preview of the track on the record table page.
         /// </summary>
         /// <param name="data">The enumerable data (double) to normalize</param>
         /// <param name="min">Min value of result</param>

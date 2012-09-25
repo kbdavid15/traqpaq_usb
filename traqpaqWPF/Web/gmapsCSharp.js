@@ -9,6 +9,15 @@ function initialize() {
         mapTypeId: google.maps.MapTypeId.SATELLITE
     });
 
+    // add a get bounds method to the polyline
+    google.maps.Polyline.prototype.getBounds = function () {
+        var bounds = new google.maps.LatLngBounds();
+        this.getPath().forEach(function (e) {
+            bounds.extend(e);
+        });
+        return bounds;
+    };
+
     // create a custom control that when clicked will re-center the view of the map to the polylines
     var centerControlDiv = document.createElement('div');
     var reCenterCtrl = new CenterMapControl(centerControlDiv);
@@ -41,7 +50,7 @@ function CenterMapControl(controlDiv) {
     controlText.innerHTML = '<img src="home.png" height="17" width="15" />';
     controlUI.appendChild(controlText);
 
-    // Setup the click event listeners: simply set the map to Chicago.
+    // Setup the click event listeners:
     google.maps.event.addDomListener(controlUI, 'click', function () {
         var bounds = new google.maps.LatLngBounds();
         for (var i = 0; i < polylineArray.length; i++) {
@@ -67,19 +76,18 @@ function addPoints(latitudes, longitudes, color, idx) {
     // Eval all paramaters (might need to use JSON for security)
     var lats = eval(latitudes);
     var longs = eval(longitudes);
-    var index = eval(idx);
     //TODO don't move the map when adding 2nd track
     var bounds;
     var path = new Array();
 
     // Assign the coordinats to the path
-    if (!polylineArray[index]) {
+    if (!polylineArray[idx]) {
         bounds = new google.maps.LatLngBounds();
         for (i = 0; i < lats.length; i++) {
             path[i] = new google.maps.LatLng(lats[i], longs[i]);
             bounds.extend(path[i]);
         }
-        polylineArray[index] = new google.maps.Polyline({
+        polylineArray[idx] = new google.maps.Polyline({
             path: path,
             strokeColor: color,
             strokeOpacity: 1.0,
@@ -89,28 +97,26 @@ function addPoints(latitudes, longitudes, color, idx) {
     }
     // Else, the line already exists
     // Check if it is set to the map
-    if (!polylineArray[index].getMap()) {
-        polylineArray[index].setMap(map)
+    if (!polylineArray[idx].getMap()) {
+        polylineArray[idx].setMap(map)
     }
     if (bounds) {
         map.fitBounds(bounds);
     }
 }
 
-function removeLine(lap) {
+function removeLine(key) {
     try {
-        // The problem was not with the object array, it was with the passed parameter
-        // Passing it as a string and then casting as number works
-        polylineArray[Number(lap)].setMap(null);
+        polylineArray[key].setMap(null);
     }
     catch (err) {
         alert(err);
     }
 }
 
-function changeColor(lap, color) {
+function changeColor(key, color) {
     try {
-        polylineArray[Number(lap)].setOptions({ strokeColor: color });
+        polylineArray[key].setOptions({ strokeColor: color });
     }
     catch (err) {   // usually this error is a result of the lap not being on the map yet
         //alert(err);
