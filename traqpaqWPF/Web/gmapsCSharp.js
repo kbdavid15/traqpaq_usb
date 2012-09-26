@@ -55,9 +55,11 @@ function CenterMapControl(controlDiv) {
         var bounds = new google.maps.LatLngBounds();
         for (var key in polylineArray) {
             if (polylineArray[key] != null) {
-                var path = polylineArray[key].getPath();
-                for (var j = 0; j < path.getLength(); j++) {
-                    bounds.extend(path.getAt(j));
+                if (polylineArray[key].getMap() != null) {
+                    var path = polylineArray[key].getPath();
+                    for (var j = 0; j < path.getLength(); j++) {
+                        bounds.extend(path.getAt(j));
+                    }
                 }
             }
         }
