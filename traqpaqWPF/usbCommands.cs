@@ -26,9 +26,18 @@ namespace traqpaqWPF
         USB_DBG_DF_CHIP_ERASE = 0x3B,
         USB_DBG_DF_IS_FLASH_FULL = 0x3C,
         USB_DBG_DF_USED_SPACE = 0x3D,
-        USB_DBG_GPS_LATITUDE = 0x40,
-        USB_DBG_GPS_LONGITUDE = 0x41,
-        USB_DBG_GPS_COURSE = 0x42,
+        USB_DBG_GPS_CURRENT_POSITION = 0x40,
+        USB_DBG_GPS_INFO_SN = 0x43,
+        USB_DBG_GPS_INFO_PN = 0x44,
+        USB_DBG_GPS_INFO_SW_VER = 0x45,
+        USB_DBG_GPS_INFO_SW_DATE = 0x46,
+        USB_DBG_START_RECORDING = 0x50,
+        USB_DBG_STOP_RECORDING = 0x51,
+        USB_DBG_RECORDING_STATUS = 0x52,
+        USB_DBG_ACCEL_GET_STATUS = 0x60,
+        USB_DBG_ACCEL_GET_FILT_DATA = 0x61,
+        USB_DBG_ACCEL_GET_NORM_DATA = 0x62,
+        USB_DBG_ACCEL_GET_ST_DATA = 0x63
     }
 
     public static class Constants

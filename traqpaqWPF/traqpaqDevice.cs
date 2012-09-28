@@ -658,37 +658,32 @@ namespace traqpaqWPF
         /// Read the last received GPS latitude
         /// </summary>
         /// <returns>The last GPS latitude as unsigned integer, or 0 if request fails</returns>
-        public int getLastGPS_lat()
+        public Position getGPS_CurrentPosition()
         {
-            byte[] readBuff = new byte[4];
-            if (sendCommand(USBcommand.USB_DBG_GPS_LATITUDE, readBuff))
-                return BetterBitConverter.ToInt32(readBuff, 0);
-            else return 0;
-        }
-
-        /// <summary>
-        /// Read the last received GPS longitude
-        /// </summary>
-        /// <returns>The last GPS longitude as unsigned integer, or 0 if request fails</returns>
-        public int getLastGPS_long()
-        {
-            byte[] readBuff = new byte[4];
-            if (sendCommand(USBcommand.USB_DBG_GPS_LONGITUDE, readBuff))
-                return BetterBitConverter.ToInt32(readBuff, 0);
-            else return 0;
-        }
-
-        /// <summary>
-        /// Read the last received GPS heading
-        /// </summary>
-        /// <returns>The last GPS heading as unsigned integer, or 0 if request fails</returns>
-        public int getLastGPS_heading()
-        {
-            byte[] readBuff = new byte[4];
-            if (sendCommand(USBcommand.USB_DBG_GPS_COURSE, readBuff))
-                return BetterBitConverter.ToInt32(readBuff, 0);
-            else return 0;
+            byte[] readBuff = new byte[12];
+            if (sendCommand(USBcommand.USB_DBG_GPS_CURRENT_POSITION, readBuff))
+            {
+                return new Position(readBuff);
+            }
+            else
+            {
+                return null;
+            }
         }
         #endregion
+    }
+
+    public class Position
+    {
+        public double latitude;
+        public double longitude;
+        public double heading;
+
+        public Position(byte[] readBuff)
+        {
+            latitude = BetterBitConverter.ToDouble(readBuff, 0);
+            longitude = BetterBitConverter.ToDouble(readBuff, 4);
+            heading = BetterBitConverter.ToDouble(readBuff, 8);
+        }
     }
 }
