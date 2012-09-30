@@ -634,6 +634,10 @@ namespace traqpaqWPF
             else return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public bool isFlashFull()
         {
             byte[] readBuff = new byte[1];
@@ -670,6 +674,170 @@ namespace traqpaqWPF
                 return null;
             }
         }
+
+        /// <summary>
+        /// Gets the GPS Serial Number
+        /// </summary>
+        /// <returns>The SN as an unsigned int, 0 if the command fails or if the SN is invalid</returns>
+        public uint getGPS_SerialNo()
+        {
+            byte[] readBuff = new byte[5];
+            if (sendCommand(USBcommand.USB_DBG_GPS_INFO_SN, readBuff))
+            {
+                // check if SN is valid
+                if (readBuff[0] > 0)
+                {
+                    return BetterBitConverter.ToUInt32(readBuff, 1);
+                }
+                else return 0;
+            }
+            else return 0;
+        }
+
+        /// <summary>
+        /// Gets the GPS receiver part number
+        /// </summary>
+        /// <returns>ASCII string containing the part number, null if the command fails, or empty string if the part number is invalid</returns>
+        public string getGPS_PartNo()
+        {
+            byte[] readBuff = new byte[9];
+            if (sendCommand(USBcommand.USB_DBG_GPS_INFO_PN, readBuff))
+            {
+                // check if PN is valid
+                if (readBuff[0] > 0)    //TODO check if this is the right test
+                {
+                    return Encoding.ASCII.GetString(readBuff, 1, Constants.GPS_INFO_PART_NUMBER_SIZE);
+                }
+                else return "";
+            }
+            else return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string getGPS_SW_Version()
+        {
+            byte[] readBuff = new byte[10];
+            if (sendCommand(USBcommand.USB_DBG_GPS_INFO_SW_VER, readBuff))
+            {
+                // check if SW Version is valid
+                if (readBuff[0] > 0)    //TODO check if this is the right test
+                {
+                    return Encoding.ASCII.GetString(readBuff, 1, Constants.GPS_INFO_SW_VERSION_SIZE);
+                }
+                else return "";
+            }
+            else return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string getGPS_SW_Date()
+        {
+            byte[] readBuff = new byte[10];
+            if (sendCommand(USBcommand.USB_DBG_GPS_INFO_SW_DATE, readBuff))
+            {
+                // check if SW Date is valid
+                if (readBuff[0] > 0)    //TODO check if this is the right test
+                {
+                    return Encoding.ASCII.GetString(readBuff, 1, Constants.GPS_INFO_SW_DATE_SIZE);
+                }
+                else return "";
+            }
+            else return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool startGPS_Recording()
+        {            
+            return sendCommand(USBcommand.USB_DBG_START_RECORDING, new byte[1]);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool stopGPS_Recording()
+        {
+            return sendCommand(USBcommand.USB_DBG_STOP_RECORDING, new byte[1]);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool getGPS_RecordingStatus()
+        {
+            byte[] readBuff = new byte[1];
+            if (sendCommand(USBcommand.USB_DBG_RECORDING_STATUS, readBuff))
+            {
+                return readBuff[0] > 0;
+            }
+            else return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public tAccelStatus getAccelStatus()
+        {
+            byte[] readBuff = new byte[1];
+            if (sendCommand(USBcommand.USB_DBG_ACCEL_GET_STATUS, readBuff))
+            {
+                return (tAccelStatus)readBuff[0];
+            }
+            else return tAccelStatus.UNKNOWN;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public AccelerometerFiltered getFilteredAccel()
+        {
+            byte[] readBuff = new byte[6];
+            if (sendCommand(USBcommand.USB_DBG_ACCEL_GET_FILT_DATA, readBuff))
+            {
+                return new AccelerometerFiltered(readBuff);
+            }
+            else return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public AccelerometerNormalized getNormalAccel()
+        {
+            byte[] readBuff = new byte[6];
+            if (sendCommand(USBcommand.USB_DBG_ACCEL_GET_NORM_DATA, readBuff))
+            {
+                return new AccelerometerNormalized(readBuff);
+            }
+            else return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public AccelerometerSelfTest getSelfTestAccel()
+        {
+            byte[] readBuff = new byte[6];
+            if (sendCommand(USBcommand.USB_DBG_ACCEL_GET_ST_DATA, readBuff))
+            {
+                return new AccelerometerSelfTest(readBuff);
+            }
+            else return null;
+        }        
         #endregion
     }
 
@@ -684,6 +852,46 @@ namespace traqpaqWPF
             latitude = BetterBitConverter.ToDouble(readBuff, 0);
             longitude = BetterBitConverter.ToDouble(readBuff, 4);
             heading = BetterBitConverter.ToDouble(readBuff, 8);
+        }
+    }
+
+    public class AccelerometerFiltered
+    {
+        public short Filtered_X { get; set; }
+        public short Filtered_Y { get; set; }
+        public short Filtered_Z { get; set; }
+
+        public AccelerometerFiltered(byte[] readBuff)
+        {
+            Filtered_X = BetterBitConverter.ToInt16(readBuff, 0);
+            Filtered_Y = BetterBitConverter.ToInt16(readBuff, 2);
+            Filtered_Z = BetterBitConverter.ToInt16(readBuff, 4);
+        }
+    }
+    public class AccelerometerNormalized
+    {
+        public short Normalized_X { get; set; }
+        public short Normalized_Y { get; set; }
+        public short Normalized_Z { get; set; }
+
+        public AccelerometerNormalized(byte[] readBuff)
+        {
+            Normalized_X = BetterBitConverter.ToInt16(readBuff, 0);
+            Normalized_Y = BetterBitConverter.ToInt16(readBuff, 2);
+            Normalized_Z = BetterBitConverter.ToInt16(readBuff, 4);
+        }
+    }
+    public class AccelerometerSelfTest
+    {
+        public short SelfTest_X { get; set; }
+        public short SelfTest_Y { get; set; }
+        public short SelfTest_Z { get; set; }
+
+        public AccelerometerSelfTest(byte[] readBuff)
+        {
+            SelfTest_X = BetterBitConverter.ToInt16(readBuff, 0);
+            SelfTest_Y = BetterBitConverter.ToInt16(readBuff, 2);
+            SelfTest_Z = BetterBitConverter.ToInt16(readBuff, 4);
         }
     }
 }

@@ -40,6 +40,18 @@ namespace traqpaqWPF
         USB_DBG_ACCEL_GET_ST_DATA = 0x63
     }
 
+    public enum tAccelStatus
+    {
+        UNKNOWN,
+        INCORRECT_DEVID,
+        UNINITIALIZED,
+        INIT_FAILED,
+        PERFORMING_INIT,
+        SELF_TEST_FAILED,
+        IDLE,
+        SAMPLING
+    }
+
     public static class Constants
     {
         // Product ID and Vendor ID (still need to register for valid ones)
@@ -105,6 +117,12 @@ namespace traqpaqWPF
         public const int TRACKLIST_LATITUDE = 24;
         public const int TRACKLIST_COURSE = 28;
         public const int TRACKLIST_ISEMPTY = 30;
+
+
+        // GPS INFO
+        public const int GPS_INFO_PART_NUMBER_SIZE = 8;
+        public const int GPS_INFO_SW_VERSION_SIZE = 9;
+        public const int GPS_INFO_SW_DATE_SIZE = 9;
 
 
         //Conversion factors
