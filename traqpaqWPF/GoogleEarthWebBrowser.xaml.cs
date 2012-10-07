@@ -13,12 +13,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Web.Script.Serialization;
 using System.Web.Script;
+using System.Runtime.InteropServices;
 
 namespace traqpaqWPF
 {
     /// <summary>
     /// Interaction logic for GoogleEarthWebBrowser.xaml
     /// </summary>
+    [ComVisible(true)]
     public partial class GoogleEarthWebBrowser : UserControl
     {
         JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
@@ -26,11 +28,13 @@ namespace traqpaqWPF
         public GoogleEarthWebBrowser()
         {
             InitializeComponent();
+
+            // Allows for 2 way communication from js
+            webBrowser.ObjectForScripting = this;
+
             //TODO clear cache is only for debugging, should be removed eventually
             Q326201CS.DeleteCache.ClearCache();
 
-            //webBrowser.DocumentText = traqpaqResources.ge;
-            //webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/ge1.htm");
             webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/gmaps.htm");
         }
 
@@ -61,6 +65,15 @@ namespace traqpaqWPF
         public void clearLaps()
         {
             webBrowser.InvokeScript("clearPolyArray");
+        }
+
+        /// <summary>
+        /// This function is called by js when a polyline is clicked
+        /// </summary>
+        /// <param name="message"></param>
+        public void Polyline_Click(string message)
+        {
+            MessageBox.Show(message);
         }
     }
 }

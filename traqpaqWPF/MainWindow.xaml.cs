@@ -16,6 +16,7 @@ using LibUsbDotNet.Main;
 using LibUsbDotNet.Info;
 using LibUsbDotNet.DeviceNotify;
 using LibUsbDotNet.DeviceNotify.Info;
+using System.Runtime.InteropServices;
 
 namespace traqpaqWPF
 {
@@ -24,6 +25,7 @@ namespace traqpaqWPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    [ClassInterface(ClassInterfaceType.None)]
     public partial class MainWindow : Window
     {
         public Page[] pages;
