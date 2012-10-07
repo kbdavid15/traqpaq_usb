@@ -854,7 +854,6 @@ namespace traqpaqWPF
             heading = BetterBitConverter.ToDouble(readBuff, 8);
         }
     }
-
     public class AccelerometerFiltered
     {
         public short Filtered_X { get; set; }
