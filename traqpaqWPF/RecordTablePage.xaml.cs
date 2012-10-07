@@ -144,13 +144,24 @@ namespace traqpaqWPF
         public List<double> Longitudes { get; set; }
         public bool AreAllChecked = false;
         public string Track { get; set; }
+
+        public LapInfo(List<double> latitudes, List<double> longitudes, Color color, string lapNo, string laptime, string track) 
+        {
+            Latitudes = latitudes;
+            Longitudes = longitudes;
+            LapColor = color;
+            LapNo = lapNo;
+            LapTime = laptime;
+            Track = track;
+        }
     }
 
     public class Record
     {
         public string trackName { get; set; }
         public string DateStamp { get; set; }
-        public List<LapInfo> Laps { get; set; }
+        public List<LapInfo> Laps = new List<LapInfo>();
+
         public Record(TraqpaqDevice traqpaq, TraqpaqDevice.RecordTableReader.RecordTable recordTable)
         {
             // get the track name
@@ -160,9 +171,7 @@ namespace traqpaqWPF
             // get the data at the record
             // for now assume 1 lap
             TraqpaqDevice.RecordDataReader dataReader = new TraqpaqDevice.RecordDataReader(traqpaq, recordTable);
-            LapInfo lap = new LapInfo();
-            lap.LapColor = Colors.Red;
-            lap.LapNo = "1";
+            dataReader.readRecordData();
             List<double> longitudes = new List<double>();
             List<double> latitutes = new List<double>();
             foreach (var page in dataReader.recordDataPages)
@@ -173,6 +182,8 @@ namespace traqpaqWPF
                     latitutes.Add(data.Latitude);
                 }
             }
+            LapInfo lap = new LapInfo(latitutes, longitudes, Colors.Red, "1", "1:20", "Burn Pit");
+            Laps.Add(lap);
         }
     }
 }
