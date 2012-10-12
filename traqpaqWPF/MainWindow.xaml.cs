@@ -19,7 +19,7 @@ using LibUsbDotNet.DeviceNotify.Info;
 
 namespace traqpaqWPF
 {
-    public enum PageName { WELCOME, RECORDS, DATA, IMPORT };
+    public enum PageName { WELCOME, IMPORT, DATA, RECORDS };
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -33,14 +33,10 @@ namespace traqpaqWPF
         /// if it is not connected already when the program is started.
         /// </summary>
         public IDeviceNotifier deviceNotifier;
-        /// <summary>
-        /// Use this list to save the previous pages that the user has visited.
-        /// </summary>
-        List<Page> backPageCache = new List<Page>();
-        /// <summary>
-        /// If the user hits the back button, save the page to this list
-        /// </summary>
-        List<Page> forwardPageCache = new List<Page>();
+
+        // Declare the record page, so that there are not multiple copies of the same page
+        public RecordTablePage recordPage;
+        public DataPage dataPage;
 
         public MainWindow()
         {
@@ -65,7 +61,7 @@ namespace traqpaqWPF
             }
 
             // Create the pages and save to array
-            pages = new Page[] { new WelcomePage(this), new RecordTablePage(this), new DataPage(this), new ImportPage(this) };
+            pages = new Page[] { new WelcomePage(this), new ImportPage(this) };
 
             // Go to the welcome page
             navigatePage(PageName.WELCOME);
@@ -86,6 +82,8 @@ namespace traqpaqWPF
                     try
                     {
                         traqpaq = new TraqpaqDevice();
+                        statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.myOTPreader.SerialNumber;
+                        //TODO tracks not showing up in log book after late connect because they are populated too early
                     }
                     catch (TraqPaqNotConnectedException) { }    // Silently fail
                 }
@@ -108,6 +106,22 @@ namespace traqpaqWPF
                 buttonBack.Visibility = System.Windows.Visibility.Visible;
             }
             frame1.Navigate(pages[(int)p]);
+        }
+        /// <summary>
+        /// Navigate directly to a created page
+        /// </summary>
+        /// <param name="page">The page to navigate to</param>
+        internal void navigatePage(Page page)
+        {
+            frame1.Navigate(page);
+            if (pages.ToList().IndexOf(page) == (int)PageName.WELCOME)
+            {
+                buttonBack.Visibility = System.Windows.Visibility.Hidden;
+            }
+            else
+            {
+                buttonBack.Visibility = System.Windows.Visibility.Visible;
+            }
         }
 
         private void buttonBack_Click(object sender, RoutedEventArgs e)

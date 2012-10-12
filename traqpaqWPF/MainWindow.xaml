@@ -20,8 +20,8 @@
                 <ProgressBar Name="progressBar1" Width="100" />
             </StatusBarItem>            
             <Separator Width="1" Background="Gray" HorizontalAlignment="Left" />
-            <StatusBarItem Name="statusBarItemTraqpaq" Width="150" HorizontalAlignment="Left"/>
-            <Separator Width="1" HorizontalAlignment="Left" Background="Gray" Grid.Column="1"/>
+            <StatusBarItem Name="statusBarItemTraqpaq" Width="350" HorizontalAlignment="Left"/>
+            <Separator Width="1" HorizontalAlignment="Left" Background="Gray" Grid.Column="1" />
         </StatusBar>
         <Button Style="{StaticResource GlassButton}" Name="buttonBack" FontSize="12" Click="buttonBack_Click" 
                 FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black" Margin="1" IsTabStop="False">

@@ -31,10 +31,13 @@ namespace traqpaqWPF
 
             this.main = main;
 
-            // read record table to find tracks
-            foreach (TraqpaqDevice.RecordTableReader.RecordTable item in main.traqpaq.recordTableList)
+            // read record table to find tracks, if device is connected
+            if (main.traqpaq != null)
             {
-                _RecordTable.Add(new Record(main.traqpaq, item));
+                foreach (TraqpaqDevice.RecordTableReader.RecordTable item in main.traqpaq.recordTableList)
+                {
+                    _RecordTable.Add(new Record(main.traqpaq, item));
+                }
             }
         }
 
@@ -126,10 +129,14 @@ namespace traqpaqWPF
         private void goToDataPage(Record[] records)
         {
             // construct the record data page
-            DataPage data = (DataPage)main.pages[(int)PageName.DATA];
-            data.setRecord(records);
+            if (main.dataPage == null)
+            {
+                DataPage data = new DataPage(main);
+                main.dataPage = data;
+            }
+            main.dataPage.setRecord(records);
             // Navigate to the page
-            main.navigatePage(PageName.DATA);
+            main.navigatePage(main.dataPage);
         }
     }
     /// <summary>

@@ -148,7 +148,14 @@ namespace traqpaqWPF
             public string SerialNumber { get; set; }
             public string TesterID { get; set; }
 
-            public OTPreader(TraqpaqDevice parent) { this.parent = parent; }
+            public OTPreader(TraqpaqDevice parent) 
+            {//TODO change this so that the request functions return the actual values
+                this.parent = parent;
+                reqApplicationVersion();
+                reqHardwareVersion();
+                reqSerialNumber();
+                reqTesterID();
+            }
 
             public bool reqApplicationVersion()
             {

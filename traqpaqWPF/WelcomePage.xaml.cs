@@ -32,7 +32,14 @@ namespace traqpaqWPF
         /// </summary>
         private void buttonLogBook_Click(object sender, RoutedEventArgs e)
         {
-            main.navigatePage(PageName.RECORDS);
+            //main.navigatePage(PageName.RECORDS);
+            // create the log page
+            if (main.recordPage == null)
+            {
+                RecordTablePage page = new RecordTablePage(main);
+                main.recordPage = page;
+            }
+            main.navigatePage(main.recordPage);
         }
 
         /// <summary>
