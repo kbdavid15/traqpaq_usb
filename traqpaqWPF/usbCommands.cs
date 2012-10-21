@@ -27,6 +27,7 @@ namespace traqpaqWPF
         USB_DBG_DF_IS_FLASH_FULL = 0x3C,
         USB_DBG_DF_USED_SPACE = 0x3D,
         USB_DBG_GPS_CURRENT_POSITION = 0x40,
+        USB_DBG_GPS_CURRENT_MODE = 0x41,
         USB_DBG_GPS_INFO_SN = 0x43,
         USB_DBG_GPS_INFO_PN = 0x44,
         USB_DBG_GPS_INFO_SW_VER = 0x45,

@@ -26,4 +26,12 @@ namespace traqpaqWPF
 
         }
     }
+
+    public class USBCommandFailedException : Exception, ISerializable
+    {
+        public USBCommandFailedException() { }
+        public USBCommandFailedException(string message) : base(message) { }
+        public USBCommandFailedException(string message, Exception inner) { }
+        protected USBCommandFailedException(SerializationInfo info, StreamingContext context) { }
+    }
 }

@@ -134,6 +134,51 @@ namespace traqpaqWPF
         }
         #endregion
 
+        public string reqApplicationVersion()
+        {
+            byte[] readBuff = new byte[2];
+            if (sendCommand(USBcommand.USB_CMD_REQ_APPL_VER, readBuff))
+            {
+                return readBuff[0] + "." + readBuff[1];
+            }
+            else return null;
+        }
+
+        public string reqHardwareVersion()
+        {
+            byte[] readBuff = new byte[1];
+            if (sendCommand(USBcommand.USB_CMD_REQ_HARDWARE_VER, readBuff))
+            {
+                return readBuff[0].ToString();
+            }
+            else return null;
+        }
+
+        public string reqSerialNumber()
+        {
+            byte[] readBuff = new byte[Constants.OTP_SERIAL_LENGTH];
+            if (sendCommand(USBcommand.USB_CMD_REQ_SERIAL_NUMBER, readBuff))
+            {
+                return Encoding.ASCII.GetString(readBuff);
+            }
+            else return null;
+        }
+
+        /// <summary>
+        /// Request end-of-line Tester ID
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="USBCommandFailedException"></exception>
+        public string reqTesterID()
+        {
+            byte[] readBuff = new byte[1];
+            if (sendCommand(USBcommand.USB_CMD_REQ_TESTER_ID, readBuff))
+            {
+                return readBuff[0].ToString();
+            }
+            else throw new USBCommandFailedException();
+        }
+
         #region tFlashOTP
         /********************************************************
          * Methods for sending commands to the device           *
@@ -143,67 +188,11 @@ namespace traqpaqWPF
         public class OTPreader
         {
             private TraqpaqDevice parent;
-            public string ApplicationVersion { get; set; }
-            public string HardwareVersion { get; set; }
-            public string SerialNumber { get; set; }
-            public string TesterID { get; set; }
 
             public OTPreader(TraqpaqDevice parent) 
-            {//TODO change this so that the request functions return the actual values
+            {
                 this.parent = parent;
-                reqApplicationVersion();
-                reqHardwareVersion();
-                reqSerialNumber();
-                reqTesterID();
-            }
-
-            public bool reqApplicationVersion()
-            {
-                byte[] readBuff = new byte[2];
-                if (parent.sendCommand(USBcommand.USB_CMD_REQ_APPL_VER, readBuff))
-                {
-                    this.ApplicationVersion = readBuff[0] + "." + readBuff[1];
-                    return true;
-                }
-                else return false;
-            }
-
-            public bool reqHardwareVersion()
-            {
-                byte[] readBuff = new byte[1];
-                if (parent.sendCommand(USBcommand.USB_CMD_REQ_HARDWARE_VER, readBuff))
-                {
-                    this.HardwareVersion = readBuff[0].ToString();
-                    return true;
-                }
-                else return false;
-            }
-
-            public bool reqSerialNumber()
-            {
-                byte[] readBuff = new byte[Constants.OTP_SERIAL_LENGTH];
-                if (parent.sendCommand(USBcommand.USB_CMD_REQ_SERIAL_NUMBER, readBuff))
-                {
-                    this.SerialNumber = Encoding.ASCII.GetString(readBuff);
-                    return true;
-                }
-                else return false;
-            }
-
-            /// <summary>
-            /// Request end-of-line Tester ID
-            /// </summary>
-            /// <returns></returns>
-            public bool reqTesterID()
-            {
-                byte[] readBuff = new byte[1];
-                if (parent.sendCommand(USBcommand.USB_CMD_REQ_TESTER_ID, readBuff))
-                {
-                    this.TesterID = readBuff[0].ToString();
-                    return true;
-                }
-                else return false;
-            }
+            }            
 
             /// <summary>
             /// Read specified bytes from flash OTP
@@ -243,13 +232,6 @@ namespace traqpaqWPF
             byte[] InstCurrentRead = new byte[2];
             byte[] AccumCurrentRead = new byte[2];
             byte[] SetChargeStateFlagRead = new byte[1];
-            
-            public double Voltage { get; set; }
-            public double Temperature { get; set; }
-            public double CurrentInst { get; set; }
-            public double CurrentAccum { get; set; }
-            public bool ChargeStateFlag { get; set; }
-
             private TraqpaqDevice traqpaq;
 
             public Battery(TraqpaqDevice parent) 
@@ -260,71 +242,71 @@ namespace traqpaqWPF
             /// <summary>
             /// Request current battery voltage
             /// </summary>
-            /// <returns>True if request was successful, false otherwise</returns>
-            public bool reqBatteryVoltage()
+            /// <returns>The battery voltage</returns>
+            /// <exception cref="USBCommandFailedException"></exception>
+            public double reqBatteryVoltage()
             {
                 if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_VOLTAGE, VoltageRead))
-                {   // convert to Volts
-                    this.Voltage = BetterBitConverter.ToUInt16(VoltageRead, 0) * Constants.BATT_VOLTAGE_FACTOR;                    
-                    return true;
+                {
+                    return BetterBitConverter.ToUInt16(VoltageRead, 0) * Constants.BATT_VOLTAGE_FACTOR;
                 }
-                else return false;
+                else throw new USBCommandFailedException();
             }
 
             /// <summary>
             /// Request battery temperature
             /// </summary>
-            /// <returns>True if request was successful, false otherwise</returns>
-            public bool reqBatteryTemp()
+            /// <returns>The battery temperature</returns>
+            /// <exception cref="USBCommandFailedException"></exception>
+            public double reqBatteryTemp()
             {
                 if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_TEMPERATURE, TemperatureRead))
                 {
-                    this.Temperature = BetterBitConverter.ToUInt16(TemperatureRead, 0) * Constants.BATT_TEMP_FACTOR; // measured in °C
-                    return true;
+                    return BetterBitConverter.ToUInt16(TemperatureRead, 0) * Constants.BATT_TEMP_FACTOR; // measured in °C
                 }
-                else return false;
+                else throw new USBCommandFailedException();
             }
 
             /// <summary>
             /// Request battery instantaneous current draw
             /// </summary>
-            /// <returns>True if request was successful, false otherwise</returns>
-            public bool reqBatteryInstCurrent()
+            /// <returns>The battery instantaneous current</returns>
+            /// <exception cref="USBCommandFailedException"></exception>
+            public double reqBatteryInstCurrent()
             {
                 if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_INSTANT, InstCurrentRead))
                 {
-                    this.CurrentInst = BetterBitConverter.ToUInt16(InstCurrentRead, 0) * Constants.BATT_INST_CURRENT_FACTOR;
-                    return true;
+                    return BetterBitConverter.ToUInt16(InstCurrentRead, 0) * Constants.BATT_INST_CURRENT_FACTOR;
                 }
-                else return false;
+                else throw new USBCommandFailedException();
             }
 
             /// <summary>
             /// Request battery accumulated current draw
             /// </summary>
-            /// <returns>True if request was successful, false otherwise</returns>
-            public bool reqBatteryAccumCurrent()
+            /// <returns>The battery accumulated current</returns>
+            /// <exception cref="USBCommandFailedException"></exception>
+            public double reqBatteryAccumCurrent()
             {
                 if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_ACCUM, AccumCurrentRead))
                 {
-                    this.CurrentAccum = BetterBitConverter.ToUInt16(AccumCurrentRead, 0) * Constants.BATT_ACCUM_CURRENT_FACTOR;
-                    return true;
+                    return BetterBitConverter.ToUInt16(AccumCurrentRead, 0) * Constants.BATT_ACCUM_CURRENT_FACTOR;
                 }
-                else return false;
+                else throw new USBCommandFailedException();
             }
 
             /// <summary>
             /// Set accumulated battery current to full-charge state
             /// </summary>
-            /// <returns>True if request was successful, false otherwise</returns>
+            /// <returns>True if the battery is fully charged</returns>
+            /// <exception cref="USBCommandFailedException"></exception>
             public bool setBatteryFullChargeState()
             {
                 if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_UPDATE, SetChargeStateFlagRead))
                 {
-                    this.ChargeStateFlag = (SetChargeStateFlagRead[0] > 0);     //true if success
-                    return true; 
+                    return SetChargeStateFlagRead[0] > 0;     //true if success
                 }
-                else return false;
+                else throw new USBCommandFailedException();
             }
         }
 
@@ -790,6 +772,16 @@ namespace traqpaqWPF
             else return false;
         }
 
+        public GPSmode getGPS_ModeAndSatellites()
+        {
+            byte[] readBuff = new byte[2];
+            if (sendCommand(USBcommand.USB_DBG_GPS_CURRENT_MODE, readBuff))
+            {
+                return new GPSmode(readBuff);
+            }
+            else return null;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -898,6 +890,16 @@ namespace traqpaqWPF
             SelfTest_X = BetterBitConverter.ToInt16(readBuff, 0);
             SelfTest_Y = BetterBitConverter.ToInt16(readBuff, 2);
             SelfTest_Z = BetterBitConverter.ToInt16(readBuff, 4);
+        }
+    }
+    public class GPSmode
+    {
+        public int mode, numSatellites;
+
+        public GPSmode(byte[] readBuff)
+        {
+            mode = readBuff[0];
+            numSatellites = readBuff[1];
         }
     }
 }
