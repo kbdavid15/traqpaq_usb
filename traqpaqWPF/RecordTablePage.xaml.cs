@@ -81,15 +81,26 @@ namespace traqpaqWPF
                 {
                     size = (int)viewboxPreviewPane.RenderSize.Width;
                 }
-                double[] xCoord = NormalizeData(lap.Latitudes, 10, size - 10);
-                double[] yCoord = NormalizeData(lap.Longitudes, 10, size - 10);
-                for (int i = 0; i < xCoord.Length; i++)
-                {
-                    polyline.Points.Add(new Point(xCoord[i], yCoord[i]));
-                }
 
-                // Add the polyline to the viewbox
-                viewboxPreviewPane.Child = polyline;
+                // check if there is data in lat and long. If there is not, display message in preview pane
+                if (lap.Longitudes.Count > 0 && lap.Latitudes.Count > 0)
+                {
+                    double[] xCoord = NormalizeData(lap.Latitudes, 10, size - 10);
+                    double[] yCoord = NormalizeData(lap.Longitudes, 10, size - 10);
+                    for (int i = 0; i < xCoord.Length; i++)
+                    {
+                        polyline.Points.Add(new Point(xCoord[i], yCoord[i]));
+                    }
+                    // Add the polyline to the viewbox
+                    viewboxPreviewPane.Child = polyline;
+                }
+                else
+                {
+                    // show error message in preview pane
+                    Label l = new Label();
+                    l.Content = "No data found";
+                    viewboxPreviewPane.Child = l;
+                }
             }            
         }
 
