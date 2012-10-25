@@ -55,7 +55,7 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="record">Record object containing lap information</param>
         public void setRecord(Record[] records)
-        {//TODO allow more than one record to be set, and set up groups in the listview            
+        {            
             if (recordTable != null)
             {
                 if (!recordTable.Equals(records))
@@ -65,7 +65,7 @@ namespace traqpaqWPF
                     geBrowser.clearLaps();
                 }
             }
-            //TODO rethink how js stores the array because it won't work with 2 tracks that both have lap 1, 2...
+
             this.recordTable = records;
             // Add the laps to the Collection
             foreach (Record r in recordTable)

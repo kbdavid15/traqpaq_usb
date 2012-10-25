@@ -276,7 +276,7 @@ namespace traqpaqWPF
             {
                 if (traqpaq.sendCommand(USBcommand.USB_CMD_REQ_BATTERY_INSTANT, InstCurrentRead))
                 {
-                    return BetterBitConverter.ToUInt16(InstCurrentRead, 0) * Constants.BATT_INST_CURRENT_FACTOR;
+                    return BetterBitConverter.ToInt16(InstCurrentRead, 0) * Constants.BATT_INST_CURRENT_FACTOR;
                 }
                 else throw new USBCommandFailedException();
             }
@@ -416,7 +416,8 @@ namespace traqpaqWPF
                 byte[] readBuffer = new byte[Constants.RECORD_TABLE_SIZE];
                 public bool RecordEmpty { get; set; }
                 public byte TrackID { get; set; }
-                public uint DateStamp { get; set; }
+                //public uint DateStamp { get; set; }
+                public DateTime DateStamp { get; set; }
                 public uint StartAddress { get; set; }
                 public uint EndAddress { get; set; }
                 public uint StartPage { get; set; }
@@ -433,7 +434,8 @@ namespace traqpaqWPF
                     {   
                         this.RecordEmpty = readBuffer[Constants.RECORD_EMPTY] == 0xFF;   // true if empty
                         this.TrackID = readBuffer[Constants.RECORD_TRACK_ID];
-                        this.DateStamp = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_DATESTAMP);
+                        uint tmpDateStamp = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_DATESTAMP);
+                        //this.DateStamp = new DateTime(Math.Floor(tmpDateStamp / Constants.DATETIME_DAY), 
                         this.StartAddress = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_START_ADDRESS);
                         this.EndAddress = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_END_ADDRESS);
                         this.StartPage = (StartAddress - Constants.ADDR_RECORD_DATA_START) / Constants.MEMORY_PAGE_SIZE;
@@ -460,7 +462,8 @@ namespace traqpaqWPF
                     if (table.readRecordTable(index))
                     {
                         isEmpty = table.RecordEmpty;
-                        if (!isEmpty)   // only add the table if it is not empty
+                        //TODO remove the check for trackID, this was to get around some corrupted entries in the record table
+                        if (!isEmpty && table.TrackID != 255)   // only add the table if it is not empty
                             this.recordTable.Add(table);
                         index++;
                     }
@@ -848,9 +851,9 @@ namespace traqpaqWPF
 
         public Position(byte[] readBuff)
         {
-            latitude = BetterBitConverter.ToDouble(readBuff, 0);
-            longitude = BetterBitConverter.ToDouble(readBuff, 4);
-            heading = BetterBitConverter.ToDouble(readBuff, 8);
+            latitude = BetterBitConverter.ToInt32(readBuff, 0);
+            longitude = BetterBitConverter.ToInt32(readBuff, 4);
+            heading = BetterBitConverter.ToInt32(readBuff, 8);
         }
     }
     public class AccelerometerFiltered

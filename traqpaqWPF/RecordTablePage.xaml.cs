@@ -189,7 +189,7 @@ namespace traqpaqWPF
                     latitutes.Add(data.Latitude);
                 }
             }
-            LapInfo lap = new LapInfo(latitutes, longitudes, Colors.Red, "1", "1:20", "Burn Pit");
+            LapInfo lap = new LapInfo(latitutes, longitudes, Colors.Red, "1", "1:20", trackName);
             Laps.Add(lap);
         }
     }

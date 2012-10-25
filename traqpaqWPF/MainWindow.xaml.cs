@@ -47,7 +47,7 @@ namespace traqpaqWPF
             {
                 traqpaq = new TraqpaqDevice();
                 // update status bar
-                statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.myOTPreader.SerialNumber;
+                //statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.myOTPreader.SerialNumber;
             }
             catch (TraqPaqNotConnectedException)
             {
@@ -82,7 +82,7 @@ namespace traqpaqWPF
                     try
                     {
                         traqpaq = new TraqpaqDevice();
-                        statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.myOTPreader.SerialNumber;
+                        //statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.myOTPreader.SerialNumber;
                         //TODO tracks not showing up in log book after late connect because they are populated too early
                     }
                     catch (TraqPaqNotConnectedException) { }    // Silently fail
