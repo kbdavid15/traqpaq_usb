@@ -27,15 +27,27 @@
                 VerticalAlignment="Stretch" Width="50" Click="buttonLogout_Click" Style="{StaticResource LogoutButton}"
                 Visibility="Hidden" />
         <StackPanel Grid.Column="1" Name="stackPanelLogin" HorizontalAlignment="Right" Orientation="Horizontal" />
-        <TabControl Grid.RowSpan="2" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Name="tabControl1" VerticalAlignment="Stretch" Margin="0,5,0,0">
+        <TabControl Grid.RowSpan="2" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Name="tabControl1" VerticalAlignment="Stretch" Margin="0,5,0,0" >
             <TabItem Header="Home" Name="tabItemHome">
                 <Grid>
                     <Frame HorizontalAlignment="Stretch" Name="frameHome" VerticalAlignment="Stretch" />
                 </Grid>
             </TabItem>
             <TabItem Header="Log Book" Name="tabItemLogBook">
-                <Grid>                    
-                    <Frame HorizontalAlignment="Stretch" Name="frameLogBook" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25" />
+                        <ColumnDefinition Width="786*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="393*" />
+                    </Grid.RowDefinitions>
+                    <Button Style="{StaticResource GlassButton}" Name="buttonBack" FontSize="12" Click="buttonBack_Click" Visibility="Hidden"
+                        FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black" Margin="1" IsTabStop="False">
+                        <Image Width="Auto" Height="18" Source="/traqpaqWPF;component/Images/white_arrow_transparent.png" />
+                    </Button>
+                    <Frame Grid.Row="1" HorizontalAlignment="Stretch" Name="frameLogBook" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2" />
                 </Grid>
             </TabItem>
             <TabItem Header="Settings" Name="tabItemSettings">

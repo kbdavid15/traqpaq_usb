@@ -43,13 +43,17 @@ namespace traqpaqWPF
         public MainWindow()
         {
             InitializeComponent();
+
+            // Set up event handler to wait for a usb device to connect to
+            deviceNotifier = DeviceNotifier.OpenDeviceNotifier();
+            deviceNotifier.OnDeviceNotify += new EventHandler<DeviceNotifyEventArgs>(deviceNotifier_OnDeviceNotify);
             
-            // try to connect to device. Show status in status bar
+            // try to connect to device (if device was connected previously). Show status in status bar
             try
             {
                 traqpaq = new TraqpaqDevice();
                 // update status bar
-                //statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.myOTPreader.SerialNumber;
+                statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.reqSerialNumber();
             }
             catch (TraqPaqNotConnectedException)
             {
@@ -57,9 +61,7 @@ namespace traqpaqWPF
                 traqpaq = null;
                 // update status bar
                 statusBarItemTraqpaq.Content = "Device not found";
-                // Set up event handler to wait for a usb device to connect to
-                deviceNotifier = DeviceNotifier.OpenDeviceNotifier();
-                deviceNotifier.OnDeviceNotify += new EventHandler<DeviceNotifyEventArgs>(deviceNotifier_OnDeviceNotify);
+
             }
 
             // Create the pages and save to array
@@ -112,25 +114,31 @@ namespace traqpaqWPF
         void deviceNotifier_OnDeviceNotify(object sender, DeviceNotifyEventArgs e)
         {
             // Detected a device, try to see if it is the traqpaq
-            if (e.EventType == EventType.DeviceArrival)  // check for device arrival
+            if (e.Device.IdProduct == Constants.PID && e.Device.IdVendor == Constants.VID)
             {
-                //MessageBox.Show(e.Device.IdProduct.ToString() + "\n" + e.Device.IdVendor.ToString());
-                if (traqpaq == null)
-                {//TODO could also check for specifics with the e.Device..... properties
-                    // try to connect again
-                    try
+                if (e.EventType == EventType.DeviceArrival)  // check for device arrival
+                {
+                    if (traqpaq == null)
                     {
-                        traqpaq = new TraqpaqDevice();
-                        //statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.myOTPreader.SerialNumber;
-                        //TODO tracks not showing up in log book after late connect because they are populated too early
+                        // try to connect again
+                        try
+                        {
+                            traqpaq = new TraqpaqDevice();
+                            statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.reqSerialNumber();
+                            // populate tracks
+                            //TODO fix populate tracks
+                            recordPage.populateTracks();
+                        }
+                        catch (TraqPaqNotConnectedException) { }    // Silently fail
                     }
-                    catch (TraqPaqNotConnectedException) { }    // Silently fail
                 }
-            }
-            else
-            {
-                //TODO use this to disconnect the device. The event handler would need to be created regardless
-                //of wether or not the device is connected at first though.
+                else    // device removal
+                {
+                    traqpaq.MyUSBDevice.Close();
+                    traqpaq = null;
+                    // update status bar
+                    statusBarItemTraqpaq.Content = "Traqpaq disconnected";
+                }
             }
         }
 
@@ -164,17 +172,17 @@ namespace traqpaqWPF
         //    }
         //}
 
-        //private void buttonBack_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (frameLogBook.CanGoBack)
-        //    {
-        //        frameLogBook.GoBack();
-        //        if (!frameLogBook.CanGoBack)
-        //        {   // if can't go back anymore, hide the back button
-        //            buttonBack.Visibility = System.Windows.Visibility.Hidden;
-        //        }
-        //    }
-        //}
+        private void buttonBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (frameLogBook.CanGoBack)
+            {
+                frameLogBook.GoBack();
+                if (!frameLogBook.CanGoBack)
+                {   // if can't go back anymore, hide the back button
+                    buttonBack.Visibility = System.Windows.Visibility.Hidden;
+                }
+            }
+        }
 
         /// <summary>
         /// Show the login window and let the user attempt to login

@@ -31,13 +31,24 @@ namespace traqpaqWPF
             this.main = main;
 
             // read record table to find tracks, if device is connected
+            populateTracks();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool populateTracks()
+        {
             if (main.traqpaq != null)
             {
                 foreach (TraqpaqDevice.RecordTableReader.RecordTable item in main.traqpaq.recordTableList)
                 {
                     _RecordTable.Add(new Record(main.traqpaq, item));
                 }
-            }
+                return true;
+            } 
+            else return false;  // device not connected
         }
 
         /// <summary>
@@ -57,7 +68,7 @@ namespace traqpaqWPF
                     break;
                 }
                 obj = VisualTreeHelper.GetParent(obj);
-            }            
+            }
         }
 
         /// <summary>
@@ -122,7 +133,7 @@ namespace traqpaqWPF
                 .ToArray();
         }
 
-        private void buttonDataPage_Click(object sender, RoutedEventArgs e)
+        private void buttonNext_Click(object sender, RoutedEventArgs e)
         {
             Record[] records = new Record[listViewRecords.SelectedItems.Count];
             for (int i = 0; i < listViewRecords.SelectedItems.Count; i++)
@@ -132,18 +143,7 @@ namespace traqpaqWPF
             goToDataPage(records);
         }
 
-        private void buttonBack_Click(object sender, RoutedEventArgs e)
-        {
-            if (main.frameLogBook.CanGoBack)
-            {
-                main.frameLogBook.GoBack();
-                if (!main.frameLogBook.CanGoBack)
-                {   // if can't go back anymore, hide the back button
-                    buttonBack.Visibility = System.Windows.Visibility.Hidden;
-                }
-            }
-        }
-
+        
 
         /// <summary>
         /// This function is called by the double click event and the datapage button click event
@@ -157,7 +157,9 @@ namespace traqpaqWPF
                 DataPage data = new DataPage(main);
                 main.dataPage = data;
             }
+
             main.dataPage.setRecord(records);
+
             // Navigate to the page
             main.frameLogBook.Navigate(main.dataPage);
         }

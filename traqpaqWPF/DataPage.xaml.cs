@@ -39,13 +39,14 @@ namespace traqpaqWPF
         {            
             InitializeComponent();
             this.main = main;
+            
 
             // if internet connection, use web browser to load google earth
             // otherwise, just plot the points
             //TODO figure this out, for now assume internet and fail gracefully
             geBrowser = new GoogleEarthWebBrowser();
             geBrowser.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            mainGrid.Children.Add(geBrowser);
+            subGrid1.Children.Add(geBrowser);
             Grid.SetColumn(geBrowser, 2);
         }
 

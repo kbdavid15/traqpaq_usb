@@ -39,17 +39,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="186*" />
-            </Grid.ColumnDefinitions>
-            <Button Style="{StaticResource GlassButton}" Name="buttonBack" FontSize="12" Click="buttonBack_Click"
-                        FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black" Margin="1" IsTabStop="False">
-                <Image Width="Auto" Height="18" Source="/traqpaqWPF;component/Images/white_arrow_transparent.png" />
-            </Button>
-            
-            <Button Name="buttonDataPage" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Content="Next" Click="buttonDataPage_Click" Grid.Row="1" />
+        <Grid>            
+            <Button Name="buttonNext" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="50" Content="Next" Click="buttonNext_Click" Grid.Row="1" />
         </Grid>        
     </Grid>
 </Page>
