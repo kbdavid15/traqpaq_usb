@@ -5,16 +5,14 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25" />
-            <ColumnDefinition Width="490*" />
+            <ColumnDefinition Width="100*" />
             <ColumnDefinition Width="50" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
-            <RowDefinition Height="438*" />
+            <RowDefinition Height="100*" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
-        <Frame Name="frame1" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden" Grid.Row="1" Grid.ColumnSpan="5" IsTabStop="False"/>
         <StatusBar Height="23" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Grid.Row="2" Grid.ColumnSpan="5">
             <StatusBarItem Name="statusBarItemProgress" VerticalContentAlignment="Stretch">
                 <ProgressBar Name="progressBar1" Width="100" />
@@ -23,15 +21,39 @@
             <StatusBarItem Name="statusBarItemTraqpaq" Width="350" HorizontalAlignment="Left"/>
             <Separator Width="1" HorizontalAlignment="Left" Background="Gray" Grid.Column="1" />
         </StatusBar>
-        <Button Style="{StaticResource GlassButton}" Name="buttonBack" FontSize="12" Click="buttonBack_Click" 
-                FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black" Margin="1" IsTabStop="False">
-            <Image Width="Auto" Height="18" Source="/traqpaqWPF;component/Images/white_arrow_transparent.png" />
-        </Button>
         <Button Content="Log In" Grid.Column="2" HorizontalAlignment="Right" Name="buttonLogin" IsTabStop="False"
                 VerticalAlignment="Stretch" Width="50" Click="buttonLogin_Click" Style="{StaticResource LoginButton}"/>
         <Button Content="Log Out" Grid.Column="2" HorizontalAlignment="Right" Name="buttonLogout" IsTabStop="False"
                 VerticalAlignment="Stretch" Width="50" Click="buttonLogout_Click" Style="{StaticResource LogoutButton}"
                 Visibility="Hidden" />
         <StackPanel Grid.Column="1" Name="stackPanelLogin" HorizontalAlignment="Right" Orientation="Horizontal" />
+        <TabControl Grid.RowSpan="2" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Name="tabControl1" VerticalAlignment="Stretch" Margin="0,5,0,0">
+            <TabItem Header="Home" Name="tabItemHome">
+                <Grid>
+                    <Frame HorizontalAlignment="Stretch" Name="frameHome" VerticalAlignment="Stretch" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Log Book" Name="tabItemLogBook">
+                <Grid>                    
+                    <Frame HorizontalAlignment="Stretch" Name="frameLogBook" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings" Name="tabItemSettings">
+                <Grid>
+                    <Frame HorizontalAlignment="Stretch" Name="frameSettings" VerticalAlignment="Stretch" />
+                </Grid>
+            </TabItem>
+            <TabItem Name="tabItemUpload">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/traqpaqWPF;component/Images/document_import.png" Margin="0,0,5,0" Height="20"/>
+                        <TextBlock Text="Import" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Frame Name="frameUpload" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

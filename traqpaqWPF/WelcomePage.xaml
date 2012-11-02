@@ -9,27 +9,10 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="27" />
             <RowDefinition Height="200*" />
             <RowDefinition Height="50*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="75" />
-                <ColumnDefinition Width="75" />
-                <ColumnDefinition Width="75" />
-                <ColumnDefinition Width="75*" />
-            </Grid.ColumnDefinitions>
-            <Button Name="buttonImport" Grid.Column="0" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Click="buttonImport_Click" IsTabStop="False" TabIndex="0">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/traqpaqWPF;component/Images/document_import.png" Margin="0,0,5,0" Height="Auto"/>
-                    <TextBlock Text="Import" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                </StackPanel>
-            </Button>
-            <Button Name="buttonLogBook" Grid.Column="1" Height="25" Content="Log Book" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="buttonLogBook_Click" Style="{StaticResource RedButton}" IsTabStop="False" TabIndex="1" />
-            <Button Name="buttonSettings" Grid.Column="2" Height="25" Content="Settings" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Click="buttonSettings_Click" Style="{StaticResource RedButton}" IsTabStop="False" TabIndex="2" />
-        </Grid>
-        <Grid Grid.Row="1">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
                 <RowDefinition Height="100*" />
@@ -53,6 +36,6 @@
                 <Label Name="labelAllTimeMaxSpeed" Content="Overall Max Speed: " FontSize="14" /> 
             </StackPanel>
         </Grid>
-        <Image Name="image1" Stretch="Uniform" Source="/traqpaqWPF;component/Images/traqpaq.png" Grid.Row="2" />
+        <Image Name="image1" Stretch="Uniform" Source="/traqpaqWPF;component/Images/traqpaq.png" Grid.Row="1" />
     </Grid>
 </Page>

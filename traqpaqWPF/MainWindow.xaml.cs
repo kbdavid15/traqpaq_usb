@@ -16,6 +16,8 @@ using LibUsbDotNet.Main;
 using LibUsbDotNet.Info;
 using LibUsbDotNet.DeviceNotify;
 using LibUsbDotNet.DeviceNotify.Info;
+using System.Threading;
+using System.ComponentModel;
 
 namespace traqpaqWPF
 {
@@ -26,7 +28,7 @@ namespace traqpaqWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Page[] pages;
+        public List<Page> pages;
         public TraqpaqDevice traqpaq;
         /// <summary>
         /// Used to detect when a device is connected, 
@@ -61,10 +63,47 @@ namespace traqpaqWPF
             }
 
             // Create the pages and save to array
-            pages = new Page[] { new WelcomePage(this), new ImportPage(this) };
+            pages = new List<Page>() { new WelcomePage(this), new ImportPage(this) };
 
             // Go to the welcome page
-            navigatePage(PageName.WELCOME);
+            frameHome.Navigate(pages[(int)PageName.WELCOME]);
+
+            frameLogBook.Navigate(new RecordTablePage(this));
+
+            // attempt with backgroundworker
+            //BackgroundWorker bw = new BackgroundWorker();
+            //bw.DoWork += bw_DoWork;
+            //bw.RunWorkerAsync();
+
+            //// create the log book page as a background task
+            //Thread threadCreateRecordPage = new System.Threading.Thread(
+            //    new ThreadStart(
+            //        delegate()
+            //        {
+            //            pages.Add(new RecordTablePage(this));
+            //            System.Windows.Threading.DispatcherOperation dispatcherOp = frameLogBook.Dispatcher.BeginInvoke(
+            //                System.Windows.Threading.DispatcherPriority.Normal,
+            //                new Action(delegate()
+            //                {
+            //                    frameLogBook.Navigate(pages[pages.Count - 1]);
+            //                }));
+            //        }));
+            //threadCreateRecordPage.SetApartmentState(ApartmentState.STA);
+            //threadCreateRecordPage.Start();
+
+            //Action createRecordPage = delegate()
+            //{
+            //    pages.Add(new RecordTablePage(this));
+            //    frameLogBook.Navigate(pages[pages.Count - 1]);
+            //};
+            //Task taskLogPage = Task.Factory.StartNew(createRecordPage);
+
+        }
+
+        void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            pages.Add(new RecordTablePage(this));
+            frameLogBook.Navigate(pages[pages.Count - 1]);
         }
 
         /// <summary>
@@ -95,46 +134,47 @@ namespace traqpaqWPF
             }
         }
 
-        public void navigatePage(PageName p)
-        {
-            if (p == PageName.WELCOME)
-            {
-                buttonBack.Visibility = System.Windows.Visibility.Hidden;
-            }
-            else
-            {
-                buttonBack.Visibility = System.Windows.Visibility.Visible;
-            }
-            frame1.Navigate(pages[(int)p]);
-        }
+        //public void navigatePage(PageName p)
+        //{
+        //    if (p == PageName.WELCOME)
+        //    {
+        //        buttonBack.Visibility = System.Windows.Visibility.Hidden;
+        //    }
+        //    else
+        //    {
+        //        buttonBack.Visibility = System.Windows.Visibility.Visible;
+        //    }
+        //    frame1.Navigate(pages[(int)p]);
+        //}
+
         /// <summary>
         /// Navigate directly to a created page
         /// </summary>
         /// <param name="page">The page to navigate to</param>
-        internal void navigatePage(Page page)
-        {
-            frame1.Navigate(page);
-            if (pages.ToList().IndexOf(page) == (int)PageName.WELCOME)
-            {
-                buttonBack.Visibility = System.Windows.Visibility.Hidden;
-            }
-            else
-            {
-                buttonBack.Visibility = System.Windows.Visibility.Visible;
-            }
-        }
+        //internal void navigatePage(Page page)
+        //{
+        //    frame1.Navigate(page);
+        //    if (pages.ToList().IndexOf(page) == (int)PageName.WELCOME)
+        //    {
+        //        buttonBack.Visibility = System.Windows.Visibility.Hidden;
+        //    }
+        //    else
+        //    {
+        //        buttonBack.Visibility = System.Windows.Visibility.Visible;
+        //    }
+        //}
 
-        private void buttonBack_Click(object sender, RoutedEventArgs e)
-        {
-            if (frame1.CanGoBack)
-            {
-                frame1.GoBack();
-                if (!frame1.CanGoBack)
-                {   // if can't go back anymore, hide the back button
-                    buttonBack.Visibility = System.Windows.Visibility.Hidden;
-                }
-            }
-        }
+        //private void buttonBack_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (frameLogBook.CanGoBack)
+        //    {
+        //        frameLogBook.GoBack();
+        //        if (!frameLogBook.CanGoBack)
+        //        {   // if can't go back anymore, hide the back button
+        //            buttonBack.Visibility = System.Windows.Visibility.Hidden;
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Show the login window and let the user attempt to login

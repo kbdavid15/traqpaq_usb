@@ -15,7 +15,7 @@
             <ColumnDefinition Width="100*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="25" />
             <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
         <GridSplitter Grid.Column="1" Grid.Row="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
@@ -41,11 +41,15 @@
         </ListView>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50*" />
-                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="186*" />
             </Grid.ColumnDefinitions>
-            <Label Content="Log Book" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Bottom" FontSize="26" />
-            <Button Name="buttonDataPage" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Content="Next" Click="buttonDataPage_Click" />
+            <Button Style="{StaticResource GlassButton}" Name="buttonBack" FontSize="12" Click="buttonBack_Click"
+                        FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black" Margin="1" IsTabStop="False">
+                <Image Width="Auto" Height="18" Source="/traqpaqWPF;component/Images/white_arrow_transparent.png" />
+            </Button>
+            
+            <Button Name="buttonDataPage" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Content="Next" Click="buttonDataPage_Click" Grid.Row="1" />
         </Grid>        
     </Grid>
 </Page>

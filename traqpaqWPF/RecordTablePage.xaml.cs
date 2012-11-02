@@ -15,7 +15,6 @@ using System.Collections.ObjectModel;
 
 namespace traqpaqWPF
 {
-
     /// <summary>
     /// Interaction logic for RecordTablePage.xaml
     /// </summary>
@@ -107,7 +106,7 @@ namespace traqpaqWPF
         /// <summary>
         /// Normalize a set of data. Used to show a preview of the track on the record table page.
         /// </summary>
-        /// <param name="data">The enumerable data (double) to normalize</param>
+        /// <param name="data">The enumerable data (doubles) to normalize</param>
         /// <param name="min">Min value of result</param>
         /// <param name="max">Max value of result</param>
         /// <returns>Array of doubles containing normalized data</returns>
@@ -133,6 +132,19 @@ namespace traqpaqWPF
             goToDataPage(records);
         }
 
+        private void buttonBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (main.frameLogBook.CanGoBack)
+            {
+                main.frameLogBook.GoBack();
+                if (!main.frameLogBook.CanGoBack)
+                {   // if can't go back anymore, hide the back button
+                    buttonBack.Visibility = System.Windows.Visibility.Hidden;
+                }
+            }
+        }
+
+
         /// <summary>
         /// This function is called by the double click event and the datapage button click event
         /// </summary>
@@ -147,7 +159,7 @@ namespace traqpaqWPF
             }
             main.dataPage.setRecord(records);
             // Navigate to the page
-            main.navigatePage(main.dataPage);
+            main.frameLogBook.Navigate(main.dataPage);
         }
     }
     /// <summary>
