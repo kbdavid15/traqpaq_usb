@@ -13,16 +13,14 @@ namespace traqpaqWPF
     {
         public UsbDevice MyUSBDevice;
         private static UsbDeviceFinder traqpaqDeviceFinder;
-        UsbEndpointReader reader;
-        UsbEndpointWriter writer;
-        ErrorCode ec = ErrorCode.None;        
+        private UsbEndpointReader reader;
+        private UsbEndpointWriter writer;
+        private ErrorCode ec = ErrorCode.None;        
         public Battery battery;
-        public SavedTrackReader trackReader;
-        public List<TraqpaqDevice.SavedTrackReader.SavedTrack> trackList;
-        RecordTableReader tableReader;
+        public List<SavedTrack> trackList = new List<SavedTrack>();
+        private RecordTableReader tableReader;
         public List<RecordTableReader.RecordTable> recordTableList;
         public RecordDataReader dataReader;
-        public OTPreader myOTPreader;
 
         /// <summary>
         /// Class constructor for the traq|paq
@@ -44,12 +42,8 @@ namespace traqpaqWPF
             // create the battery object
             this.battery = new Battery(this);
 
-            // create the otp reader object
-            this.myOTPreader = new OTPreader(this);
-
-            // create a saved track reader to get a list of saved tracks
-            this.trackReader = new SavedTrackReader(this);
-            this.trackList = trackReader.trackList;
+            // get a list of saved tracks
+            getAllTracks();
 
             // get the record table data
             tableReader = new RecordTableReader(this);
@@ -88,8 +82,7 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="cmd">USB command</param>
         /// <param name="readBuffer">Pre-allocated byte array</param>
-        /// <param name="commandBytes">command bytes passed in order from byte0..byte1..byte(n)
-        ///                            They are appended to the writeBuffer</param>
+        /// <param name="commandBytes">command bytes passed in order from byte0..byte1..byte(n). They are appended to the writeBuffer</param>
         /// <returns>False if read or write error. True otherwise.</returns>
         private bool sendCommand(USBcommand cmd, byte[] readBuffer, params byte[] commandBytes)
         {   
@@ -185,43 +178,31 @@ namespace traqpaqWPF
          * All these methods call the sendCommand() function.   *
          * These should be used to access the device.           *
          ********************************************************/
-        public class OTPreader
+        /// <summary>
+        /// Read specified bytes from flash OTP
+        /// </summary>
+        /// <param name="length">Number of bytes to read</param>
+        /// <param name="index">Byte index to start reading from</param>
+        /// <returns></returns>
+        public byte[] readOTP(byte length, byte index)
         {
-            private TraqpaqDevice parent;
-
-            public OTPreader(TraqpaqDevice parent) 
+            byte[] readBuff = new byte[length];
+            if (sendCommand(USBcommand.USB_CMD_READ_OTP, readBuff, length, index))
             {
-                this.parent = parent;
-            }            
-
-            /// <summary>
-            /// Read specified bytes from flash OTP
-            /// </summary>
-            /// <param name="length">Number of bytes to read</param>
-            /// <param name="index">Byte index to start reading from</param>
-            /// <returns></returns>
-            public byte[] readOTP(byte length, byte index)
-            {
-                byte[] readBuff = new byte[length];
-                if (parent.sendCommand(USBcommand.USB_CMD_READ_OTP, readBuff, length, index))
-                {
-                    //TODO figure out how to return this value
-                    return readBuff;
-                }
+                //TODO figure out how to return this value
                 return readBuff;
             }
+            return readBuff;
+        }
 
-            /// <summary>
-            /// Write fixed data in flash OTP
-            /// </summary>
-            public void writeOTP()
-            {
-                byte[] readBuff = new byte[256]; // don't know how big to make the buffer
-                if (parent.sendCommand(USBcommand.USB_CMD_WRITE_OTP, readBuff))
-                {
-                    //TODO learn more about this function
-                }                
-            }
+        /// <summary>
+        /// Write fixed data in flash OTP
+        /// </summary>
+        /// <returns>True if successful, false otherwise</returns>
+        public bool writeOTP()
+        {
+            byte[] readBuff = new byte[256]; // don't know how big to make the buffer
+            return sendCommand(USBcommand.USB_CMD_WRITE_OTP, readBuff); //TODO writeOTP() function is probably not necessary
         }
         #endregion
 
@@ -310,90 +291,78 @@ namespace traqpaqWPF
             }
         }
 
-
-        public class SavedTrackReader
-        {          
-            public List<SavedTrack> trackList = new List<SavedTrack>();
+#region SavedTracks
+        public class SavedTrack
+        {
+            private byte[] trackReadBuff = new byte[Constants.TRACKLIST_SIZE];
+            private ushort index;
             private TraqpaqDevice traqpaq;
+            public string trackName { get; set; }
+            public double Longitute { get; set; }
+            public double Latitude { get; set; }
+            public ushort Heading { get; set; }
+            public bool isEmpty { get; set; }            
 
-            public SavedTrackReader(TraqpaqDevice parent)
+            public SavedTrack(TraqpaqDevice traqpaq, ushort index)
             {
-                this.traqpaq = parent;
-                // get all the saved tracks and add them to the list
-                getAllTracks();
+                this.traqpaq = traqpaq;
+                this.index = index;
             }
 
             /// <summary>
-            /// Get all the saved tracks on the device and add them to the trackList
+            /// Read saved track data from the device
             /// </summary>
-            private void getAllTracks()
+            /// <returns>True if successful, false if there was an error</returns>
+            public bool readTrack()
             {
-                bool isEmpty = false;
-                SavedTrack track;
-                ushort index = 0;
-
-                while (!isEmpty)
-                {   // keep reading tracks until one is empty
-                    track = new SavedTrack(this, index);
-                    if (track.readTrack())
-                    {
-                        if (!track.isEmpty)
-                            trackList.Add(track);   // don't add the track if it is empty
-                        isEmpty = track.isEmpty;
-                        index++;
-                    }
-                    else isEmpty = false;   // track read failed
-                }
-            }
-
-            //TODO test this function
-            public bool writeSavedTracks()
-            {
-                byte[] readBuffer = new byte[1];
-                if (traqpaq.sendCommand(USBcommand.USB_CMD_WRITE_SAVED_TRACKS, readBuffer))
+                byte[] byteIndex = BetterBitConverter.GetBytes(index);
+                if (traqpaq.sendCommand(USBcommand.USB_CMD_READ_SAVED_TRACKS, trackReadBuff, byteIndex[0], byteIndex[1]))
                 {
-                    return readBuffer[0] > 0;
+                    this.trackName = BetterBitConverter.ToASCIIString(trackReadBuff, 0, Constants.TRACKLIST_NAME_STRLEN);
+                    this.Longitute = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LONGITUDE) / Constants.LATITUDE_LONGITUDE_COORD;
+                    this.Latitude = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LATITUDE) / Constants.LATITUDE_LONGITUDE_COORD;
+                    this.Heading = BetterBitConverter.ToUInt16(trackReadBuff, Constants.TRACKLIST_COURSE);
+                    this.isEmpty = (trackReadBuff[Constants.TRACKLIST_ISEMPTY] == 0xFF);  // true if empty
+                    return true;
                 }
                 else return false;
             }
+        }
 
-            public class SavedTrack
-            {
-                private byte[] trackReadBuff = new byte[Constants.TRACKLIST_SIZE];
-                SavedTrackReader parent;
-                ushort index;
-                public string trackName { get; set; }
-                public double Longitute { get; set; }
-                public double Latitude { get; set; }
-                public ushort Heading { get; set; }
-                public bool isEmpty { get; set; }
+        /// <summary>
+        /// Get all the saved tracks on the device and add them to the trackList
+        /// </summary>
+        private void getAllTracks()
+        {
+            bool isEmpty = false;
+            SavedTrack track;
+            ushort index = 0;
 
-                public SavedTrack(SavedTrackReader parent, ushort index)
+            while (!isEmpty)
+            {   // keep reading tracks until one is empty
+                track = new SavedTrack(this, index);
+                if (track.readTrack())
                 {
-                    this.parent = parent;
-                    this.index = index;
+                    if (!track.isEmpty)
+                        trackList.Add(track);   // don't add the track if it is empty
+                    isEmpty = track.isEmpty;
+                    index++;
                 }
-                /// <summary>
-                /// Read saved track data from the device
-                /// </summary>
-                /// <returns>True if successful, false if there was an error</returns>
-                public bool readTrack()
-                {
-                    byte[] byteIndex = BetterBitConverter.GetBytes(index);
-                    if (parent.traqpaq.sendCommand(USBcommand.USB_CMD_READ_SAVED_TRACKS, trackReadBuff, byteIndex[0], byteIndex[1]))
-                    {
-                        this.trackName = Encoding.ASCII.GetString(trackReadBuff, 0, Constants.TRACKLIST_NAME_STRLEN);
-                        this.Longitute = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LONGITUDE) / Constants.LATITUDE_LONGITUDE_COORD;
-                        this.Latitude = BetterBitConverter.ToInt32(trackReadBuff, Constants.TRACKLIST_LATITUDE) / Constants.LATITUDE_LONGITUDE_COORD;
-                        this.Heading = BetterBitConverter.ToUInt16(trackReadBuff, Constants.TRACKLIST_COURSE);
-                        this.isEmpty = (trackReadBuff[Constants.TRACKLIST_ISEMPTY] == 0xFF);  // true if empty
-                        return true;
-                    }
-                    else return false;
-                }
+                else isEmpty = false;   // track read failed
             }
         }
 
+        //TODO test this function
+        public bool writeSavedTracks()
+        {
+            byte[] readBuffer = new byte[1];
+            if (sendCommand(USBcommand.USB_CMD_WRITE_SAVED_TRACKS, readBuffer))
+            {
+                return readBuffer[0] > 0;
+            }
+            else return false;
+        }
+#endregion
 
         public class RecordTableReader
         {            

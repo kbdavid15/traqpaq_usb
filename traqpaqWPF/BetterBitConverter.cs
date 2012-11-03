@@ -506,6 +506,17 @@ namespace traqpaqWPF
                 return BitConverter.ToString(value, startIndex, length);
         }
 
+        public static string ToASCIIString(byte[] value, int startIndex, int maxLength)
+        {
+            string returnString = "";
+            for (int i = startIndex; i < maxLength; i++)
+            {
+                if (value[i] == 0x00) break;
+                returnString += System.Text.Encoding.ASCII.GetString(value, i, 1);
+            }
+            return returnString;
+        }
+
         //
         // Summary:
         //     Returns a 16-bit unsigned integer converted from two bytes at a specified

@@ -148,36 +148,6 @@ namespace traqpaqWPF
             }
         }
 
-        //public void navigatePage(PageName p)
-        //{
-        //    if (p == PageName.WELCOME)
-        //    {
-        //        buttonBack.Visibility = System.Windows.Visibility.Hidden;
-        //    }
-        //    else
-        //    {
-        //        buttonBack.Visibility = System.Windows.Visibility.Visible;
-        //    }
-        //    frame1.Navigate(pages[(int)p]);
-        //}
-
-        /// <summary>
-        /// Navigate directly to a created page
-        /// </summary>
-        /// <param name="page">The page to navigate to</param>
-        //internal void navigatePage(Page page)
-        //{
-        //    frame1.Navigate(page);
-        //    if (pages.ToList().IndexOf(page) == (int)PageName.WELCOME)
-        //    {
-        //        buttonBack.Visibility = System.Windows.Visibility.Hidden;
-        //    }
-        //    else
-        //    {
-        //        buttonBack.Visibility = System.Windows.Visibility.Visible;
-        //    }
-        //}
-
         private void buttonBack_Click(object sender, RoutedEventArgs e)
         {
             if (frameLogBook.CanGoBack)
