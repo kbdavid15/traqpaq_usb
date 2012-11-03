@@ -23,7 +23,7 @@ namespace traqpaqWPF
     public partial class DataPage : Page
     {
         MainWindow main;
-        GoogleEarthWebBrowser geBrowser;
+        GoogleMapsWebBrowser geBrowser;
 
         //TraqpaqDevice.RecordTableReader.RecordTable recordTable;
         Record[] recordTable;
@@ -44,7 +44,7 @@ namespace traqpaqWPF
             // if internet connection, use web browser to load google earth
             // otherwise, just plot the points
             //TODO figure this out, for now assume internet and fail gracefully
-            geBrowser = new GoogleEarthWebBrowser();
+            geBrowser = new GoogleMapsWebBrowser();
             geBrowser.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             subGrid1.Children.Add(geBrowser);
             Grid.SetColumn(geBrowser, 2);

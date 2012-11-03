@@ -16,15 +16,15 @@ using System.Collections.ObjectModel;
 namespace traqpaqWPF
 {
     /// <summary>
-    /// Interaction logic for RecordTablePage.xaml
+    /// Interaction logic for LogBookPage.xaml
     /// </summary>
-    public partial class RecordTablePage : Page
+    public partial class LogBookPage : Page
     {
         ObservableCollection<Record> _RecordTable = new ObservableCollection<Record>();
         public ObservableCollection<Record> RecordTable { get { return _RecordTable; } }
         MainWindow main;
 
-        public RecordTablePage(MainWindow main)
+        public LogBookPage(MainWindow main)
         {
             InitializeComponent();
 
@@ -143,8 +143,6 @@ namespace traqpaqWPF
             goToDataPage(records);
         }
 
-        
-
         /// <summary>
         /// This function is called by the double click event and the datapage button click event
         /// </summary>
@@ -162,8 +160,13 @@ namespace traqpaqWPF
 
             // Navigate to the page
             main.frameLogBook.Navigate(main.dataPage);
+
+            // make the back button visible
+            main.buttonBack.Visibility = System.Windows.Visibility.Visible;
         }
     }
+
+
     /// <summary>
     /// Dummy class for adding info to the record
     /// </summary>

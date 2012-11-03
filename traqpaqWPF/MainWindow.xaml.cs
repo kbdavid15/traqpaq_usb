@@ -37,7 +37,7 @@ namespace traqpaqWPF
         public IDeviceNotifier deviceNotifier;
 
         // Declare the record page, so that there are not multiple copies of the same page
-        public RecordTablePage recordPage;
+        public LogBookPage recordPage;
         public DataPage dataPage;
 
         public MainWindow()
@@ -73,7 +73,7 @@ namespace traqpaqWPF
             // Go to the welcome page
             frameHome.Navigate(pages[(int)PageName.WELCOME]);
 
-            frameLogBook.Navigate(new RecordTablePage(this));
+            frameLogBook.Navigate(new LogBookPage(this));
 
             // attempt with backgroundworker
             //BackgroundWorker bw = new BackgroundWorker();
@@ -107,7 +107,7 @@ namespace traqpaqWPF
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            pages.Add(new RecordTablePage(this));
+            pages.Add(new LogBookPage(this));
             frameLogBook.Navigate(pages[pages.Count - 1]);
         }
 
@@ -130,9 +130,11 @@ namespace traqpaqWPF
                             statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.reqSerialNumber();
                             // populate tracks
                             //TODO fix populate tracks
-                            recordPage.populateTracks();
+                            
                         }
                         catch (TraqPaqNotConnectedException) { }    // Silently fail
+
+                        recordPage.populateTracks();
                     }
                 }
                 else    // device removal

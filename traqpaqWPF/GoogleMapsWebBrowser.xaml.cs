@@ -1,29 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Web.Script.Serialization;
-using System.Web.Script;
 
 namespace traqpaqWPF
 {
     /// <summary>
-    /// Interaction logic for GoogleEarthWebBrowser.xaml
+    /// Interaction logic for GoogleMapsWebBrowser.xaml
     /// </summary>
-    public partial class GoogleEarthWebBrowser : UserControl
+    public partial class GoogleMapsWebBrowser : UserControl
     {
         JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
         
-        public GoogleEarthWebBrowser()
+        public GoogleMapsWebBrowser()
         {
             InitializeComponent();
             //TODO clear cache is only for debugging, should be removed eventually
