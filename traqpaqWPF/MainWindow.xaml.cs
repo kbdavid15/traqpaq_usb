@@ -65,7 +65,10 @@ namespace traqpaqWPF
             }
 
             // Create the pages and save to array
-            pages = new List<Page>() { new WelcomePage(this), new ImportPage(this) };
+            pages = new List<Page>() { new HomePage(this), new UploadPage(this) };
+
+            // assign the pages to the respective tabs
+            frameUpload.Navigate(pages[(int)PageName.IMPORT]);
 
             // Go to the welcome page
             frameHome.Navigate(pages[(int)PageName.WELCOME]);

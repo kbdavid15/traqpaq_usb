@@ -17,12 +17,12 @@ namespace traqpaqWPF
     /// <summary>
     /// Interaction logic for ImportPage.xaml
     /// </summary>
-    public partial class ImportPage : Page
+    public partial class UploadPage : Page
     {
         MainWindow main;
         TraqpaqDevice traqpaq;
 
-        public ImportPage(MainWindow main)
+        public UploadPage(MainWindow main)
         {
             this.main = main;
             this.traqpaq = main.traqpaq;

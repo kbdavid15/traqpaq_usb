@@ -88,9 +88,6 @@ namespace traqpaqWPF
             // Create the KML file
             KmlFile kmlFile = KmlFile.Create(kml, false);
 
-            //TODO for debugging purposes, save the kml file to test folder.
-            kmlFile.Save("test.kml");
-
             // Return the KML file as a string
             return kmlFile.SaveString();
         }

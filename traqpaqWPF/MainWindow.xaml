@@ -23,10 +23,10 @@
         </StatusBar>
         <Button Content="Log In" Grid.Column="2" HorizontalAlignment="Right" Name="buttonLogin" IsTabStop="False"
                 VerticalAlignment="Stretch" Width="50" Click="buttonLogin_Click" Style="{StaticResource LoginButton}"/>
-        <Button Content="Log Out" Grid.Column="2" HorizontalAlignment="Right" Name="buttonLogout" IsTabStop="False"
+        <Button Content="Log Out" Grid.Column="1" HorizontalAlignment="Right" Name="buttonLogout" IsTabStop="False"
                 VerticalAlignment="Stretch" Width="50" Click="buttonLogout_Click" Style="{StaticResource LogoutButton}"
                 Visibility="Hidden" />
-        <StackPanel Grid.Column="1" Name="stackPanelLogin" HorizontalAlignment="Right" Orientation="Horizontal" />
+        <StackPanel Name="stackPanelLogin" HorizontalAlignment="Right" Orientation="Horizontal" />
         <TabControl Grid.RowSpan="2" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Name="tabControl1" VerticalAlignment="Stretch" Margin="0,5,0,0" >
             <TabItem Header="Home" Name="tabItemHome">
                 <Grid>
@@ -37,11 +37,11 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="25" />
-                        <ColumnDefinition Width="786*" />
+                        <ColumnDefinition Width="200*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25" />
-                        <RowDefinition Height="393*" />
+                        <RowDefinition Height="100*" />
                     </Grid.RowDefinitions>
                     <Button Style="{StaticResource GlassButton}" Name="buttonBack" FontSize="12" Click="buttonBack_Click" Visibility="Hidden"
                         FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black" Margin="1" IsTabStop="False">
@@ -59,7 +59,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/traqpaqWPF;component/Images/document_import.png" Margin="0,0,5,0" Height="20"/>
-                        <TextBlock Text="Import" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock Text="Upload" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>

@@ -17,11 +17,11 @@ namespace traqpaqWPF
     /// <summary>
     /// Interaction logic for WelcomePage.xaml
     /// </summary>
-    public partial class WelcomePage : Page
+    public partial class HomePage : Page
     {
         MainWindow main;
 
-        public WelcomePage(MainWindow main)
+        public HomePage(MainWindow main)
         {
             InitializeComponent();
             this.main = main;

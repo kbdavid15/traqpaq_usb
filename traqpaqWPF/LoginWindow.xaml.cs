@@ -30,6 +30,8 @@ namespace traqpaqWPF
             loginDictionary["kbdavid15"] = "password1";
             loginDictionary["ryan"] = "123";
 
+            // set focus to the username box
+            textBoxUsername.Focus();
         }
 
         /// <summary>

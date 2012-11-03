@@ -201,7 +201,7 @@ namespace traqpaqWPF
             //TODO need to convert to readable date format
             DateStamp = recordTable.DateStamp.ToString();
             // get the data at the record
-            // for now assume 1 lap
+            //TODO separate laps for now assume 1 lap
             TraqpaqDevice.RecordDataReader dataReader = new TraqpaqDevice.RecordDataReader(traqpaq, recordTable);
             dataReader.readRecordData();
             List<double> longitudes = new List<double>();
