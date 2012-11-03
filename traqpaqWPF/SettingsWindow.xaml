@@ -1,8 +1,0 @@
-﻿<Window x:Class="traqpaqWPF.SettingsWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SettingsWindow" Height="300" Width="300" ShowInTaskbar="False">
-    <Grid>
-        <TextBlock Text="Need to decide what to put in this window, and wether it should be a window or a page" TextWrapping="Wrap" />
-    </Grid>
-</Window>

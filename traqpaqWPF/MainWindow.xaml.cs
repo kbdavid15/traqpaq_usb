@@ -21,7 +21,7 @@ using System.ComponentModel;
 
 namespace traqpaqWPF
 {
-    public enum PageName { WELCOME, IMPORT, DATA, RECORDS };
+    public enum PageName { WELCOME, IMPORT, SETTINGS, DATA, RECORDS };
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -65,10 +65,11 @@ namespace traqpaqWPF
             }
 
             // Create the pages and save to array
-            pages = new List<Page>() { new HomePage(this), new UploadPage(this) };
+            pages = new List<Page>() { new HomePage(this), new UploadPage(this), new SettingsPage(this) };
 
             // assign the pages to the respective tabs
             frameUpload.Navigate(pages[(int)PageName.IMPORT]);
+            frameSettings.Navigate(pages[(int)PageName.SETTINGS]);
 
             // Go to the welcome page
             frameHome.Navigate(pages[(int)PageName.WELCOME]);

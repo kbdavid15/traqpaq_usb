@@ -121,8 +121,11 @@
       <DependentUpon>DataPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Exceptions.cs" />
-    <Compile Include="GoogleEarthWebBrowser.xaml.cs">
-      <DependentUpon>GoogleEarthWebBrowser.xaml</DependentUpon>
+    <Compile Include="GoogleMapsWebBrowser.xaml.cs">
+      <DependentUpon>GoogleMapsWebBrowser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UploadPage.xaml.cs">
       <DependentUpon>UploadPage.xaml</DependentUpon>
@@ -131,11 +134,8 @@
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RecordTablePage.xaml.cs">
-      <DependentUpon>RecordTablePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    <Compile Include="LogBookPage.xaml.cs">
+      <DependentUpon>LogBookPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="traqpaqDevice.cs" />
     <Compile Include="usbCommands.cs" />
@@ -143,6 +143,10 @@
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Page Include="DataPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -162,7 +166,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="GoogleEarthWebBrowser.xaml">
+    <Page Include="GoogleMapsWebBrowser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -178,11 +182,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="RecordTablePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="LogBookPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

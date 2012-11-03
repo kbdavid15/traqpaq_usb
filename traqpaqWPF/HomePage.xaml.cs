@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace traqpaqWPF
 {
     /// <summary>
-    /// Interaction logic for WelcomePage.xaml
+    /// Interaction logic for HomePage.xaml
     /// </summary>
     public partial class HomePage : Page
     {
@@ -25,38 +25,6 @@ namespace traqpaqWPF
         {
             InitializeComponent();
             this.main = main;
-        }
-
-        ///// <summary>
-        ///// Show the log page (record page)
-        ///// </summary>
-        //private void buttonLogBook_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //main.navigatePage(PageName.RECORDS);
-        //    // create the log page
-        //    if (main.recordPage == null)
-        //    {
-        //        RecordTablePage page = new RecordTablePage(main);
-        //        main.recordPage = page;
-        //    }
-        //    main.navigatePage(main.recordPage);
-        //}
-
-        ///// <summary>
-        ///// Import a new session from the device
-        ///// </summary>
-        //private void buttonImport_Click(object sender, RoutedEventArgs e)
-        //{
-        //    main.navigatePage(PageName.IMPORT);
-        //}
-
-        /// <summary>
-        /// Change user settings
-        /// </summary>
-        private void buttonSettings_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsWindow settings = new SettingsWindow();
-            settings.ShowDialog();
         }
     }
 }

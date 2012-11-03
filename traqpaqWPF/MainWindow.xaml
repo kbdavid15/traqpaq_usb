@@ -43,8 +43,7 @@
                         <RowDefinition Height="25" />
                         <RowDefinition Height="100*" />
                     </Grid.RowDefinitions>
-                    <Button Style="{StaticResource GlassButton}" Name="buttonBack" FontSize="12" Click="buttonBack_Click" Visibility="Hidden"
-                        FontFamily="Comic Sans MS" FontStyle="Normal" FontWeight="Bold" Background="Black" Margin="1" IsTabStop="False">
+                    <Button Style="{StaticResource GlassButton}" Name="buttonBack" Click="buttonBack_Click" Visibility="Hidden" Background="Black" Margin="1" IsTabStop="False">
                         <Image Width="Auto" Height="18" Source="/traqpaqWPF;component/Images/white_arrow_transparent.png" />
                     </Button>
                     <Frame Grid.Row="1" HorizontalAlignment="Stretch" Name="frameLogBook" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2" />

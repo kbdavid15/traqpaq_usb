@@ -86,5 +86,13 @@
             </Grid>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
+        <TabControl Name="tabControlCharts" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TabItem Header="Altitude">
+                
+            </TabItem>
+            <TabItem Header="Performance">
+                
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>

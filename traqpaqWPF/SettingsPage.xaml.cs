@@ -9,18 +9,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace traqpaqWPF
 {
     /// <summary>
-    /// Interaction logic for SettingsWindow.xaml
+    /// Interaction logic for SettingsPage.xaml
     /// </summary>
-    public partial class SettingsWindow : Window
+    public partial class SettingsPage : Page
     {
-        public SettingsWindow()
+        private MainWindow mainWindow;
+
+        public SettingsPage(MainWindow mainWindow)
         {
             InitializeComponent();
+            this.mainWindow = mainWindow;
         }
     }
 }
