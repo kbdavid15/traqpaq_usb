@@ -37,7 +37,7 @@ namespace traqpaqWPF
         public IDeviceNotifier deviceNotifier;
 
         // Declare the record page, so that there are not multiple copies of the same page
-        public LogBookPage recordPage;
+        public LogBookPage logBookPage;
         public DataPage dataPage;
 
         public MainWindow()
@@ -73,8 +73,11 @@ namespace traqpaqWPF
 
             // Go to the welcome page
             frameHome.Navigate(pages[(int)PageName.WELCOME]);
+            
+            // create the log book page
+            logBookPage = new LogBookPage(this);
+            frameLogBook.Navigate(logBookPage);
 
-            frameLogBook.Navigate(new LogBookPage(this));
 
             // attempt with backgroundworker
             //BackgroundWorker bw = new BackgroundWorker();
@@ -135,7 +138,7 @@ namespace traqpaqWPF
                         }
                         catch (TraqPaqNotConnectedException) { }    // Silently fail
 
-                        recordPage.populateTracks();
+                        logBookPage.populateTracks();
                     }
                 }
                 else    // device removal

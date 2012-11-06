@@ -404,7 +404,7 @@ namespace traqpaqWPF
                         this.RecordEmpty = readBuffer[Constants.RECORD_EMPTY] == 0xFF;   // true if empty
                         this.TrackID = readBuffer[Constants.RECORD_TRACK_ID];
                         uint tmpDateStamp = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_DATESTAMP);
-                        //this.DateStamp = new DateTime(Math.Floor(tmpDateStamp / Constants.DATETIME_DAY), 
+                        //TODOthis.DateStamp = new DateTime(Math.Floor(tmpDateStamp / Constants.DATETIME_DAY), 
                         this.StartAddress = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_START_ADDRESS);
                         this.EndAddress = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_END_ADDRESS);
                         this.StartPage = (StartAddress - Constants.ADDR_RECORD_DATA_START) / Constants.MEMORY_PAGE_SIZE;
