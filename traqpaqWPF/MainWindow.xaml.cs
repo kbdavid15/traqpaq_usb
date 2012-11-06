@@ -18,6 +18,7 @@ using LibUsbDotNet.DeviceNotify;
 using LibUsbDotNet.DeviceNotify.Info;
 using System.Threading;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace traqpaqWPF
 {
@@ -35,10 +36,16 @@ namespace traqpaqWPF
         /// if it is not connected already when the program is started.
         /// </summary>
         public IDeviceNotifier deviceNotifier;
+        /// <summary>
+        /// 
+        /// </summary>
+        public BackgroundWorker bw = new BackgroundWorker();
 
         // Declare the record page, so that there are not multiple copies of the same page
         public LogBookPage logBookPage;
         public DataPage dataPage;
+
+        public delegate void Populate();
 
         public MainWindow()
         {
@@ -77,24 +84,27 @@ namespace traqpaqWPF
             // create the log book page
             logBookPage = new LogBookPage(this);
             frameLogBook.Navigate(logBookPage);
+            //logBookPage.populateTracks();
 
-
-            // attempt with backgroundworker
-            //BackgroundWorker bw = new BackgroundWorker();
-            //bw.DoWork += bw_DoWork;
-            //bw.RunWorkerAsync();
+            // configure the background worker
+            bw.DoWork += bw_DoWork;
+            bw.WorkerReportsProgress = false;
+            // attempt with backgroundworker if connected
+            if (traqpaq != null)
+            {
+                bw.RunWorkerAsync(); 
+            }
 
             //// create the log book page as a background task
             //Thread threadCreateRecordPage = new System.Threading.Thread(
             //    new ThreadStart(
             //        delegate()
             //        {
-            //            pages.Add(new RecordTablePage(this));
             //            System.Windows.Threading.DispatcherOperation dispatcherOp = frameLogBook.Dispatcher.BeginInvoke(
             //                System.Windows.Threading.DispatcherPriority.Normal,
             //                new Action(delegate()
             //                {
-            //                    frameLogBook.Navigate(pages[pages.Count - 1]);
+            //                    logBookPage.populateTracks();                                
             //                }));
             //        }));
             //threadCreateRecordPage.SetApartmentState(ApartmentState.STA);
@@ -102,17 +112,22 @@ namespace traqpaqWPF
 
             //Action createRecordPage = delegate()
             //{
-            //    pages.Add(new RecordTablePage(this));
-            //    frameLogBook.Navigate(pages[pages.Count - 1]);
+            //    logBookPage.populateTracks();
             //};
             //Task taskLogPage = Task.Factory.StartNew(createRecordPage);
 
         }
 
+        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MessageBox.Show("Complete");
+        }
+
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            pages.Add(new LogBookPage(this));
-            frameLogBook.Navigate(pages[pages.Count - 1]);
+            Populate handler = logBookPage.populateTracks;
+            logBookPage.Dispatcher.BeginInvoke(handler);
+            //logBookPage.populateTracks();
         }
 
         /// <summary>
@@ -138,7 +153,10 @@ namespace traqpaqWPF
                         }
                         catch (TraqPaqNotConnectedException) { }    // Silently fail
 
-                        logBookPage.populateTracks();
+                        //logBookPage.populateTracks();
+                        //BackgroundWorker bw = new BackgroundWorker();
+                        //bw.DoWork += bw_DoWork;
+                        bw.RunWorkerAsync(); 
                     }
                 }
                 else    // device removal

@@ -27,28 +27,19 @@ namespace traqpaqWPF
         public LogBookPage(MainWindow main)
         {
             InitializeComponent();
-
             this.main = main;
-
-            // read record table to find tracks, if device is connected
-            populateTracks();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public bool populateTracks()
+        public void populateTracks()
         {
-            if (main.traqpaq != null)
+            foreach (TraqpaqDevice.RecordTableReader.RecordTable item in main.traqpaq.recordTableList)
             {
-                foreach (TraqpaqDevice.RecordTableReader.RecordTable item in main.traqpaq.recordTableList)
-                {
-                    _RecordTable.Add(new Record(main.traqpaq, item));
-                }
-                return true;
-            } 
-            else return false;  // device not connected
+                _RecordTable.Add(new Record(main.traqpaq, item));
+            }
         }
 
         /// <summary>
