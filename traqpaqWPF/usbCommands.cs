@@ -68,10 +68,10 @@ namespace traqpaqWPF
         // Memory Layout
         public const int ADDR_USER_PREFS_START = 0x00000000;
         public const int ADDR_USER_PREFS_END = 0x000000FF;
-        public const int ADDR_RECORD_TABLE_START = 0x00000100;
-        public const int ADDR_RECORD_TABLE_END = 0x00000FFF;
-        public const int ADDR_TRACKLIST_START = 0x00001000;
-        public const int ADDR_TRACKLIST_END = 0x00001FFF;
+        public const int ADDR_RECORD_TABLE_START = 0x00001000;
+        public const int ADDR_RECORD_TABLE_END = 0x00001FFF;
+        public const int ADDR_TRACKLIST_START = 0x00000100;
+        public const int ADDR_TRACKLIST_END = 0x00000FFF;
         public const int ADDR_RECORD_DATA_START = 0x00002000;
         public const int ADDR_RECORD_DATA_END = 0x001FFFFF;
 
