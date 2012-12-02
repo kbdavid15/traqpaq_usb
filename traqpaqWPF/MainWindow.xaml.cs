@@ -37,11 +37,11 @@ namespace traqpaqWPF
         /// </summary>
         public IDeviceNotifier deviceNotifier;
         /// <summary>
-        /// 
+        /// Background Worker used to add records to the Log Book Page without freezing the GUI
         /// </summary>
         public BackgroundWorker bw = new BackgroundWorker();
 
-        // Declare the record page, so that there are not multiple copies of the same page
+        // Declare the log page and data page here so that there are not multiple copies of the same page
         public LogBookPage logBookPage;
         public DataPage dataPage;
 
@@ -68,7 +68,6 @@ namespace traqpaqWPF
                 traqpaq = null;
                 // update status bar
                 statusBarItemTraqpaq.Content = "Device not found";
-
             }
 
             // Create the pages and save to array
@@ -151,7 +150,7 @@ namespace traqpaqWPF
                             //TODO fix populate tracks
                             
                         }
-                        catch (TraqPaqNotConnectedException) { }    // Silently fail
+                        catch (TraqPaqNotConnectedException) { return; }    // Silently fail and exit method
 
                         //logBookPage.populateTracks();
                         //BackgroundWorker bw = new BackgroundWorker();

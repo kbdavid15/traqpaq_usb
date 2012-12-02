@@ -159,7 +159,7 @@ namespace traqpaqWPF
 
 
     /// <summary>
-    /// Dummy class for adding info to the record
+    /// 
     /// </summary>
     public class LapInfo
     {
@@ -193,7 +193,7 @@ namespace traqpaqWPF
             // get the track name
             trackName = traqpaq.trackList[recordTable.TrackID].trackName;
             //TODO need to convert to readable date format
-            DateStamp = recordTable.DateStamp.ToString();
+            DateStamp = recordTable.DateStamp.ToLongDateString();
             // get the data at the record
             //TODO separate laps for now assume 1 lap
             TraqpaqDevice.RecordDataReader dataReader = new TraqpaqDevice.RecordDataReader(traqpaq, recordTable);

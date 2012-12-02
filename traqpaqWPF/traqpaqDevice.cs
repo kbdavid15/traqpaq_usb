@@ -386,7 +386,7 @@ namespace traqpaqWPF
                 public bool RecordEmpty { get; set; }
                 public byte TrackID { get; set; }
                 //public uint DateStamp { get; set; }
-                public DateTime DateStamp { get; set; }
+                public DateTime DateStamp;
                 public uint StartAddress { get; set; }
                 public uint EndAddress { get; set; }
                 public uint StartPage { get; set; }
@@ -404,7 +404,23 @@ namespace traqpaqWPF
                         this.RecordEmpty = readBuffer[Constants.RECORD_EMPTY] == 0xFF;   // true if empty
                         this.TrackID = readBuffer[Constants.RECORD_TRACK_ID];
                         uint tmpDateStamp = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_DATESTAMP);
-                        //TODOthis.DateStamp = new DateTime(Math.Floor(tmpDateStamp / Constants.DATETIME_DAY), 
+                        //TODO If this is the bottleneck, don't use strings. Use this method: http://stackoverflow.com/questions/3389264/how-to-get-the-separate-digits-of-an-int-number
+                        string tmpDateStampString = tmpDateStamp.ToString();
+                        if (tmpDateStampString.Length < 6)
+                        {
+                            for (int i = 0; i <= 6 - tmpDateStampString.Length; i++)
+                            {
+                                tmpDateStampString = "0" + tmpDateStampString;  // add a zero to the front of the string
+                            }
+                        }
+                        try
+                        {
+                            this.DateStamp = new DateTime(int.Parse("20" + tmpDateStampString.Substring(4, 2)), int.Parse(tmpDateStampString.Substring(2, 2)), int.Parse(tmpDateStampString.Substring(0, 2)));
+                        }
+                        catch (Exception)
+                        {
+                            this.DateStamp = new DateTime();
+                        }
                         this.StartAddress = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_START_ADDRESS);
                         this.EndAddress = BetterBitConverter.ToUInt32(readBuffer, Constants.RECORD_END_ADDRESS);
                         this.StartPage = (StartAddress - Constants.ADDR_RECORD_DATA_START) / Constants.MEMORY_PAGE_SIZE;

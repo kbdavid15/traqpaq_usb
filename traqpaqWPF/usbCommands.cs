@@ -137,9 +137,6 @@ namespace traqpaqWPF
         public const double COURSE_FACTOR = 100;                 // Converts course(heading) to degrees
         public const double UTC_FACTOR = 1000;
         public const double HDOP_FACTOR = 100;
-
-        public const double DATETIME_DAY = 10000;
-        //TODO figure out how to convert uint datestamp to c# datetime object
         
         public const int TIMEOUT = 250;                          // usb timeout in ms
     }
