@@ -38,8 +38,7 @@ namespace traqpaqWPF
         public DataPage(MainWindow main)
         {            
             InitializeComponent();
-            this.main = main;
-            
+            this.main = main;            
 
             // if internet connection, use web browser to load google earth
             // otherwise, just plot the points

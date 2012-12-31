@@ -16,7 +16,7 @@ namespace traqpaqWPF
         {
             InitializeComponent();
             //TODO clear cache is only for debugging, should be removed eventually
-            Q326201CS.DeleteCache.ClearCache();
+            //Q326201CS.DeleteCache.ClearCache();
 
             //webBrowser.DocumentText = traqpaqResources.ge;
             //webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/ge1.htm");
