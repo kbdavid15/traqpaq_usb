@@ -24,10 +24,21 @@ namespace traqpaqWPF
         public ObservableCollection<Record> RecordTable { get { return _RecordTable; } }
         MainWindow main;
 
+        #region dummy
+        /*
+         * This is a dummy class for testing purposes that will be added to 
+         * the record collection regardless of whether the device is connected or not
+         */
+        DummyRecord dummy = new DummyRecord();
+        #endregion
+
+
         public LogBookPage(MainWindow main)
         {
             InitializeComponent();
             this.main = main;
+            // add the dummy record
+            _RecordTable.Add(dummy);
         }
 
         /// <summary>
@@ -166,20 +177,26 @@ namespace traqpaqWPF
         public string LapNo { get; set; }
         public string LapTime { get; set; }
         public Color LapColor { get; set; }
-        public List<double> Latitudes { get; set; }
-        public List<double> Longitudes { get; set; }
-        public bool AreAllChecked = false;
+        public List<double> Latitudes = new List<double>();
+        public List<double> Longitudes = new List<double>();
+        public List<double> Altitude = new List<double>();
+        public List<double> Velocity = new List<double>();
         public string Track { get; set; }
 
-        public LapInfo(List<double> latitudes, List<double> longitudes, Color color, string lapNo, string laptime, string track) 
-        {
-            Latitudes = latitudes;
-            Longitudes = longitudes;
-            LapColor = color;
-            LapNo = lapNo;
-            LapTime = laptime;
-            Track = track;
-        }
+        /// <summary>
+        /// Empty constructor for dummy record
+        /// </summary>
+        public LapInfo() { }
+
+        //public LapInfo(List<double> latitudes, List<double> longitudes, Color color, string lapNo, string laptime, string track) 
+        //{
+        //    Latitudes = latitudes;
+        //    Longitudes = longitudes;
+        //    LapColor = color;
+        //    LapNo = lapNo;
+        //    LapTime = laptime;
+        //    Track = track;
+        //}
     }
 
     public class Record
@@ -187,6 +204,11 @@ namespace traqpaqWPF
         public string trackName { get; set; }
         public string DateStamp { get; set; }
         public List<LapInfo> Laps = new List<LapInfo>();
+
+        /// <summary>
+        /// Empty constructor for inheritancein dummy record
+        /// </summary>
+        public Record() { }
 
         public Record(TraqpaqDevice traqpaq, TraqpaqDevice.RecordTableReader.RecordTable recordTable)
         {
@@ -198,17 +220,29 @@ namespace traqpaqWPF
             //TODO separate laps for now assume 1 lap
             TraqpaqDevice.RecordDataReader dataReader = new TraqpaqDevice.RecordDataReader(traqpaq, recordTable);
             dataReader.readRecordData();
+
             List<double> longitudes = new List<double>();
             List<double> latitutes = new List<double>();
+            List<double> altitudes = new List<double>();
+            List<double> velocities = new List<double>();
+
             foreach (var page in dataReader.recordDataPages)
             {
                 foreach (var data in page.RecordData)
                 {
                     longitudes.Add(data.Longitude);
                     latitutes.Add(data.Latitude);
+                    altitudes.Add(data.Altitude);
+                    velocities.Add(data.Speed);
                 }
             }
-            LapInfo lap = new LapInfo(latitutes, longitudes, Colors.Red, "1", "1:20", trackName);
+            LapInfo lap = new LapInfo();
+            lap.Latitudes = latitutes;
+            lap.Longitudes = longitudes;
+            lap.LapColor = Colors.Red;
+            lap.LapNo = "1";
+            lap.LapTime = "1:20";
+            lap.Track = trackName;
             Laps.Add(lap);
         }
     }

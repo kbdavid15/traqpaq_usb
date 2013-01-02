@@ -124,6 +124,7 @@
     <Compile Include="DataPage.xaml.cs">
       <DependentUpon>DataPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DummyRecord.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="GoogleMapsWebBrowser.xaml.cs">
       <DependentUpon>GoogleMapsWebBrowser.xaml</DependentUpon>
@@ -219,6 +220,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="TrackFiles\cardrivedata.csv" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\traqpaq.png" />

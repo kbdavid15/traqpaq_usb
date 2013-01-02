@@ -30,7 +30,7 @@ namespace traqpaqWPF
 
         ObservableCollection<LapInfo> _LapCollection = new ObservableCollection<LapInfo>();
         public ObservableCollection<LapInfo> LapCollection { get { return _LapCollection; } }
-        
+
         /// <summary>
         /// This page should not be created until a run is selected
         /// </summary>

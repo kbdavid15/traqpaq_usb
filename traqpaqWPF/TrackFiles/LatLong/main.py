@@ -26,4 +26,5 @@ for row in cells[21:130]:
 print(lat1)
 print(long1)
 print(lat2)
-print(long2)   
+print(long2)
+input()
