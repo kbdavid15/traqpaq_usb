@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:data='clr-namespace:System.Windows.Data;assembly=PresentationFramework'
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
       mc:Ignorable="d"
       d:DesignHeight="500" d:DesignWidth="750"
       DataContext="{Binding RelativeSource={RelativeSource Self}}" Title="DataPage" >
@@ -86,13 +87,11 @@
             </Grid>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
-        <TabControl Name="tabControlCharts" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TabItem Header="Altitude">
-                
-            </TabItem>
-            <TabItem Header="Performance">
-                
-            </TabItem>
-        </TabControl>
+        <d3:ChartPlotter Grid.Row="3" Name="chartPlotter">
+            <d3:ChartPlotter.HorizontalAxis>
+                <d3:HorizontalTimeSpanAxis Name="timeAxis" />
+            </d3:ChartPlotter.HorizontalAxis>
+            <d3:HorizontalAxisTitle Content="Time (seconds)" />
+        </d3:ChartPlotter>
     </Grid>
 </Page>
