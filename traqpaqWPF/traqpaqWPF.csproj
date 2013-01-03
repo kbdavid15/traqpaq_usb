@@ -92,9 +92,6 @@
     <Reference Include="DynamicDataDisplay">
       <HintPath>lib\DynamicDataDisplay.dll</HintPath>
     </Reference>
-    <Reference Include="DynamicDataDisplay.Silverlight">
-      <HintPath>lib\DynamicDataDisplay.Silverlight.dll</HintPath>
-    </Reference>
     <Reference Include="LibUsbDotNet">
       <HintPath>lib\LibUsbDotNet.dll</HintPath>
     </Reference>

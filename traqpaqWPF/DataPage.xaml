@@ -92,6 +92,7 @@
                 <d3:HorizontalTimeSpanAxis Name="timeAxis" />
             </d3:ChartPlotter.HorizontalAxis>
             <d3:HorizontalAxisTitle Content="Time (seconds)" />
+            <d3:VerticalAxisTitle Content="Altitude (meters)" />
         </d3:ChartPlotter>
     </Grid>
 </Page>

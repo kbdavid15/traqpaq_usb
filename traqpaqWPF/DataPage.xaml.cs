@@ -13,6 +13,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using xe = Xceed.Wpf.Toolkit;
+using Microsoft.Research.DynamicDataDisplay;
+using Microsoft.Research.DynamicDataDisplay.Charts;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
+using Microsoft.Research.DynamicDataDisplay.PointMarkers;
 
 namespace traqpaqWPF
 {
@@ -79,21 +83,33 @@ namespace traqpaqWPF
 
         /// <summary>
         /// Runs when a Checkbox in the lapListView is Checked or Unchecked
+        /// and plots the lap on the map. Also it will plot the altitude
+        /// and speed in the chart below.
         /// </summary>
         /// <param name="sender">The CheckBox that was checked</param>
         void LapCheckBox_Checked(object sender, EventArgs e)
         {
-            // get the selected items and update the infobox, also generate KML files to overlay on GE
-            //foreach (LapInfo item in listViewLaps.SelectedItems)
-            //{
-            //    // use this to determine average lap time, average speed, max speed, etc                
-            //    //string kml = KmlCreator.getKMLstring(item.LapColor, item.latitudes, item.longitudes);
-            //    //geBrowser.loadKML(kml, item.LapNo);
-            //    plotLap(item);                
-            //}
             CheckBox cb = sender as CheckBox;
             LapInfo lap = (LapInfo)cb.Tag;
             geBrowser.addPoints(lap.Latitudes, lap.Longitudes, lap.LapColor, lap.Track, lap.LapNo);
+
+            // generate chart, make sure to plot all the laps that are checked
+            int[] xPoints = new int[lap.Altitude.Count];
+            for (int i = 0; i < lap.Altitude.Count; i++)
+            {
+                xPoints[i] = i;
+            }
+            var xDataSource = new EnumerableDataSource<int>(xPoints);
+            var altitudeDataSource = new EnumerableDataSource<double>(lap.Altitude);
+            var velocityDataSource = new EnumerableDataSource<double>(lap.Velocity);
+            xDataSource.SetXMapping(x => x);
+            altitudeDataSource.SetYMapping(y => y);
+            velocityDataSource.SetYMapping(y => y);
+            CompositeDataSource compositeSource1 = new CompositeDataSource(xDataSource, altitudeDataSource);
+            CompositeDataSource compositeSource2 = new CompositeDataSource(xDataSource, velocityDataSource);
+            //chartPlotter.AddLineGraph(compositeSource1, Colors.Blue, 1, "Altitude");
+            chartPlotter.AddLineGraph(compositeSource2, Colors.Red, 1, "Speed");
+            chartPlotter.Viewport.FitToView();
         }
 
         /// <summary>
