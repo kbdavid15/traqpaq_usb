@@ -107,7 +107,7 @@ namespace traqpaqWPF
             velocityDataSource.SetYMapping(y => y);
             CompositeDataSource compositeSource1 = new CompositeDataSource(xDataSource, altitudeDataSource);
             CompositeDataSource compositeSource2 = new CompositeDataSource(xDataSource, velocityDataSource);
-            //chartPlotter.AddLineGraph(compositeSource1, Colors.Blue, 1, "Altitude");
+            chartPlotter.AddLineGraph(compositeSource1, Colors.Blue, 1, "Altitude");
             chartPlotter.AddLineGraph(compositeSource2, Colors.Red, 1, "Speed");
             chartPlotter.Viewport.FitToView();
         }
