@@ -25,9 +25,9 @@ namespace traqpaqWPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public traqpaqWPF.Record[] RecentTracks {
+        public global::traqpaqWPF.RecentTracks RecentTracks {
             get {
-                return ((traqpaqWPF.Record[])(this["RecentTracks"]));
+                return ((global::traqpaqWPF.RecentTracks)(this["RecentTracks"]));
             }
             set {
                 this["RecentTracks"] = value;

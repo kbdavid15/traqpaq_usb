@@ -74,6 +74,9 @@ namespace traqpaqWPF
             // Add the laps to the Collection
             foreach (Record r in recordTable)
             {
+                // add record to the recentTracks property for quick viewing on the home page
+                Properties.Settings.Default.RecentTracks.pushRecord(r);
+
                 foreach (LapInfo lap in r.Laps)
                 {
                     _LapCollection.Add(lap);

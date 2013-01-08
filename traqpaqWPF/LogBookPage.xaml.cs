@@ -37,6 +37,7 @@ namespace traqpaqWPF
         {
             InitializeComponent();
             this.main = main;
+
             // add the dummy record
             _RecordTable.Add(dummy);
         }

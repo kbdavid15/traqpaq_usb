@@ -22,14 +22,11 @@ using System.Threading.Tasks;
 
 namespace traqpaqWPF
 {
-    public enum PageName { WELCOME, IMPORT, SETTINGS, DATA, RECORDS };
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<Page> pages;
         public TraqpaqDevice traqpaq;
         /// <summary>
         /// Used to detect when a device is connected, 
@@ -44,6 +41,9 @@ namespace traqpaqWPF
         // Declare the log page and data page here so that there are not multiple copies of the same page
         public LogBookPage logBookPage;
         public DataPage dataPage;
+        public HomePage homePage;
+        public SettingsPage settingsPage;
+        public UploadPage uploadPage;
 
         public delegate void Populate();
 
@@ -54,7 +54,7 @@ namespace traqpaqWPF
             // Set up event handler to wait for a usb device to connect to
             deviceNotifier = DeviceNotifier.OpenDeviceNotifier();
             deviceNotifier.OnDeviceNotify += new EventHandler<DeviceNotifyEventArgs>(deviceNotifier_OnDeviceNotify);
-            
+
             // try to connect to device (if device was connected previously). Show status in status bar
             try
             {
@@ -70,16 +70,18 @@ namespace traqpaqWPF
                 statusBarItemTraqpaq.Content = "Device not found";
             }
 
-            // Create the pages and save to array
-            pages = new List<Page>() { new HomePage(this), new UploadPage(this), new SettingsPage(this) };
+            // Create the pages
+            homePage = new HomePage(this);
+            settingsPage = new SettingsPage(this);
+            uploadPage = new UploadPage(this);
 
             // assign the pages to the respective tabs
-            frameUpload.Navigate(pages[(int)PageName.IMPORT]);
-            frameSettings.Navigate(pages[(int)PageName.SETTINGS]);
+            frameUpload.Navigate(uploadPage);
+            frameSettings.Navigate(settingsPage);
 
             // Go to the welcome page
-            frameHome.Navigate(pages[(int)PageName.WELCOME]);
-            
+            frameHome.Navigate(homePage);
+
             // create the log book page
             logBookPage = new LogBookPage(this);
             frameLogBook.Navigate(logBookPage);
@@ -91,7 +93,7 @@ namespace traqpaqWPF
             // attempt with backgroundworker if connected
             if (traqpaq != null)
             {
-                bw.RunWorkerAsync(); 
+                bw.RunWorkerAsync();
             }
 
             //// create the log book page as a background task

@@ -22,11 +22,11 @@
                 <ColumnDefinition Width="100*" />
             </Grid.ColumnDefinitions>
             <Label Content="Recent Sessions" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="16"/>
-            <ListView Name="listViewRecentTracks" ItemsSource="{Binding RecentTracks}" Grid.Row="1" Style="{DynamicResource ListViewStyle}" IsTabStop="False">
+            <ListView Name="listViewRecords" Style="{StaticResource ListViewStyle}" ItemsSource="{Binding RecordTable}" Margin="0,22,0,3" Grid.RowSpan="2">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}"/>
-                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" />
+                        <GridViewColumn Header="Track Name" DisplayMemberBinding="{Binding trackName}"/>
+                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateStamp}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -34,6 +34,7 @@
                 <Label Name="labelTotalDistanceTraveled" Content="Total Distance Ridden: " FontSize="14" />
                 <Label Name="labelTotalTimeUsed" Content="Total Time Riding: " FontSize="14" />
                 <Label Name="labelAllTimeMaxSpeed" Content="Overall Max Speed: " FontSize="14" /> 
+                <Button Name="buttonShowRecentRecords" Content="Show Recent Records" Click="buttonShowRecentRecords_Click"/>
             </StackPanel>
         </Grid>
         <Image Name="image1" Stretch="Uniform" Source="/traqpaqWPF;component/Images/traqpaq.png" Grid.Row="1" />

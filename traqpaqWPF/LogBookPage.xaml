@@ -31,7 +31,7 @@
                 <Label Content="Stats about the selected track(s)" />
             </StackPanel>
         </Grid>
-        <ListView Grid.Row="1" Name="listViewRecords" Style="{StaticResource ListViewStyle}" ItemsSource="{Binding RecordTable}" MouseDoubleClick="listViewRecords_MouseDoubleClick" SelectionChanged="listViewRecords_SelectionChanged">
+        <ListView Name="listViewRecords" Style="{StaticResource ListViewStyle}" ItemsSource="{Binding RecordTable}" MouseDoubleClick="listViewRecords_MouseDoubleClick" SelectionChanged="listViewRecords_SelectionChanged" Margin="0,22,0,3" Grid.RowSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Track Name" DisplayMemberBinding="{Binding trackName}"/>
