@@ -13,6 +13,7 @@
             <d3:InjectedPlotter Name="innerPlotter" Background="Aqua" SetViewportBinding="False">
                 <d3:VerticalAxis Placement="Right"/>
                 <d3:VerticalAxisTitle Content="Torque" Placement="Right"/>
+                
             </d3:InjectedPlotter>
 
             <d3:AxisNavigation Placement="Bottom"/>

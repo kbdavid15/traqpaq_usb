@@ -37,11 +37,6 @@ namespace traqpaqWPF
             Loaded += new RoutedEventHandler(Window1_Loaded);
 		}
 
-        /// <summary>
-        /// Sample use of injected plotter taken from a sample project of DynamicDataDisplay
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
 		private void Window1_Loaded(object sender, RoutedEventArgs e)
 		{
 			innerPlotter.SetVerticalTransform(0, 0, 124, 58);
@@ -62,6 +57,6 @@ namespace traqpaqWPF
 		{
 			innerPlotter.Children.RemoveAll<LineGraph>();
 			plotter.Children.RemoveAll<LineGraph>();
-		}
+        }
     }
 }
