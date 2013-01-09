@@ -87,7 +87,8 @@
             </Grid>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
-        <d3:ChartPlotter Grid.Row="3" Name="chartPlotter">
+        <!--<d3:ChartPlotter Grid.Row="3" Name="chartPlotter">
+            
             <d3:HorizontalAxis>
                 <d3:HorizontalTimeSpanAxis Name="timeAxis" >
                     <d3:HorizontalAxisTitle Content="Time (seconds)" />
@@ -99,6 +100,9 @@
             <d3:VerticalAxis Placement="Right" Name="verticalAxisSpeed">
                 <d3:VerticalAxisTitle>Speed(m/s)</d3:VerticalAxisTitle>
             </d3:VerticalAxis>
+        </d3:ChartPlotter>-->
+        <d3:ChartPlotter Name="plotter">
+            
         </d3:ChartPlotter>
     </Grid>
 </Page>
