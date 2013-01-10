@@ -33,7 +33,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="500*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="300*" />
+            <RowDefinition Height="500*" />
         </Grid.RowDefinitions>
         <Grid Name="subGrid1">
             <Grid.ColumnDefinitions>
@@ -87,15 +87,18 @@
             </Grid>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
-        <d3:ChartPlotter Name="plotter" Grid.Row="3">
+        <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisibility="Hidden" >
+            <d3:ChartPlotter.FitToViewRestrictions>
+                <!--<d3:DomainRestriction />-->
+            </d3:ChartPlotter.FitToViewRestrictions>
+            
             <d3:InjectedPlotter Name="innerPlotter" Background="Aqua" SetViewportBinding="False" >
                 <d3:VerticalAxis Placement="Right"/>
                 <d3:VerticalAxisTitle Content="Meters/Second" Placement="Right"/>
-
             </d3:InjectedPlotter>
-
-            <d3:AxisNavigation Placement="Bottom"/>
-            <d3:AxisNavigation Placement="Right"/>
+            
+            <d3:AxisNavigation Placement="Bottom" />
+            <d3:AxisNavigation Placement="Right" />
 
             <d3:VerticalAxisTitle Content="Meters"/>
             <d3:HorizontalAxisTitle>Time</d3:HorizontalAxisTitle>

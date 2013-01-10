@@ -121,8 +121,7 @@ namespace traqpaqWPF
             innerPlotter.SetVerticalTransform(0, 0, 124, 58);   // what does this do? it breaks when commented out
 
             //TODO add event handler for mouse over event that displays the exact value for graph
-
-
+            
 
         }
 
