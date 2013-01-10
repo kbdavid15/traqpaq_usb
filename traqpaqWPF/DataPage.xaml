@@ -87,22 +87,18 @@
             </Grid>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
-        <!--<d3:ChartPlotter Grid.Row="3" Name="chartPlotter">
-            
-            <d3:HorizontalAxis>
-                <d3:HorizontalTimeSpanAxis Name="timeAxis" >
-                    <d3:HorizontalAxisTitle Content="Time (seconds)" />
-                </d3:HorizontalTimeSpanAxis>
-            </d3:HorizontalAxis>            
-            <d3:VerticalAxis Placement="Left" Name="verticalAxisAltitude">
-                <d3:VerticalAxisTitle>Altitude (meters)</d3:VerticalAxisTitle>
-            </d3:VerticalAxis>
-            <d3:VerticalAxis Placement="Right" Name="verticalAxisSpeed">
-                <d3:VerticalAxisTitle>Speed(m/s)</d3:VerticalAxisTitle>
-            </d3:VerticalAxis>
-        </d3:ChartPlotter>-->
-        <d3:ChartPlotter Name="plotter">
-            
+        <d3:ChartPlotter Name="plotter" Grid.Row="3">
+            <d3:InjectedPlotter Name="innerPlotter" Background="Aqua" SetViewportBinding="False" >
+                <d3:VerticalAxis Placement="Right"/>
+                <d3:VerticalAxisTitle Content="Meters/Second" Placement="Right"/>
+
+            </d3:InjectedPlotter>
+
+            <d3:AxisNavigation Placement="Bottom"/>
+            <d3:AxisNavigation Placement="Right"/>
+
+            <d3:VerticalAxisTitle Content="Meters"/>
+            <d3:HorizontalAxisTitle>Time</d3:HorizontalAxisTitle>
         </d3:ChartPlotter>
     </Grid>
 </Page>

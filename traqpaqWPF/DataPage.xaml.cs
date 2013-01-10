@@ -99,23 +99,31 @@ namespace traqpaqWPF
             LapInfo lap = (LapInfo)cb.Tag;
             geBrowser.addPoints(lap.Latitudes, lap.Longitudes, lap.LapColor, lap.Track, lap.LapNo);
 
-            //// generate chart, make sure to plot all the laps that are checked
-            //int[] xPoints = new int[lap.Altitude.Count];
-            //for (int i = 0; i < lap.Altitude.Count; i++)
-            //{
-            //    xPoints[i] = i;
-            //}
-            //var xDataSource = new EnumerableDataSource<int>(xPoints);
-            //var altitudeDataSource = new EnumerableDataSource<double>(lap.Altitude);
-            //var velocityDataSource = new EnumerableDataSource<double>(lap.Velocity);
-            //xDataSource.SetXMapping(x => x);
-            //altitudeDataSource.SetYMapping(y => y);
-            //velocityDataSource.SetYMapping(y => y);
-            //CompositeDataSource compositeSource1 = new CompositeDataSource(xDataSource, altitudeDataSource);
-            //CompositeDataSource compositeSource2 = new CompositeDataSource(xDataSource, velocityDataSource);
-            //chartPlotter.AddLineGraph(compositeSource1, Colors.Blue, 1, "Altitude");
-            //chartPlotter.AddLineGraph(compositeSource2, Colors.Red, 1, "Speed");
-            //chartPlotter.Viewport.FitToView();
+            // using newer version of D3 library
+            //TODO might need to add D3 project to solution and customize it further for added features (select section instead of pan)
+            double[] xPoints = new double[lap.Altitude.Count];
+            for (int i = 0; i < lap.Altitude.Count; i++)
+            {
+                xPoints[i] = i;
+            }
+            //var time = Enumerable.Range(0, lap.Altitude.Count).ToArray().AsXDataSource();
+            var time = xPoints.AsXDataSource();
+            //TODO get relative time for each point. This could work well because time is only reported every 15 data points, so this would make the number of points to plot smaller
+            var altitude = lap.Altitude.AsYDataSource();
+            var altitudeDS = time.Join(altitude);
+            plotter.AddLineGraph(altitudeDS, Colors.Red, 2, "Altitude");
+
+            var speed = lap.Velocity.AsYDataSource();
+            var speedDS = time.Join(speed);
+
+            var line = innerPlotter.AddLineGraph(speedDS, Colors.Blue, 2, "Speed");
+
+            innerPlotter.SetVerticalTransform(0, 0, 124, 58);   // what does this do? it breaks when commented out
+
+            //TODO add event handler for mouse over event that displays the exact value for graph
+
+
+
         }
 
         /// <summary>

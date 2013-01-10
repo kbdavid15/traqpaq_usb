@@ -48,7 +48,7 @@ namespace traqpaqWPF
 			plotter.AddLineGraph(horsePowersDS, Colors.Red, 2, "HP per RPM");
 
 			var torque = new double[] { 0, 22, 45, 54, 58, 55, 50, 47, 45 }.AsYDataSource();
-			var torqueDS = rpms.Join(torque);
+            var torqueDS = rpms.Join(torque);
 
 			var line = innerPlotter.AddLineGraph(torqueDS, Colors.Blue, 2, "Torque per RPM");
 		}
