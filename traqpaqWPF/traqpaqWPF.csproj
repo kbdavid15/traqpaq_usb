@@ -89,16 +89,23 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DynamicDataDisplay, Version=0.3.2.0, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\d3\DynamicDataDisplay.dll</HintPath>
+    <Reference Include="DynamicDataDisplay">
+      <HintPath>lib\d3_2013-01-13_1244PM\DynamicDataDisplay.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamicDataDisplay.Maps">
+      <HintPath>lib\d3_2013-01-13_1244PM\DynamicDataDisplay.Maps.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamicDataDisplay.Markers">
+      <HintPath>lib\d3_2013-01-13_1244PM\DynamicDataDisplay.Markers.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamicDataDisplay.Markers2">
+      <HintPath>lib\d3_2013-01-13_1244PM\DynamicDataDisplay.Markers2.dll</HintPath>
     </Reference>
     <Reference Include="LibUsbDotNet">
       <HintPath>lib\LibUsbDotNet.dll</HintPath>
     </Reference>
-    <Reference Include="Parser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\rebuild\TwoIndependentAxes\bin\Debug\Parser.dll</HintPath>
+    <Reference Include="Parser">
+      <HintPath>lib\d3_2013-01-13_1244PM\Parser.dll</HintPath>
     </Reference>
     <Reference Include="SharpKml">
       <HintPath>lib\SharpKml.dll</HintPath>

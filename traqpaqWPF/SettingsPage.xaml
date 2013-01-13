@@ -9,27 +9,6 @@
       Title="Settings">
 
     <Grid>
-        <!--<d3:ChartPlotter Name="plotter">
-            <d3:InjectedPlotter Name="innerPlotter" Background="Aqua" SetViewportBinding="False">
-                <d3:VerticalAxis Placement="Right"/>
-                <d3:VerticalAxisTitle Content="Torque" Placement="Right"/>
-                
-            </d3:InjectedPlotter>
-
-            <d3:AxisNavigation Placement="Bottom"/>
-            <d3:AxisNavigation Placement="Right"/>
-
-            <d3:VerticalAxisTitle Content="HP"/>
-            <d3:HorizontalAxisTitle>RPM</d3:HorizontalAxisTitle>
-
-            <Button Content="Remove all charts" Name="removeAllChartsBtn" Click="removeAllChartsBtn_Click"/>
-        </d3:ChartPlotter>-->
-        <d3:ChartPlotter Name="plotter">
-            <d3:RectangleHighlight Name="selector"/>
-            <TextBlock>
-				<Run Text="Selected rectangle:"/>
-				<TextBlock Text="{Binding SelectedRectangle, ElementName=selector}"/>
-			</TextBlock>
-        </d3:ChartPlotter>
+        
     </Grid>
 </Page>

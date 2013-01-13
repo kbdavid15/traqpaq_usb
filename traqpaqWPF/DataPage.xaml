@@ -88,20 +88,37 @@
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
         <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisibility="Hidden" >
-            <d3:ChartPlotter.FitToViewRestrictions>
-                <!--<d3:DomainRestriction />-->
-            </d3:ChartPlotter.FitToViewRestrictions>
-            
-            <d3:InjectedPlotter Name="innerPlotter" Background="Aqua" SetViewportBinding="False" >
+            <d3:InjectedPlotter Name="innerPlotter">
                 <d3:VerticalAxis Placement="Right"/>
                 <d3:VerticalAxisTitle Content="Meters/Second" Placement="Right"/>
+                <d3:AxisNavigation Placement="Right"/>
+                <d3:AxisNavigation Placement="Bottom"/>
+                <d3:InjectedPlotter.ConjunctionMode>
+                    <d3:ViewportConjunctionMode>X</d3:ViewportConjunctionMode>
+                </d3:InjectedPlotter.ConjunctionMode>
             </d3:InjectedPlotter>
-            
-            <d3:AxisNavigation Placement="Bottom" />
-            <d3:AxisNavigation Placement="Right" />
+
+            <!--<d3:DependentPlotter Name="dependentPlotter">
+                <d3:VerticalAxis Placement="Right" Background="#33662211"/>
+                <d3:VerticalAxisTitle Content="Value" Placement="Right"/>
+                <d3:AxisNavigation Placement="Right"/>
+                <d3:HorizontalAxis Placement="Bottom" Background="#33662211"/>
+                <d3:AxisNavigation Placement="Bottom"/>
+            </d3:DependentPlotter>-->
 
             <d3:VerticalAxisTitle Content="Meters"/>
-            <d3:HorizontalAxisTitle>Time</d3:HorizontalAxisTitle>
+            <d3:HorizontalAxisTitle>Seconds</d3:HorizontalAxisTitle>
+
+            <!--<GroupBox Header="Conjunction Mode" Canvas.Left="10" Canvas.Bottom="10">
+                <StackPanel>
+                    <RadioButton Content="None" Name="None" Checked="RadioButton_Checked"/>
+                    <RadioButton Content="X"  Name="X" Checked="RadioButton_Checked"/>
+                    <RadioButton Content="Y" Name="Y" Checked="RadioButton_Checked"/>
+                    <RadioButton Content="XY" Name="XY" IsChecked="True" Checked="RadioButton_Checked"/>
+                </StackPanel>
+            </GroupBox>-->
+
+            
         </d3:ChartPlotter>
     </Grid>
 </Page>

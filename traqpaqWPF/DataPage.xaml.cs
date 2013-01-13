@@ -54,6 +54,8 @@ namespace traqpaqWPF
             geBrowser.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             subGrid1.Children.Add(geBrowser);
             Grid.SetColumn(geBrowser, 2);
+
+            // set up the d3 chart
         }
 
         /// <summary>
@@ -97,6 +99,8 @@ namespace traqpaqWPF
         {
             CheckBox cb = sender as CheckBox;
             LapInfo lap = (LapInfo)cb.Tag;
+
+            // plot the points on Google Maps
             geBrowser.addPoints(lap.Latitudes, lap.Longitudes, lap.LapColor, lap.Track, lap.LapNo);
 
             // using newer version of D3 library
@@ -106,20 +110,13 @@ namespace traqpaqWPF
             {
                 xPoints[i] = i;
             }
-            //var time = Enumerable.Range(0, lap.Altitude.Count).ToArray().AsXDataSource();
-            var time = xPoints.AsXDataSource();
+
             //TODO get relative time for each point. This could work well because time is only reported every 15 data points, so this would make the number of points to plot smaller
-            var altitude = lap.Altitude.AsYDataSource();
-            var altitudeDS = time.Join(altitude);
-            plotter.AddLineGraph(altitudeDS, Colors.Red, 2, "Altitude");
+            var altitudeDS = DataSource.Create(xPoints, lap.Altitude);
+            var speedDS = DataSource.Create(xPoints, lap.Velocity);
 
-            var speed = lap.Velocity.AsYDataSource();
-            var speedDS = time.Join(speed);
-
-            var line = innerPlotter.AddLineGraph(speedDS, Colors.Blue, 2, "Speed");
-
-            innerPlotter.SetVerticalTransform(0, 0, 124, 58);   // what does this do? it breaks when commented out
-
+            plotter.AddLineChart(altitudeDS).WithStroke(Brushes.Red).WithStrokeThickness(2).WithDescription("Altitude");
+            innerPlotter.AddLineChart(speedDS).WithStroke(Brushes.Blue).WithStrokeThickness(2).WithDescription("Velocity");
             //TODO add event handler for mouse over event that displays the exact value for graph
             
 
