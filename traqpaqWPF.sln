@@ -1,6 +1,6 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "traqpaqWPF", "traqpaqWPF\traqpaqWPF.csproj", "{9DB7FAE2-5E55-4349-B516-8249BC24FA7D}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GoogleEarth", "ftp://redline-electronics.com/traqpaq/GoogleEarth", "{1A218E34-F205-49E2-89F8-9A532FC5C8C0}"
