@@ -11,15 +11,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Research.DynamicDataDisplay;
-using Microsoft.Research.DynamicDataDisplay.DataSources;
-using Microsoft.Research.DynamicDataDisplay.Charts.Navigation;
-using Microsoft.Research.DynamicDataDisplay.ViewportConstraints;
-using Microsoft.Research.DynamicDataDisplay.Charts;
-using Microsoft.Research.DynamicDataDisplay.Common.Auxiliary;
-using Microsoft.Research.DynamicDataDisplay.Common;
-using Microsoft.Research.DynamicDataDisplay.Charts.NewLine;
-using Microsoft.Research.DynamicDataDisplay.Markers2;
 
 namespace traqpaqWPF
 {

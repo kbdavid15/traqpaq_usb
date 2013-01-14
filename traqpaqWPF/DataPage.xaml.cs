@@ -109,7 +109,6 @@ namespace traqpaqWPF
             geBrowser.addPoints(lap.Latitudes, lap.Longitudes, lap.LapColor, lap.Track, lap.LapNo);
 
             // using newer version of D3 library
-            //TODO might need to add D3 project to solution and customize it further for added features (select section instead of pan)
             //double[] xPoints = new double[lap.Altitude.Count];
             //for (int i = 0; i < lap.Altitude.Count; i++)
             //{
@@ -144,6 +143,7 @@ namespace traqpaqWPF
             geBrowser.removeLap(lap.Track, lap.LapNo);
 
             //TODO remove from plot
+            
 
         }
 
