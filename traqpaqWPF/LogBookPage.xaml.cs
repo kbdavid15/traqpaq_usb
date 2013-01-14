@@ -80,10 +80,15 @@ namespace traqpaqWPF
         void listViewRecords_SelectionChanged(object sender, EventArgs e)
         {
             Record session = (Record)listViewRecords.SelectedItem;
-            foreach (LapInfo lap in session.Laps)
-            {
-                Polyline polyline = new Polyline();
-                polyline.Stroke = Brushes.Black;
+            Polyline polyline = new Polyline();
+            polyline.Stroke = Brushes.Black;
+
+            //TODO fix error with multiple laps
+            LapInfo lap = session.Laps[0];
+            //foreach (LapInfo lap in session.Laps)
+            //{
+                
+                
                 // find the smallest dimension, width or height, and use that to calculate the points
                 int size;
                 if (viewboxPreviewPane.RenderSize.Width > viewboxPreviewPane.RenderSize.Height)
@@ -104,8 +109,8 @@ namespace traqpaqWPF
                     {
                         polyline.Points.Add(new Point(xCoord[i], yCoord[i]));
                     }
-                    // Add the polyline to the viewbox
-                    viewboxPreviewPane.Child = polyline;
+                    
+                    
                 }
                 else
                 {
@@ -114,7 +119,9 @@ namespace traqpaqWPF
                     l.Content = "No data found";
                     viewboxPreviewPane.Child = l;
                 }
-            }            
+            //}
+            // Add the polyline to the viewbox
+            viewboxPreviewPane.Child = polyline;
         }
 
         /// <summary>

@@ -87,8 +87,8 @@
             </Grid>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
-        <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisibility="Hidden" >
-            <d3:InjectedPlotter Name="innerPlotter">
+        <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisibility="Hidden" LegendVisible="False">
+            <d3:InjectedPlotter Name="innerPlotter" LegendVisibility="Hidden">
                 <d3:VerticalAxis Placement="Right"/>
                 <d3:VerticalAxisTitle Content="Meters/Second" Placement="Right"/>
                 <d3:AxisNavigation Placement="Right"/>
@@ -109,14 +109,22 @@
             <d3:VerticalAxisTitle Content="Meters"/>
             <d3:HorizontalAxisTitle>Seconds</d3:HorizontalAxisTitle>
 
-            <!--<GroupBox Header="Conjunction Mode" Canvas.Left="10" Canvas.Bottom="10">
+            <GroupBox Name="groupBox1" Canvas.Left="2" Canvas.Top="2" BorderThickness="1" Background="White" Padding="0,2,0,-3" >
                 <StackPanel>
-                    <RadioButton Content="None" Name="None" Checked="RadioButton_Checked"/>
-                    <RadioButton Content="X"  Name="X" Checked="RadioButton_Checked"/>
-                    <RadioButton Content="Y" Name="Y" Checked="RadioButton_Checked"/>
-                    <RadioButton Content="XY" Name="XY" IsChecked="True" Checked="RadioButton_Checked"/>
+                    <CheckBox Name="checkBoxSpeed" Checked="checkBoxSpeed_Checked">
+                        <StackPanel Orientation="Horizontal" Margin="0" HorizontalAlignment="Left">
+                            <Label Content="Speed" Margin="-2"/>
+                            <Line Stroke="Blue" StrokeThickness="2" X2="10" Y1="10" Width="10" Height="10"/>
+                        </StackPanel>
+                    </CheckBox>
+                    <CheckBox Name="checkBoxAltitude" Checked="checkBoxAltitude_Checked">
+                        <StackPanel Orientation="Horizontal" Margin="0" HorizontalAlignment="Left" >
+                            <Label Content="Altitude" Margin="-2"/>
+                            <Line Stroke="Red" StrokeThickness="2" X2="10" Y1="10" Width="10" Height="10"/>
+                        </StackPanel>
+                    </CheckBox>
                 </StackPanel>
-            </GroupBox>-->
+            </GroupBox>
 
             
         </d3:ChartPlotter>
