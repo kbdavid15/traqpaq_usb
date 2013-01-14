@@ -84,11 +84,9 @@ namespace traqpaqWPF
             polyline.Stroke = Brushes.Black;
 
             //TODO fix error with multiple laps
-            LapInfo lap = session.Laps[0];
-            //foreach (LapInfo lap in session.Laps)
-            //{
-                
-                
+            //LapInfo lap = session.Laps[1];
+            foreach (LapInfo lap in session.Laps)
+            {
                 // find the smallest dimension, width or height, and use that to calculate the points
                 int size;
                 if (viewboxPreviewPane.RenderSize.Width > viewboxPreviewPane.RenderSize.Height)
@@ -105,12 +103,10 @@ namespace traqpaqWPF
                 {
                     double[] xCoord = NormalizeData(lap.Latitudes, 10, size - 10);
                     double[] yCoord = NormalizeData(lap.Longitudes, 10, size - 10);
-                    for (int i = 0; i < xCoord.Length; i++)
+                    for (int i = 0; i < xCoord.Length; i+=3)    // skip every other to test issue #7
                     {
                         polyline.Points.Add(new Point(xCoord[i], yCoord[i]));
                     }
-                    
-                    
                 }
                 else
                 {
@@ -119,7 +115,7 @@ namespace traqpaqWPF
                     l.Content = "No data found";
                     viewboxPreviewPane.Child = l;
                 }
-            //}
+            }
             // Add the polyline to the viewbox
             viewboxPreviewPane.Child = polyline;
         }
@@ -190,6 +186,7 @@ namespace traqpaqWPF
         public List<double> Altitude = new List<double>();
         public List<double> Velocity = new List<double>();
         public string Track { get; set; }
+        public bool? isChecked { get; set; }
 
         /// <summary>
         /// Empty constructor for dummy record

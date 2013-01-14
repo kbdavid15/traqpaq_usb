@@ -34,8 +34,8 @@ namespace traqpaqWPF
                     lap1.Latitudes.Add(lat);
                     lap1.Altitude.Add(alt);
                     lap1.Velocity.Add(vel);
-                    lap2.Longitudes.Add(lon + rand.NextDouble());
-                    lap2.Latitudes.Add(lat + rand.NextDouble());
+                    lap2.Longitudes.Add(lon + (rand.NextDouble() * 2 - 1)/ 10000);
+                    lap2.Latitudes.Add(lat + (rand.NextDouble() * 2 - 1) / 10000);
                     lap2.Altitude.Add(alt + rand.NextDouble());
                     lap2.Velocity.Add(vel + rand.NextDouble());
                 }
@@ -50,7 +50,7 @@ namespace traqpaqWPF
             // lap 2 information
             lap2.LapColor = Colors.Orange;
             lap2.LapNo = "2";
-            lap1.LapTime = "5:14";
+            lap2.LapTime = "5:14";
             lap2.Track = trackName;
 
             this.DateStamp = new DateTime(2013, 1, 1).ToLongDateString();

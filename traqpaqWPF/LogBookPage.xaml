@@ -15,7 +15,7 @@
             <ColumnDefinition Width="100*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="23" />
             <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
         <GridSplitter Grid.Column="1" Grid.Row="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
@@ -31,7 +31,7 @@
                 <Label Content="Stats about the selected track(s)" />
             </StackPanel>
         </Grid>
-        <ListView Name="listViewRecords" Style="{StaticResource ListViewStyle}" ItemsSource="{Binding RecordTable}" MouseDoubleClick="listViewRecords_MouseDoubleClick" SelectionChanged="listViewRecords_SelectionChanged" Margin="0,22,0,3" Grid.RowSpan="2">
+        <ListView Name="listViewRecords" Style="{StaticResource ListViewStyle}" ItemsSource="{Binding RecordTable}" MouseDoubleClick="listViewRecords_MouseDoubleClick" SelectionChanged="listViewRecords_SelectionChanged"  Grid.RowSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Track Name" DisplayMemberBinding="{Binding trackName}"/>
@@ -40,7 +40,7 @@
             </ListView.View>
         </ListView>
         <Grid>            
-            <Button Name="buttonNext" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="50" Content="Next" Click="buttonNext_Click" Grid.Row="1" />
+            <Button Name="buttonNext" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="50" Content="Next" Click="buttonNext_Click" Grid.Row="1" />
         </Grid>        
     </Grid>
 </Page>
