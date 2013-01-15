@@ -130,7 +130,7 @@ namespace traqpaqWPF
             geBrowser.removeLap(lap.Track, lap.LapNo);
 
             //TODO remove from plot
-            
+            removeLapFromPlotter(lap);
 
         }
 
@@ -218,19 +218,52 @@ namespace traqpaqWPF
             if (checkBoxAltitude.IsChecked == true)
             {
                 var altitudeDS = DataSource.Create(xPoints, lap.Altitude);
-                plotter.AddLineChart(altitudeDS).WithStroke(lapColor).WithStrokeThickness(2).WithDescription("Altitude").WithStrokeDashArray(new double[] { 1, 1 });
+                LineChart chart = new LineChart();
+                chart.DataSource = altitudeDS;
+                chart.Stroke = lapColor;
+                chart.StrokeThickness = 2;
+                chart.Description = "Altitude";
+                chart.StrokeDashArray = new DoubleCollection(new double[] { 1, 1 });
+                chart.Tag = lap;    // chart tag holds the corresponding lap object. used for chart removal
+                plotter.Children.Add(chart);
             }
             if (checkBoxSpeed.IsChecked == true)
             {
                 var speedDS = DataSource.Create(xPoints, lap.Velocity);
-                innerPlotter.AddLineChart(speedDS).WithStroke(lapColor).WithStrokeThickness(2).WithDescription("Velocity");
+                LineChart chart = new LineChart();
+                chart.DataSource = speedDS;
+                chart.Stroke = lapColor;
+                chart.StrokeThickness = 2;
+                chart.Description = "Velocity";
+                chart.Tag = lap;    // chart tag holds the corresponding lap object. used for chart removal
+                innerPlotter.Children.Add(chart);
             }
         }
 
+        /// <summary>
+        /// Remove the specified lap from the plotter. Compare with the chart.Tag property
+        /// </summary>
+        /// <param name="lap"></param>
         void removeLapFromPlotter(LapInfo lap)
         {
+            List<LineChart> chartsToDelete = new List<LineChart>();
+            foreach (IPlotterElement child in plotter.Children)
+            {
+                if (typeof(LineChart) == child.GetType())
+                {
+                    LineChart chart = child as LineChart;
+                    if (lap.Equals((LapInfo)chart.Tag)) // find the chart that matches the lap object
+                    {
+                        chartsToDelete.Add(chart);                       
+                    }
+                }
+            }
 
-
+            // actually remove the charts
+            foreach (LineChart chart in chartsToDelete)
+            {
+                chart.RemoveFromPlotter();
+            }
         }
     }
 }
