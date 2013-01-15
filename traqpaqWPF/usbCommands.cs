@@ -53,6 +53,8 @@ namespace traqpaqWPF
         SAMPLING
     }
 
+    public enum ChartOptions { ALTITUDE, SPEED }
+
     public static class Constants
     {
         // Product ID and Vendor ID (still need to register for valid ones)

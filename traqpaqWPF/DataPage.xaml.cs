@@ -25,7 +25,6 @@ using xe = Xceed.Wpf.Toolkit;
 
 namespace traqpaqWPF
 {
-    
     /// <summary>
     /// Interaction logic for DataPage.xaml
     /// </summary>
@@ -129,7 +128,7 @@ namespace traqpaqWPF
             // remove from map
             geBrowser.removeLap(lap.Track, lap.LapNo);
 
-            //TODO remove from plot
+            // remove from plotter
             removeLapFromPlotter(lap);
 
         }
@@ -151,13 +150,19 @@ namespace traqpaqWPF
         }
 
         /// <summary>
-        /// Update the map with the new color
+        /// Update the map with the new color, as well as the plotter
         /// </summary>
         void ColorPicker_SelectedColorChanged(object sender, EventArgs e)
         {
             xe.ColorPicker cp = sender as xe.ColorPicker;
             LapInfo lap = (LapInfo)cp.Tag;
             geBrowser.changeColor(lap.Track, lap.LapNo, cp.SelectedColor);
+
+            // update the plotter color
+            foreach (LineChart lchart in getLineCharts(lap))
+            {
+                lchart.Stroke = new SolidColorBrush(lap.LapColor);
+            }
         }
 
         /// <summary>
@@ -166,7 +171,7 @@ namespace traqpaqWPF
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void checkBoxPlot_Checked(object sender, RoutedEventArgs e)
-        {
+        { 
             if (recordTable != null)
                 foreach (Record r in recordTable)
                     foreach (LapInfo lap in r.Laps)
@@ -176,19 +181,7 @@ namespace traqpaqWPF
 
         private void checkBoxAltitude_Unchecked(object sender, RoutedEventArgs e)
         {
-            //plotter.Children.RemoveAllOfType(typeof(LineChart));
-            List<IPlotterElement> remove = new List<IPlotterElement>();  // this also removes the speed linechart
-            foreach (IPlotterElement child in plotter.Children)
-            {
-                if (child.GetType() == typeof(LineChart))
-                {
-                    if (child.Plotter.Name != "innerPlotter")
-                    {
-                        remove.Add(child);
-                    }
-                }
-            }
-            foreach (var item in remove)
+            foreach (var item in getLineCharts(ChartOptions.ALTITUDE))
             {
                 plotter.Children.Remove(item);
             }
@@ -246,7 +239,54 @@ namespace traqpaqWPF
         /// <param name="lap"></param>
         void removeLapFromPlotter(LapInfo lap)
         {
-            List<LineChart> chartsToDelete = new List<LineChart>();
+            foreach (LineChart chart in getLineCharts(lap))
+            {
+                chart.RemoveFromPlotter();
+            }
+        }
+        
+        #region PlotterHelperFunctions
+        // These functions will be used for common operations with the plotter
+        //TODO consider rebuilding the library with these functions built in
+
+        /// <summary>
+        /// Gets all the charts on the plotters
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<LineChart> getLineCharts()
+        {
+            List<LineChart> charts = new List<LineChart>();
+            foreach (IPlotterElement child in plotter.Children)
+                if (typeof(LineChart) == child.GetType())
+                    charts.Add((LineChart)child);
+            return charts;
+        }
+
+        /// <summary>
+        /// Gets a specific set of line charts that are either Altitude or Speed
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        IEnumerable<LineChart> getLineCharts(ChartOptions type)
+        {
+            List<LineChart> charts = new List<LineChart>();
+            foreach (IPlotterElement child in plotter.Children)
+                if (typeof(LineChart) == child.GetType())
+                    if (type == ChartOptions.ALTITUDE && child.Plotter.Name == "plotter")
+                        charts.Add((LineChart)child);
+                    else if (type == ChartOptions.SPEED && child.Plotter.Name == "innerPlotter")
+                        charts.Add((LineChart)child);
+            return charts;
+        }
+
+        /// <summary>
+        /// Gets the charts that are specific to a lap
+        /// </summary>
+        /// <param name="lap"></param>
+        /// <returns></returns>
+        IEnumerable<LineChart> getLineCharts(LapInfo lap)
+        {
+            List<LineChart> charts = new List<LineChart>();
             foreach (IPlotterElement child in plotter.Children)
             {
                 if (typeof(LineChart) == child.GetType())
@@ -254,16 +294,12 @@ namespace traqpaqWPF
                     LineChart chart = child as LineChart;
                     if (lap.Equals((LapInfo)chart.Tag)) // find the chart that matches the lap object
                     {
-                        chartsToDelete.Add(chart);                       
+                        charts.Add(chart);
                     }
                 }
             }
-
-            // actually remove the charts
-            foreach (LineChart chart in chartsToDelete)
-            {
-                chart.RemoveFromPlotter();
-            }
+            return charts;
         }
+        #endregion
     }
 }
