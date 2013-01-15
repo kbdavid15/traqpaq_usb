@@ -108,20 +108,7 @@ namespace traqpaqWPF
             // plot the points on Google Maps
             geBrowser.addPoints(lap.Latitudes, lap.Longitudes, lap.LapColor, lap.Track, lap.LapNo);
 
-            // using newer version of D3 library
-            //double[] xPoints = new double[lap.Altitude.Count];
-            //for (int i = 0; i < lap.Altitude.Count; i++)
-            //{
-            //    xPoints[i] = i;
-            //}
-
-            ////TODO get relative time for each point. This could work well because time is only reported every 15 data points, so this would make the number of points to plot smaller
-            //var altitudeDS = DataSource.Create(xPoints, lap.Altitude);
-            //var speedDS = DataSource.Create(xPoints, lap.Velocity);
-
-            //plotter.AddLineChart(altitudeDS).WithStroke(Brushes.Red).WithStrokeThickness(2).WithDescription("Altitude").WithStrokeDashArray( new double[] {1,1} );
-            //innerPlotter.AddLineChart(speedDS).WithStroke(Brushes.Blue).WithStrokeThickness(2).WithDescription("Velocity");
-
+            // plot the altitude and speed on the chart
             addLapToPlotter(lap);
 
 
@@ -238,6 +225,12 @@ namespace traqpaqWPF
                 var speedDS = DataSource.Create(xPoints, lap.Velocity);
                 innerPlotter.AddLineChart(speedDS).WithStroke(lapColor).WithStrokeThickness(2).WithDescription("Velocity");
             }
+        }
+
+        void removeLapFromPlotter(LapInfo lap)
+        {
+
+
         }
     }
 }
