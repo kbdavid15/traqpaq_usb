@@ -88,6 +88,7 @@
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
         <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisibility="Hidden" LegendVisible="False">
+            <d3:ChartPlotter.MainVerticalAxisVisibility>Collapsed</d3:ChartPlotter.MainVerticalAxisVisibility>
             <d3:InjectedPlotter Name="innerPlotter" LegendVisibility="Hidden">
                 <d3:VerticalAxis Placement="Right"/>
                 <d3:VerticalAxisTitle Content="Meters/Second" Placement="Right"/>
@@ -97,18 +98,17 @@
                     <d3:ViewportConjunctionMode>X</d3:ViewportConjunctionMode>
                 </d3:InjectedPlotter.ConjunctionMode>
             </d3:InjectedPlotter>
-
-            <!--<d3:DependentPlotter Name="dependentPlotter">
-                <d3:VerticalAxis Placement="Right" Background="#33662211"/>
-                <d3:VerticalAxisTitle Content="Value" Placement="Right"/>
-                <d3:AxisNavigation Placement="Right"/>
-                <d3:HorizontalAxis Placement="Bottom" Background="#33662211"/>
+            <d3:InjectedPlotter Name="innerAltitudePlotter" LegendVisibility="Hidden">
+                <d3:VerticalAxis Placement="Left"/>
+                <d3:VerticalAxisTitle Content="Meters" Placement="Left"/>
+                <d3:AxisNavigation Placement="Left"/>
                 <d3:AxisNavigation Placement="Bottom"/>
-            </d3:DependentPlotter>-->
-
-            <d3:VerticalAxisTitle Content="Meters"/>
+                <d3:InjectedPlotter.ConjunctionMode>
+                    <d3:ViewportConjunctionMode>X</d3:ViewportConjunctionMode>
+                </d3:InjectedPlotter.ConjunctionMode>
+            </d3:InjectedPlotter>
+            
             <d3:HorizontalAxisTitle>Seconds</d3:HorizontalAxisTitle>
-
             <GroupBox Name="groupBox1" Canvas.Left="2" Canvas.Top="2" BorderThickness="1" Background="White" Padding="0,2,0,-3" >
                 <StackPanel>
                     <CheckBox Name="checkBoxSpeed" IsChecked="True" Checked="checkBoxPlot_Checked" Unchecked="checkBoxSpeed_Unchecked" >
@@ -125,8 +125,10 @@
                     </CheckBox>
                 </StackPanel>
             </GroupBox>
+            <Button Canvas.Right="0" Canvas.Top="0" Name="buttonResetView" Style="{StaticResource RoundButton}" Width="25" Height="25" Click="buttonResetView_Click" >
+                <Image Source="Images/1358368677_Reset.png" />
+            </Button>
 
-            
         </d3:ChartPlotter>
     </Grid>
 </Page>

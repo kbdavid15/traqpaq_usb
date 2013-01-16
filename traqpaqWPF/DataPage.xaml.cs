@@ -249,7 +249,8 @@ namespace traqpaqWPF
                 chart.Description = "Altitude";
                 chart.StrokeDashArray = new DoubleCollection(new double[] { 1, 1 });
                 chart.Tag = lap;    // chart tag holds the corresponding lap object. used for chart removal
-                plotter.Children.Add(chart);
+                //plotter.Children.Add(chart);
+                innerAltitudePlotter.AddChild(chart);
             }
             if (checkBoxSpeed.IsChecked == true)
             {
@@ -303,7 +304,7 @@ namespace traqpaqWPF
             List<LineChart> charts = new List<LineChart>();
             foreach (IPlotterElement child in plotter.Children)
                 if (typeof(LineChart) == child.GetType())
-                    if (type == ChartOptions.ALTITUDE && child.Plotter.Name == "plotter")
+                    if (type == ChartOptions.ALTITUDE && child.Plotter.Name == "innerAltitudePlotter")
                         charts.Add((LineChart)child);
                     else if (type == ChartOptions.SPEED && child.Plotter.Name == "innerPlotter")
                         charts.Add((LineChart)child);
@@ -332,5 +333,10 @@ namespace traqpaqWPF
             return charts;
         }
         #endregion
+
+        private void buttonResetView_Click(object sender, RoutedEventArgs e)
+        {
+            plotter.FitToView();
+        }
     }
 }

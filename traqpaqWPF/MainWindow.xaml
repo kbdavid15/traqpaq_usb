@@ -57,7 +57,7 @@
             <TabItem Name="tabItemUpload">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/traqpaqWPF;component/Images/document_import.png" Margin="0,0,5,0" Height="20"/>
+                        <Image Margin="0,0,5,0" Height="20" Source="Images/document_import.png"/>
                         <TextBlock Text="Upload" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     </StackPanel>
                 </TabItem.Header>
