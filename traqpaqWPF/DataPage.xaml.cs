@@ -55,8 +55,6 @@ namespace traqpaqWPF
             geBrowser.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             subGrid1.Children.Add(geBrowser);
             Grid.SetColumn(geBrowser, 2);
-
-            // set up the d3 chart
         }
 
         /// <summary>
@@ -130,7 +128,6 @@ namespace traqpaqWPF
 
             // remove from plotter
             removeLapFromPlotter(lap);
-
         }
 
         /// <summary>
@@ -171,25 +168,59 @@ namespace traqpaqWPF
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void checkBoxPlot_Checked(object sender, RoutedEventArgs e)
-        { 
+        {
             if (recordTable != null)
-                foreach (Record r in recordTable)
-                    foreach (LapInfo lap in r.Laps)
-                        if (lap.isChecked == true)
-                            addLapToPlotter(lap);
+            {
+                List<LineChart> altitudes = getLineCharts(ChartOptions.ALTITUDE);
+                List<LineChart> speeds = getLineCharts(ChartOptions.SPEED);
+                if ((altitudes.Count + speeds.Count) == 0)  // if there are no charts currently drawn
+                {
+                    foreach (Record r in recordTable)
+                        foreach (LapInfo lap in r.Laps)
+                            if (lap.isChecked == true)
+                                addLapToPlotter(lap);
+                }
+                else 
+                {
+                    if (altitudes.Count > 0)   // chart is already there, just hidden
+                    {
+                        foreach (var chart in altitudes)
+                            chart.Visibility = System.Windows.Visibility.Visible;
+                    }
+                    if (speeds.Count > 0)
+                    {
+                        foreach (var chart in speeds)
+                            chart.Visibility = System.Windows.Visibility.Visible;
+                    }
+                }
+                // re-fit plot
+            }
         }        
 
+        /// <summary>
+        /// Hide the altitude plot(s)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkBoxAltitude_Unchecked(object sender, RoutedEventArgs e)
         {
             foreach (var item in getLineCharts(ChartOptions.ALTITUDE))
             {
-                plotter.Children.Remove(item);
+                item.Visibility = System.Windows.Visibility.Hidden;
             }
         }
 
+        /// <summary>
+        /// Hide the speed plot(s)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkBoxSpeed_Unchecked(object sender, RoutedEventArgs e)
         {
-            innerPlotter.Children.RemoveAllOfType(typeof(LineChart));
+            foreach (var item in getLineCharts(ChartOptions.SPEED))
+            {
+                item.Visibility = System.Windows.Visibility.Hidden;
+            }
         }
 
         /// <summary>
@@ -253,7 +284,7 @@ namespace traqpaqWPF
         /// Gets all the charts on the plotters
         /// </summary>
         /// <returns></returns>
-        IEnumerable<LineChart> getLineCharts()
+        List<LineChart> getLineCharts()
         {
             List<LineChart> charts = new List<LineChart>();
             foreach (IPlotterElement child in plotter.Children)
@@ -267,7 +298,7 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        IEnumerable<LineChart> getLineCharts(ChartOptions type)
+        List<LineChart> getLineCharts(ChartOptions type)
         {
             List<LineChart> charts = new List<LineChart>();
             foreach (IPlotterElement child in plotter.Children)
@@ -284,7 +315,7 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="lap"></param>
         /// <returns></returns>
-        IEnumerable<LineChart> getLineCharts(LapInfo lap)
+        List<LineChart> getLineCharts(LapInfo lap)
         {
             List<LineChart> charts = new List<LineChart>();
             foreach (IPlotterElement child in plotter.Children)
