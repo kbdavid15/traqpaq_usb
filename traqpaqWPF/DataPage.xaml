@@ -33,63 +33,55 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="500*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="500*" />
+            <RowDefinition Height="350*" />
         </Grid.RowDefinitions>
         <Grid Name="subGrid1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="125*" />
+                <ColumnDefinition Width="200*" />
             </Grid.ColumnDefinitions>
             <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Background="LightGray"/>
-            <Grid Name="subGrid2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="150*" />
-                </Grid.ColumnDefinitions>
-                <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
-                <ListView Name="listViewLaps" ItemsSource="{Binding Source={StaticResource src}}" Style="{StaticResource ListViewStyle}">
-                    <ListView.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.ContainerStyle>
-                                <Style TargetType="{x:Type GroupItem}">
-                                    <Setter Property="Margin" Value="0,0,0,5"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                <Expander IsExpanded="True" BorderBrush="#FFA4B97F" BorderThickness="0,0,0,1">
-                                                    <Expander.Header>
-                                                        <DockPanel>
-                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="100"/>
-                                                        </DockPanel>
-                                                    </Expander.Header>
-                                                    <Expander.Content>
-                                                        <ItemsPresenter />
-                                                    </Expander.Content>
-                                                </Expander>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </GroupStyle.ContainerStyle>
-                        </GroupStyle>
-                    </ListView.GroupStyle>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn HeaderTemplate="{StaticResource CheckBoxHeaderCell}" CellTemplate="{DynamicResource CheckBoxCell}" />
-                            <GridViewColumn Header="Lap" DisplayMemberBinding="{Binding LapNo}" />
-                            <GridViewColumn Header="Time" DisplayMemberBinding="{Binding LapTime}" />
-                            <GridViewColumn Header="Color" CellTemplate="{DynamicResource ColorPicker}"  />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
+            <ListView Name="listViewLaps" ItemsSource="{Binding Source={StaticResource src}}" Style="{StaticResource ListViewStyle}">
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Margin" Value="0,0,0,5"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Expander IsExpanded="True" BorderBrush="#FFA4B97F" BorderThickness="0,0,0,1">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="100"/>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <Expander.Content>
+                                                    <ItemsPresenter />
+                                                </Expander.Content>
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn HeaderTemplate="{StaticResource CheckBoxHeaderCell}" CellTemplate="{DynamicResource CheckBoxCell}" />
+                        <GridViewColumn Header="Lap" DisplayMemberBinding="{Binding LapNo}" />
+                        <GridViewColumn Header="Time" DisplayMemberBinding="{Binding LapTime}" />
+                        <GridViewColumn Header="Color" CellTemplate="{DynamicResource ColorPicker}"  />
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
         <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisibility="Hidden" LegendVisible="False">
             <d3:ChartPlotter.MainVerticalAxisVisibility>Collapsed</d3:ChartPlotter.MainVerticalAxisVisibility>
-            <d3:InjectedPlotter Name="innerPlotter" LegendVisibility="Hidden">
+            <d3:InjectedPlotter Name="innerSpeedPlotter" LegendVisibility="Hidden">
                 <d3:VerticalAxis Placement="Right"/>
                 <d3:VerticalAxisTitle Content="Meters/Second" Placement="Right"/>
                 <d3:AxisNavigation Placement="Right"/>
@@ -111,13 +103,13 @@
             <d3:HorizontalAxisTitle>Seconds</d3:HorizontalAxisTitle>
             <GroupBox Name="groupBox1" Canvas.Left="2" Canvas.Top="2" BorderThickness="1" Background="White" Padding="0,2,0,-3" >
                 <StackPanel>
-                    <CheckBox Name="checkBoxSpeed" IsChecked="True" Checked="checkBoxPlot_Checked" Unchecked="checkBoxSpeed_Unchecked" >
+                    <CheckBox Name="checkBoxSpeed" IsChecked="True" Checked="checkBoxSpeed_Checked" Unchecked="checkBoxSpeed_Unchecked" >
                         <StackPanel Orientation="Horizontal" Margin="0" HorizontalAlignment="Left">
                             <Label Content="Speed" Margin="-2"/>
                             <Line Stroke="Black" StrokeThickness="2" X2="10" Y1="10" Width="10" Height="10"/>
                         </StackPanel>
                     </CheckBox>
-                    <CheckBox Name="checkBoxAltitude" IsChecked="True" Checked="checkBoxPlot_Checked" Unchecked="checkBoxAltitude_Unchecked">
+                    <CheckBox Name="checkBoxAltitude" IsChecked="True" Checked="checkBoxAltitude_Checked" Unchecked="checkBoxAltitude_Unchecked">
                         <StackPanel Orientation="Horizontal" Margin="0" HorizontalAlignment="Left" >
                             <Label Content="Altitude" Margin="-2"/>
                             <Line Stroke="Black" StrokeThickness="2" X2="10" Y1="10" Width="10" Height="10" StrokeDashArray="1 1" />

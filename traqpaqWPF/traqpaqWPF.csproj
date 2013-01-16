@@ -275,7 +275,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\1358368677_Reset.png" />
     <Resource Include="Images\1358368677_Reset.png" />
     <Content Include="Web\ge1.htm" />
     <Content Include="Web\gmaps.htm" />

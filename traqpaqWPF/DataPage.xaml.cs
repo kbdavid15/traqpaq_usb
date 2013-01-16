@@ -163,42 +163,69 @@ namespace traqpaqWPF
         }
 
         /// <summary>
-        /// Called when a checkbox in the plotter element is checked. Adds linecharts to the plotter
+        /// Make the speed plots visible if hidden, or create them if they have not yet been created
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkBoxPlot_Checked(object sender, RoutedEventArgs e)
+        private void checkBoxSpeed_Checked(object sender, RoutedEventArgs e)
         {
             if (recordTable != null)
             {
-                List<LineChart> altitudes = getLineCharts(ChartOptions.ALTITUDE);
-                List<LineChart> speeds = getLineCharts(ChartOptions.SPEED);
-                if ((altitudes.Count + speeds.Count) == 0)  // if there are no charts currently drawn
+                LineChart hiddenChart;
+                foreach (Record r in recordTable)
                 {
-                    foreach (Record r in recordTable)
-                        foreach (LapInfo lap in r.Laps)
-                            if (lap.isChecked == true)
-                                addLapToPlotter(lap);
-                }
-                else 
-                {
-                    if (altitudes.Count > 0)   // chart is already there, just hidden
+                    foreach (LapInfo lap in r.Laps)
                     {
-                        foreach (var chart in altitudes)
-                            chart.Visibility = System.Windows.Visibility.Visible;
-                    }
-                    if (speeds.Count > 0)
-                    {
-                        foreach (var chart in speeds)
-                            chart.Visibility = System.Windows.Visibility.Visible;
+                        if (lap.isChecked == true)
+                        {
+                            hiddenChart = getLineCharts(lap, ChartOptions.SPEED);
+                            if (hiddenChart == null)
+                            {
+                                addLapToPlotter(lap);// chart must be added
+                            }
+                            else
+                            {
+                                hiddenChart.Visibility = System.Windows.Visibility.Visible;
+                            }
+                        }
                     }
                 }
-                // re-fit plot
             }
-        }        
+        }
 
         /// <summary>
-        /// Hide the altitude plot(s)
+        /// Make the altitude plots visible if hidden, or create them if they have not yet been created
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBoxAltitude_Checked(object sender, RoutedEventArgs e)
+        {
+            if (recordTable != null)
+            {
+                LineChart hiddenChart;
+                foreach (Record r in recordTable)
+                {
+                    foreach (LapInfo lap in r.Laps)
+                    {
+                        if (lap.isChecked == true)
+                        {
+                            hiddenChart = getLineCharts(lap, ChartOptions.ALTITUDE);
+                            if (hiddenChart == null)
+                            {
+                                addLapToPlotter(lap);// chart must be added
+                            }
+                            else
+                            {
+                                hiddenChart.Visibility = System.Windows.Visibility.Visible;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Hide the altitude plot(s) 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -249,7 +276,6 @@ namespace traqpaqWPF
                 chart.Description = "Altitude";
                 chart.StrokeDashArray = new DoubleCollection(new double[] { 1, 1 });
                 chart.Tag = lap;    // chart tag holds the corresponding lap object. used for chart removal
-                //plotter.Children.Add(chart);
                 innerAltitudePlotter.AddChild(chart);
             }
             if (checkBoxSpeed.IsChecked == true)
@@ -261,7 +287,7 @@ namespace traqpaqWPF
                 chart.StrokeThickness = 2;
                 chart.Description = "Velocity";
                 chart.Tag = lap;    // chart tag holds the corresponding lap object. used for chart removal
-                innerPlotter.Children.Add(chart);
+                innerSpeedPlotter.Children.Add(chart);
             }
         }
 
@@ -273,7 +299,8 @@ namespace traqpaqWPF
         {
             foreach (LineChart chart in getLineCharts(lap))
             {
-                chart.RemoveFromPlotter();
+                //chart.RemoveFromPlotter();
+                chart.Visibility = System.Windows.Visibility.Hidden;
             }
         }
         
@@ -299,15 +326,22 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        List<LineChart> getLineCharts(ChartOptions type)
+        List<LineChart> getLineCharts(ChartOptions option)
         {
             List<LineChart> charts = new List<LineChart>();
-            foreach (IPlotterElement child in plotter.Children)
-                if (typeof(LineChart) == child.GetType())
-                    if (type == ChartOptions.ALTITUDE && child.Plotter.Name == "innerAltitudePlotter")
-                        charts.Add((LineChart)child);
-                    else if (type == ChartOptions.SPEED && child.Plotter.Name == "innerPlotter")
-                        charts.Add((LineChart)child);
+            switch (option)
+            {
+                case ChartOptions.ALTITUDE:
+                    foreach (IPlotterElement child in innerAltitudePlotter.Children)
+                        if (typeof(LineChart) == child.GetType())
+                            charts.Add((LineChart)child);
+                    break;
+                case ChartOptions.SPEED:
+                    foreach (IPlotterElement child in innerSpeedPlotter.Children)
+                        if (typeof(LineChart) == child.GetType())
+                            charts.Add((LineChart)child);
+                    break;
+            }
             return charts;
         }
 
@@ -332,8 +366,53 @@ namespace traqpaqWPF
             }
             return charts;
         }
+
+        /// <summary>
+        /// This method can return at most one chart meeting both the specified criteria.
+        /// </summary>
+        /// <param name="lap"></param>
+        /// <param name="option"></param>
+        /// <returns>The LineChart of the chart matching criteria. If one is not found, return null</returns>
+        LineChart getLineCharts(LapInfo lap, ChartOptions option)
+        {
+            switch (option)
+            {
+                case ChartOptions.ALTITUDE:
+                    foreach (IPlotterElement child in innerAltitudePlotter.Children)
+                    {
+                        if (typeof(LineChart) == child.GetType())
+                        {
+                            LineChart chart = child as LineChart;
+                            if (lap.Equals((LapInfo)chart.Tag)) // find the chart that matches the lap object
+                            {
+                                return chart;
+                            }
+                        }
+                    }
+                    break;
+                case ChartOptions.SPEED:
+                    foreach (IPlotterElement child in innerSpeedPlotter.Children)
+                    {
+                        if (typeof(LineChart) == child.GetType())
+                        {
+                            LineChart chart = child as LineChart;
+                            if (lap.Equals((LapInfo)chart.Tag)) // find the chart that matches the lap object
+                            {
+                                return chart;
+                            }
+                        }
+                    }
+                    break;
+            }
+            return null;
+        }
         #endregion
 
+        /// <summary>
+        /// Resets the view of the plotter to see the entire chart
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonResetView_Click(object sender, RoutedEventArgs e)
         {
             plotter.FitToView();
