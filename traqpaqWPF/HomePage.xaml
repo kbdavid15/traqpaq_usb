@@ -9,20 +9,16 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="200*" />
-            <RowDefinition Height="50*" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="100*" />
+            <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
-                <RowDefinition Height="100*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100*" />
-                <ColumnDefinition Width="100*" />
-            </Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="100*" />
+        </Grid.ColumnDefinitions>
             <Label Content="Recent Sessions" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="16"/>
-            <ListView Name="listViewRecords" Style="{StaticResource ListViewStyle}" ItemsSource="{Binding RecordTable}" Margin="0,22,0,3" Grid.RowSpan="2">
+            <ListView Name="listViewRecords" Style="{StaticResource ListViewStyle}" ItemsSource="{Binding RecordTable}" Grid.Row="1">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Track Name" DisplayMemberBinding="{Binding trackName}"/>
@@ -36,7 +32,5 @@
                 <Label Name="labelAllTimeMaxSpeed" Content="Overall Max Speed: " FontSize="14" /> 
                 <Button Name="buttonShowRecentRecords" Content="Show Recent Records" Click="buttonShowRecentRecords_Click"/>
             </StackPanel>
-        </Grid>
-        <Image Name="image1" Stretch="Uniform" Source="/traqpaqWPF;component/Images/traqpaq.png" Grid.Row="1" />
     </Grid>
 </Page>
