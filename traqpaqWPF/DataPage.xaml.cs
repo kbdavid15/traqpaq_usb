@@ -419,5 +419,16 @@ namespace traqpaqWPF
         {
             plotter.FitToView();
         }
+
+        /// <summary>
+        /// When the mouse moves over the plot, display a tooltip that shows the exact speed
+        /// and altitude at the corresponding coordinate.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void plotter_MouseMove_1(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 }

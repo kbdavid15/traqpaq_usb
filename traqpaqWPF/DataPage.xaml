@@ -79,7 +79,7 @@
             </ListView>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
-        <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisible="False" MainVerticalAxisVisibility="Collapsed" >
+        <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisible="False" MainVerticalAxisVisibility="Collapsed" MouseMove="plotter_MouseMove_1" >
             <d3:InjectedPlotter Name="innerSpeedPlotter" LegendVisibility="Hidden" ConjunctionMode="X">
                 <d3:VerticalAxis Placement="Left" />
                 <d3:VerticalAxisTitle Content="Meters/Second" Placement="Left"/>
