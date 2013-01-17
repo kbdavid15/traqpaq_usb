@@ -79,19 +79,17 @@
             </ListView>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" />
-        <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisibility="Hidden" LegendVisible="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
-            <d3:ChartPlotter.MainVerticalAxisVisibility>Collapsed</d3:ChartPlotter.MainVerticalAxisVisibility>
-            <d3:InjectedPlotter Name="innerSpeedPlotter" LegendVisibility="Hidden" ConjunctionMode="X" ScrollViewer.CanContentScroll="False">
-                <d3:VerticalAxis Placement="Right" />
-                <d3:VerticalAxisTitle Content="Meters/Second" Placement="Right"/>
+        <d3:ChartPlotter Name="plotter" Grid.Row="3" LegendVisible="False" MainVerticalAxisVisibility="Collapsed" >
+            <d3:InjectedPlotter Name="innerSpeedPlotter" LegendVisibility="Hidden" ConjunctionMode="X">
+                <d3:VerticalAxis Placement="Left" />
+                <d3:VerticalAxisTitle Content="Meters/Second" Placement="Left"/>
             </d3:InjectedPlotter>
-            <d3:InjectedPlotter Name="innerAltitudePlotter" LegendVisibility="Hidden" ConjunctionMode="X" ScrollViewer.CanContentScroll="False">
-                <d3:VerticalAxis Placement="Left"/>
-                <d3:VerticalAxisTitle Content="Meters" Placement="Left"/>
+            <d3:InjectedPlotter Name="innerAltitudePlotter" LegendVisibility="Hidden" ConjunctionMode="X">
+                <d3:VerticalAxis Placement="Right"/>
+                <d3:VerticalAxisTitle Content="Meters" Placement="Right"/>
             </d3:InjectedPlotter>
-            
-            
             <d3:HorizontalAxisTitle>Seconds</d3:HorizontalAxisTitle>
+            
             <GroupBox Name="groupBox1" Canvas.Left="2" Canvas.Top="2" BorderThickness="1" Background="White" Padding="0,2,0,-3" >
                 <StackPanel>
                     <CheckBox Name="checkBoxSpeed" IsChecked="True" Checked="checkBoxSpeed_Checked" Unchecked="checkBoxSpeed_Unchecked" >

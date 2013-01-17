@@ -55,6 +55,9 @@ namespace traqpaqWPF
             geBrowser.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             subGrid1.Children.Add(geBrowser);
             Grid.SetColumn(geBrowser, 2);
+
+            // this disables scrolling along the main vertical axis and was necessary in order to fix gh issue #6
+            plotter.Children.RemoveAllOfType(typeof(AxisNavigation));
         }
 
         /// <summary>
@@ -107,7 +110,6 @@ namespace traqpaqWPF
 
             // plot the altitude and speed on the chart
             addLapToPlotter(lap);
-
 
             //TODO add event handler for mouse over event that displays the exact value for graph
         }
