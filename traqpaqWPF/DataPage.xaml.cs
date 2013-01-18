@@ -110,8 +110,6 @@ namespace traqpaqWPF
 
             // plot the altitude and speed on the chart
             addLapToPlotter(lap);
-
-            //TODO add event handler for mouse over event that displays the exact value for graph
         }
         
         /// <summary>
@@ -428,6 +426,14 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         private void plotter_MouseMove_1(object sender, MouseEventArgs e)
         {
+            // look at axis control samples in D3/DevSamples
+            var transform = plotter.Transform;
+            var mouseScreenPosition = Mouse.GetPosition(plotter.CentralGrid);
+            var mousePositionInData = mouseScreenPosition.ScreenToViewport(transform);
+            if (mousePositionInData.Y > 0)
+            {
+
+            }
 
         }
     }
