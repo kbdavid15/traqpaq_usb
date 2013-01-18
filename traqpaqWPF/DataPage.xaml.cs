@@ -427,9 +427,10 @@ namespace traqpaqWPF
         private void plotter_MouseMove_1(object sender, MouseEventArgs e)
         {
             // look at axis control samples in D3/DevSamples
-            var transform = plotter.Transform;
-            var mouseScreenPosition = Mouse.GetPosition(plotter.CentralGrid);
-            var mousePositionInData = mouseScreenPosition.ScreenToViewport(transform);
+            var mousePlotPosition = Mouse.GetPosition(plotter.CentralGrid);
+            var mouseAltitudePos = Mouse.GetPosition(innerAltitudePlotter.CentralGrid);
+            var mouseSpeedPos = Mouse.GetPosition(innerSpeedPlotter.CentralGrid);
+            var mousePositionInData = mousePlotPosition.ScreenToViewport(plotter.Transform);
             if (mousePositionInData.Y > 0)
             {
 
