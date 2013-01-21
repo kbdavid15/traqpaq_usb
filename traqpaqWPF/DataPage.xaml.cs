@@ -58,6 +58,28 @@ namespace traqpaqWPF
 
             // this disables scrolling along the main vertical axis and was necessary in order to fix gh issue #6
             plotter.Children.RemoveAllOfType(typeof(AxisNavigation));
+
+            // event callback
+            plotter.Viewport.DomainChanged += Viewport_DomainChanged;
+            innerAltitudePlotter.Viewport.DomainChanged += Viewport_DomainChanged;
+            innerSpeedPlotter.Viewport.DomainChanged += Viewport_DomainChanged;
+
+            plotter.Viewport.EndPanning += Viewport_EndPanning;
+
+            plotter.Viewport.PropertyChanged += Viewport_PropertyChanged;
+            
+        }
+
+        void Viewport_PropertyChanged(object sender, ExtendedPropertyChangedEventArgs e)
+        {
+            // might be calling too often but it does take care of all events
+        }
+
+
+
+        void Viewport_EndPanning(object sender, EventArgs e)
+        {
+            // doesn't trigger on zooms, only click and drag
         }
 
         /// <summary>
@@ -433,9 +455,15 @@ namespace traqpaqWPF
             var mousePositionInData = mousePlotPosition.ScreenToViewport(plotter.Transform);
             if (mousePositionInData.Y > 0)
             {
-
+                //plotter.Viewport.Transform.DataTransform.DataDomain.ViewportToData()
             }
-
+            
         }
+
+        void Viewport_DomainChanged(object sender, EventArgs e)
+        {
+            
+        }
+
     }
 }
