@@ -67,12 +67,23 @@ namespace traqpaqWPF
             plotter.Viewport.EndPanning += Viewport_EndPanning;
 
             plotter.Viewport.PropertyChanged += Viewport_PropertyChanged;
+
+            plotter.Viewport.ContentBoundsChanged += Viewport_ContentBoundsChanged;
             
+        }
+
+        void Viewport_ContentBoundsChanged(object sender, EventArgs e)
+        {
+            // only triggers when the chart is first drawn. Triggers once for each injected plotter
         }
 
         void Viewport_PropertyChanged(object sender, ExtendedPropertyChangedEventArgs e)
         {
             // might be calling too often but it does take care of all events
+            Viewport2D vp = sender as Viewport2D;
+            
+            // get the set of data currently displayed on the screen
+
         }
 
 

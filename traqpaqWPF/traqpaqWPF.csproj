@@ -89,7 +89,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DynamicDataDisplay">
+    <Reference Include="DynamicDataDisplay, Version=0.3.2.0, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\d3_2013-01-13_1244PM\DynamicDataDisplay.dll</HintPath>
     </Reference>
     <Reference Include="DynamicDataDisplay.Maps">
