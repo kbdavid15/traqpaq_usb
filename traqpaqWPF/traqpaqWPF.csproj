@@ -102,6 +102,9 @@
     <Reference Include="DynamicDataDisplay.Markers2">
       <HintPath>lib\d3_2013-01-13_1244PM\DynamicDataDisplay.Markers2.dll</HintPath>
     </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.6.1.4\lib\net45\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="LibUsbDotNet">
       <HintPath>lib\LibUsbDotNet.dll</HintPath>
     </Reference>
@@ -235,6 +238,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

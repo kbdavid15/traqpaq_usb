@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Facebook;
+using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.IO;
 using System.Linq;
+using System.Linq;
+using System.Security;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,7 +15,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Security;
 
 namespace traqpaqWPF
 {
@@ -19,10 +23,15 @@ namespace traqpaqWPF
     /// </summary>
     public partial class LoginWindow : Window
     {
+        const string _facebookAppId = "345961062172188";
+        string _permissions = ""; //"user_about_me,read_stream,publish_stream"; // Set your permissions here
+        FacebookClient _fb = new FacebookClient();
+
         /// <summary>
         /// key is username, value is password
         /// </summary>
-        Dictionary<string, string> loginDictionary = new Dictionary<string, string>();
+        Dictionary<string, string> loginDictionary = new Dictionary<string, string>();  //TODO this is obviously not the correct way to store login credentials. Need to use a database
+
         public LoginWindow()
         {
             InitializeComponent();
@@ -81,6 +90,16 @@ namespace traqpaqWPF
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        /// <summary>
+        /// Attempt to log the user in to Facebook
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonFBlogin_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
