@@ -20,7 +20,7 @@ namespace traqpaqWPF
 
             //webBrowser.DocumentText = traqpaqResources.ge;
             //webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/ge1.htm");
-            webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/gmaps.htm");
+            webBrowser.Navigate("http://www.redline-electronics.com/traqpaq/GoogleEarth/gmaps.html");
         }
 
         public void loadKML(string kml, string lap)

@@ -39,8 +39,6 @@
             
         </Grid>
         <Label Content="Login with Facebook" FontSize="30" Grid.Column="1" />
-        <StackPanel Grid.Column="1" Grid.Row="1">
-            <Button x:Name="buttonFBlogin" Content="Log In" Click="buttonFBlogin_Click"/>
-        </StackPanel>
+        <WebBrowser x:Name="loginBrowser" Grid.Column="1" Grid.Row="1" UseLayoutRounding="False" ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="0,5,0,71" Grid.RowSpan="2" />
     </Grid>
 </Window>

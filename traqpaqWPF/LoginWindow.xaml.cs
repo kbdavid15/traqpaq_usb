@@ -30,7 +30,7 @@ namespace traqpaqWPF
         /// <summary>
         /// key is username, value is password
         /// </summary>
-        Dictionary<string, string> loginDictionary = new Dictionary<string, string>();  //TODO this is obviously not the correct way to store login credentials. Need to use a database
+        Dictionary<string, string> loginDictionary = new Dictionary<string, string>();  //TODO this is obviously not the correct way to store login credentials. Need to use a db
 
         public LoginWindow()
         {
@@ -41,6 +41,10 @@ namespace traqpaqWPF
 
             // set focus to the username box
             textBoxUsername.Focus();
+
+            // load the login web page (facebook, google, twitter)
+            loginBrowser.Navigate(new Uri("http://www.traqpaq.com/facebook/loginpage.html"));
+
         }
 
         /// <summary>
@@ -92,14 +96,5 @@ namespace traqpaqWPF
             Close();
         }
 
-        /// <summary>
-        /// Attempt to log the user in to Facebook
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void buttonFBlogin_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

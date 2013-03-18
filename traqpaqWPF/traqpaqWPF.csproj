@@ -282,8 +282,9 @@
   <ItemGroup>
     <Resource Include="Images\1358368677_Reset.png" />
     <Content Include="Web\ge1.htm" />
-    <Content Include="Web\gmaps.htm" />
+    <Content Include="Web\gmaps.html" />
     <Content Include="Web\gmapsCSharp.js" />
+    <Resource Include="Web\loginpage.html" />
     <Content Include="Web\scripts\google-maps-3-vs-1-0-vsdoc.js" />
     <Content Include="Web\scripts\google-maps-3-vs-1-0.js" />
     <Content Include="Web\scripts\stand-alone-example.js" />
