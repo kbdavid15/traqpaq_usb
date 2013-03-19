@@ -15,6 +15,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MySql.Data;
+using MySql.Data.Common;
+using MySql.Data.MySqlClient;
 
 namespace traqpaqWPF
 {
@@ -32,19 +35,38 @@ namespace traqpaqWPF
         /// </summary>
         Dictionary<string, string> loginDictionary = new Dictionary<string, string>();  //TODO this is obviously not the correct way to store login credentials. Need to use a db
 
+        MySqlConnection sqlConnection;
+        string server = "192.168.1.3";
+        string database = "redline";
+        string uid = "redline";
+        string password = "9mTKBfN2NdQjpPfq";
+        string connectionString;
+
         public LoginWindow()
         {
             InitializeComponent();
+
+            // load the login web page (facebook, google, twitter)
+            loginBrowser.Navigate(new Uri("http://www.traqpaq.com/facebook/loginpage.html"));
+
+            // connect to the database
+            connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
+            sqlConnection = new MySqlConnection(connectionString);
+            //try
+            //{
+            //    sqlConnection.Open();
+            //}
+            //catch (MySqlException e)
+            //{
+            //    throw;
+            //}
+
             // Add dummy values to the login dictionary
             loginDictionary["kbdavid15"] = "password1";
             loginDictionary["ryan"] = "123";
 
             // set focus to the username box
             textBoxUsername.Focus();
-
-            // load the login web page (facebook, google, twitter)
-            loginBrowser.Navigate(new Uri("http://www.traqpaq.com/facebook/loginpage.html"));
-
         }
 
         /// <summary>
@@ -52,27 +74,53 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonLogin_Click(object sender, RoutedEventArgs e)
+        private async void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
-            //TODO set up login credentials database
-            //look into password management
-            try
+            // connect to the database
+            await sqlConnection.OpenAsync();
+
+            // get user input
+            string uname = textBoxUsername.Text;
+            string pass = passwordBox.Password;
+
+            // set up query to check password
+            string commandText = "SELECT paswd FROM user WHERE email = @email;";
+            MySqlCommand command = new MySqlCommand(commandText, sqlConnection);
+            command.Parameters.Add("@email", MySqlDbType.VarChar);
+            command.Parameters["@email"].Value = uname;
+
+            // exceute command
+            int rowsAffected = command.ExecuteNonQuery();
+            if (rowsAffected > 0)
             {
-                if (loginDictionary[textBoxUsername.Text] == passwordBox.Password)
-                {
-                    Tag = textBoxUsername.Text;
-                    this.DialogResult = true;
-                    Close();
-                }
-                else
-                {
-                    MessageBox.Show("Access denied");
-                }
+                // username found, check password
             }
-            catch (KeyNotFoundException)
+            else
             {
-                MessageBox.Show("That username was not found in our records.");
-            }            
+                // username not in database
+
+            }
+
+            // close connection
+            sqlConnection.Close();
+
+            //try
+            //{
+            //    if (loginDictionary[textBoxUsername.Text] == passwordBox.Password)
+            //    {
+            //        Tag = textBoxUsername.Text;
+            //        this.DialogResult = true;
+            //        Close();
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("Access denied");
+            //    }
+            //}
+            //catch (KeyNotFoundException)
+            //{
+            //    MessageBox.Show("That username was not found in our records.");
+            //}            
         }
 
         /// <summary>
