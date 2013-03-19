@@ -1,26 +1,53 @@
 ﻿<!DOCTYPE html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title></title>
 </head>
-<body>
+<body style="font-family: Arial; border: 0 none; margin: 0px" scroll="no">
     <div id="fb-root"></div>
     <script>
         // Additional JS functions here
         window.fbAsyncInit = function () {
             FB.init({
                 appId: '345961062172188', // App ID
-                channelUrl: '//www.traqpaq.com/traqpaq/facebook/channel.html', // Channel File
+                channelUrl: '//www.traqpaq.com/facebook/channel.html', // Channel File
                 status: true, // check login status
                 cookie: true, // enable cookies to allow the server to access the session
                 xfbml: true  // parse XFBML
             });
 
             // Additional init code here
-
+            //FB.getLoginStatus(function(response) {
+            //    if (response.status === 'connected') {
+            //        // connected
+            //    } else if (response.status === 'not_authorized') {
+            //        // not_authorized
+            //        login();
+            //    } else {
+            //        // not_logged_in
+            //        login();
+            //    }
+            //});
         };
+
+        function login() {
+            FB.login(function (response) {
+                if (response.authResponse) {
+                    // connected
+                    testAPI();
+                } else {
+                    // cancelled
+                }
+            });
+        }
+
+        function testAPI() {
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', function (response) {
+                console.log('Good to see you, ' + response.name + '.');
+            });
+        }
 
         // Load the SDK Asynchronously
         (function (d) {
@@ -30,6 +57,26 @@
             js.src = "//connect.facebook.net/en_US/all.js";
             ref.parentNode.insertBefore(js, ref);
         }(document));
+    </script>
+    <div class="fb-login-button" data-show-faces="true" data-width="200" data-max-rows="1"></div>
+    <span id="signinButton">
+      <span
+        class="g-signin"
+        data-callback="signinCallback"
+        data-clientid="1080229136615-n5ohfo07rq2oj12shtepr80cmnflt3lq.apps.googleusercontent.com"
+        data-cookiepolicy="single_host_origin"
+        data-requestvisibleactions="http://schemas.google.com/AddActivity"
+        data-scope="https://www.googleapis.com/auth/plus.login">
+      </span>
+    </span>
+
+    <!-- Place this asynchronous JavaScript just before your </body> tag -->
+    <script type="text/javascript">
+        (function () {
+            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+            po.src = 'https://apis.google.com/js/client:plusone.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
     </script>
 </body>
 </html>
