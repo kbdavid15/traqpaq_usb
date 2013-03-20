@@ -74,35 +74,38 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void buttonLogin_Click(object sender, RoutedEventArgs e)
+        private void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
+
+
+
             // connect to the database
-            await sqlConnection.OpenAsync();
+            //await sqlConnection.OpenAsync();
 
-            // get user input
-            string uname = textBoxUsername.Text;
-            string pass = passwordBox.Password;
+            //// get user input
+            //string uname = textBoxUsername.Text;
+            //string pass = passwordBox.Password;
 
-            // set up query to check password
-            string commandText = "SELECT paswd FROM user WHERE email = @email;";
-            MySqlCommand command = new MySqlCommand(commandText, sqlConnection);
-            command.Parameters.Add("@email", MySqlDbType.VarChar);
-            command.Parameters["@email"].Value = uname;
+            //// set up query to check password
+            //string commandText = "SELECT paswd FROM user WHERE email = @email;";
+            //MySqlCommand command = new MySqlCommand(commandText, sqlConnection);
+            //command.Parameters.Add("@email", MySqlDbType.VarChar);
+            //command.Parameters["@email"].Value = uname;
 
-            // exceute command
-            int rowsAffected = command.ExecuteNonQuery();
-            if (rowsAffected > 0)
-            {
-                // username found, check password
-            }
-            else
-            {
-                // username not in database
+            //// exceute command
+            //int rowsAffected = command.ExecuteNonQuery();
+            //if (rowsAffected > 0)
+            //{
+            //    // username found, check password
+            //}
+            //else
+            //{
+            //    // username not in database
 
-            }
+            //}
 
-            // close connection
-            sqlConnection.Close();
+            //// close connection
+            //sqlConnection.Close();
 
             //try
             //{

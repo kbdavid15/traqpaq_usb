@@ -166,3 +166,4 @@ pip-log.txt
 ## Sublime
 #################
 sftp-config.json
+*mysql.conf
