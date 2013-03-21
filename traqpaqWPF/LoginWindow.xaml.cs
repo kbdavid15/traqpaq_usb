@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Linq;
 using System.Security;
 using System.Text;
 using System.Windows;
@@ -18,6 +17,8 @@ using System.Windows.Shapes;
 using MySql.Data;
 using MySql.Data.Common;
 using MySql.Data.MySqlClient;
+using System.Net;
+using System.Collections.Specialized;
 
 namespace traqpaqWPF
 {
@@ -26,9 +27,11 @@ namespace traqpaqWPF
     /// </summary>
     public partial class LoginWindow : Window
     {
-        const string _facebookAppId = "345961062172188";
-        string _permissions = ""; //"user_about_me,read_stream,publish_stream"; // Set your permissions here
-        FacebookClient _fb = new FacebookClient();
+        //const string _facebookAppId = "345961062172188";
+        //string _permissions = ""; //"user_about_me,read_stream,publish_stream"; // Set your permissions here
+        //FacebookClient _fb = new FacebookClient();
+
+        WebClient webClient = new WebClient();
 
         /// <summary>
         /// key is username, value is password
@@ -61,6 +64,9 @@ namespace traqpaqWPF
             //    throw;
             //}
 
+            // set up the web client
+            //webClient.BaseAddress = "http://redline-testing.com/";
+
             // Add dummy values to the login dictionary
             loginDictionary["kbdavid15"] = "password1";
             loginDictionary["ryan"] = "123";
@@ -74,56 +80,21 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonLogin_Click(object sender, RoutedEventArgs e)
+        private async void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
+            // get user input
+            string uname = textBoxUsername.Text;
+            string pass = passwordBox.Password;
 
+            // POST the credentials to PHP
+            byte[] response = webClient.UploadValues(new Uri("http://redline-testing.com/login.php"), new NameValueCollection()
+            {
+                { "user", uname },
+                { "pass", pass }
+            });
+            string s = webClient.Encoding.GetString(response);
 
-
-            // connect to the database
-            //await sqlConnection.OpenAsync();
-
-            //// get user input
-            //string uname = textBoxUsername.Text;
-            //string pass = passwordBox.Password;
-
-            //// set up query to check password
-            //string commandText = "SELECT paswd FROM user WHERE email = @email;";
-            //MySqlCommand command = new MySqlCommand(commandText, sqlConnection);
-            //command.Parameters.Add("@email", MySqlDbType.VarChar);
-            //command.Parameters["@email"].Value = uname;
-
-            //// exceute command
-            //int rowsAffected = command.ExecuteNonQuery();
-            //if (rowsAffected > 0)
-            //{
-            //    // username found, check password
-            //}
-            //else
-            //{
-            //    // username not in database
-
-            //}
-
-            //// close connection
-            //sqlConnection.Close();
-
-            //try
-            //{
-            //    if (loginDictionary[textBoxUsername.Text] == passwordBox.Password)
-            //    {
-            //        Tag = textBoxUsername.Text;
-            //        this.DialogResult = true;
-            //        Close();
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("Access denied");
-            //    }
-            //}
-            //catch (KeyNotFoundException)
-            //{
-            //    MessageBox.Show("That username was not found in our records.");
-            //}            
+            MessageBox.Show(s); 
         }
 
         /// <summary>

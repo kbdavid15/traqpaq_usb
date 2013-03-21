@@ -116,14 +116,3 @@ $dbhost = $db['hostname'];
 $dbname = $db['database'];
 $dbuser = $db['username'];
 $dbpass = $db['password'];
-
-// connect to the database
-
-try {
-    $dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
-    $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    print "Error!: " . $e->getMessage() . "<br/>";
-    die();
-}
