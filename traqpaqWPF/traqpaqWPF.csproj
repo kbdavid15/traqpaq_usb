@@ -155,6 +155,7 @@
       <DependentUpon>GoogleMapsWebBrowser.xaml</DependentUpon>
     </Compile>
     <Compile Include="RecentTracks.cs" />
+    <Compile Include="RegexUtil.cs" />
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>

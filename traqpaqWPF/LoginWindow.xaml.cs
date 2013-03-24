@@ -28,23 +28,7 @@ namespace traqpaqWPF
     /// </summary>
     public partial class LoginWindow : Window
     {
-        //const string _facebookAppId = "345961062172188";
-        //string _permissions = ""; //"user_about_me,read_stream,publish_stream"; // Set your permissions here
-        //FacebookClient _fb = new FacebookClient();
-
         WebClient webClient = new WebClient();
-
-        /// <summary>
-        /// key is username, value is password
-        /// </summary>
-        Dictionary<string, string> loginDictionary = new Dictionary<string, string>();  //TODO this is obviously not the correct way to store login credentials. Need to use a db
-
-        MySqlConnection sqlConnection;
-        string server = "192.168.1.3";
-        string database = "redline";
-        string uid = "redline";
-        string password = "9mTKBfN2NdQjpPfq";
-        string connectionString;
 
         public LoginWindow()
         {
@@ -53,29 +37,11 @@ namespace traqpaqWPF
             // load the login web page (facebook, google, twitter)
             loginBrowser.Navigate(new Uri("http://www.traqpaq.com/facebook/loginpage.html"));
 
-
-            // connect to the database
-            //connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-            //sqlConnection = new MySqlConnection(connectionString);
-            //try
-            //{
-            //    sqlConnection.Open();
-            //}
-            //catch (MySqlException e)
-            //{
-            //    throw;
-            //}
-
             // set up the web client
             //webClient.BaseAddress = "http://redline-testing.com/";
 
-            // Add dummy values to the login dictionary
-            //loginDictionary["kbdavid15"] = "password1";
-            //loginDictionary["ryan"] = "123";
-
             // set focus to the username box
-            //textBoxUsername.Focus();
-
+            textBoxUsername.Focus();
         }
 
         /// <summary>
@@ -86,12 +52,12 @@ namespace traqpaqWPF
         private void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
             // toggle visibility if necessary
-            if (loginCanvas.Visibility == System.Windows.Visibility.Hidden)
-            {
-                loginCanvas.Visibility = System.Windows.Visibility.Visible;
-                signupCanvas.Visibility = System.Windows.Visibility.Hidden;
-                return;
-            }
+            //if (loginCanvas.Visibility == System.Windows.Visibility.Hidden)
+            //{
+            //    loginCanvas.Visibility = System.Windows.Visibility.Visible;
+            //    signupCanvas.Visibility = System.Windows.Visibility.Hidden;
+            //    return;
+            //}
 
             // get user input
             string uname = textBoxUsername.Text;
@@ -125,10 +91,14 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         private void buttonSignUp_Click(object sender, RoutedEventArgs e)
         {
-            loginCanvas.Visibility = System.Windows.Visibility.Hidden;
+            //loginCanvas.Visibility = System.Windows.Visibility.Hidden;
             //signupCanvas.Visibility = System.Windows.Visibility.Visible;
-            Storyboard sb = signupCanvas.FindResource("signUpStoryboard") as Storyboard;
-            signupCanvas.BeginStoryboard(sb);
+            Storyboard sb = inputCanvas.FindResource("signUpStoryboard") as Storyboard;
+            inputCanvas.BeginStoryboard(sb);
+
+            // hide signup button, show submit button
+            buttonSignUp.Visibility = System.Windows.Visibility.Collapsed;
+            buttonSubmit.Visibility = System.Windows.Visibility.Visible;
         }
 
         /// <summary>
@@ -141,5 +111,71 @@ namespace traqpaqWPF
             Close();
         }
 
+        /// <summary>
+        /// Verify the user submitted values and send to server for further verification
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonSubmit_Click(object sender, RoutedEventArgs e)
+        {
+            // username and password are required, and passwords must match
+            //TODO implement Ajax and have the server check if a username is available before hitting submit
+            string firstname = null, lastname = null, email, password;
+            if (textBoxFirstName.Text != "")
+                firstname = textBoxFirstName.Text;
+            if (textBoxLasttName.Text != "")
+                lastname = textBoxLasttName.Text;
+            if (textBoxSignUpUsername.Text != "")
+            {
+                email = textBoxSignUpUsername.Text;
+                // check against regex to determine if it is an email
+                RegexUtil util = new RegexUtil();   //TODO convert this into a static class/method
+                if (!util.IsValidEmail(email))
+                {
+                    MessageBox.Show("Please enter a valid email address");
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show("You must provide an email address");
+                return;
+            }
+            if (passwordBoxSignUp.Password != "" && passwordBoxConfirmSignUp.Password != "" && passwordBoxSignUp.Password == passwordBoxConfirmSignUp.Password)
+            {
+                // check if password is secure enough
+                password = passwordBoxSignUp.Password;
+            }
+            else
+            {
+                MessageBox.Show("Passwords do not match");
+                return;
+            }
+
+            // this is necessary because the server is using a self-signed certificate
+            // In production, we will pay for a cert issued by a CA and will not require this line.
+            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
+
+            // now, send the information to the server to create a database entry for this user
+            byte[] response = webClient.UploadValues(new Uri("https://redline-testing.com/signup.php"), new NameValueCollection()
+            {
+                { "firstname", firstname },
+                { "lastname", lastname },
+                { "email", email },
+                { "password", password }
+            });
+            string s = webClient.Encoding.GetString(response);
+            MessageBox.Show(s);
+        }
+
+        /// <summary>
+        /// Use this function to verify the username before the submit button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBoxSignUpUsername_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
