@@ -28,7 +28,7 @@
                     <Storyboard x:Key="signUpStoryboard">
                         <DoubleAnimation From="0" To="-300" Duration="00:00:00.5" Storyboard.TargetName="loginSignupStackPanel" Storyboard.TargetProperty="(Canvas.Top)">
                             <DoubleAnimation.EasingFunction>
-                                <CircleEase EasingMode="EaseIn"  />
+                                <CircleEase EasingMode="EaseIn" />
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
                     </Storyboard>

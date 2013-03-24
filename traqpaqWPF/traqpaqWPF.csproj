@@ -285,6 +285,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\1358368677_Reset.png" />
+    <None Include="Resources\ajax-loader.gif" />
+    <None Include="Resources\greencheck.png" />
+    <None Include="Resources\redx.png" />
+    <None Include="Resources\ajax_loader_blue_32.gif" />
     <Content Include="Web\channel.html" />
     <Content Include="Web\ge1.htm" />
     <Content Include="Web\gmaps.html" />
