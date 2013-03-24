@@ -1,7 +1,7 @@
 ﻿<Window x:Class="traqpaqWPF.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Login to traqpaq.com" Height="258" Width="571" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+        Title="Login to traqpaq.com" Height="353" Width="717" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />            
@@ -14,21 +14,49 @@
         <Label Content="Login" Name="label1" FontSize="30" />
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="10*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Content="Username / Email" Grid.Row="0" Name="label2" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
-            <Label Content="Password" Grid.Row="1" Name="label3" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
-            <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Name="textBoxUsername" TabIndex="0" Margin="0,0,10,0" Padding="0,0,0,5" />
-            <PasswordBox Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Name="passwordBox" TabIndex="1" Margin="0,0,10,0" Padding="0,0,0,5" />
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button x:Name="buttonLogin" Content="Login" IsDefault="True" VerticalAlignment="Top" Width="60" Click="buttonLogin_Click" TabIndex="2" />
+                <Button x:Name="buttonSignUp" Content="Sign Up" VerticalAlignment="Top" Width="60" Click="buttonSignUp_Click" TabIndex="3" Margin="10,0,0,0"  />
+                <Button x:Name="buttonCancel" Content="Cancel" IsCancel="True"  Width="60" Click="buttonCancel_Click" TabIndex="4" VerticalAlignment="Top" Margin="10,0,0,0"  />
+            </StackPanel>
+            <Canvas x:Name="loginCanvas" >
+                <Label Content="Username / Email" VerticalAlignment="Top" HorizontalAlignment="Left" Canvas.Left="10"/>
+                <Label Content="Password" VerticalAlignment="Top" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="45" />
+                <TextBox Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="textBoxUsername" TabIndex="0" Padding="0,0,0,5" Canvas.Left="10" Canvas.Top="24" Width="182" />
+                <PasswordBox Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" x:Name="passwordBox" TabIndex="1" Padding="0,0,0,5" Canvas.Left="10" Canvas.Top="70" Width="182" />
+            </Canvas>
+            <Canvas x:Name="signupCanvas" >
+                <Canvas.Resources>
+                    <Storyboard x:Name="signUpStoryboard" x:Key="signUpStoryboard">
+                        <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="signUpStackPanel" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame>
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Visible</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>-->
+                        <DoubleAnimation From="275" To="0" Duration="00:00:01" Storyboard.TargetName="signUpStackPanel" Storyboard.TargetProperty="(Canvas.Top)">
+                            <DoubleAnimation.EasingFunction>
+                                <BackEase EasingMode="EaseIn" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>                        
+                    </Storyboard>
+                </Canvas.Resources>
+                <StackPanel Margin="10,0,0,0" x:Name="signUpStackPanel" Canvas.Top="275" Panel.ZIndex="1"  >
+                    <Label Content="Full Name" HorizontalAlignment="Left" />
+                    <TextBox Height="23" x:Name="textBoxName" TabIndex="0" Padding="0,0,0,5"  Width="182" />
+                    <Label Content="Username / Email" />
+                    <TextBox Height="23" x:Name="textBoxSignUpUsername" TabIndex="1" Padding="0,0,0,5"  Width="182" />
+                    <Label Content="Password" />
+                    <PasswordBox Height="23" x:Name="passwordBoxSignUp" TabIndex="2" Padding="0,0,0,5" Width="182" />
+                    <Label Content="Confirm Password" />
+                    <PasswordBox Height="23" x:Name="passwordBoxConfirmSignUp" TabIndex="3" Padding="0,0,0,5" Width="182" />
+                </StackPanel>
+            </Canvas>
         </Grid>
-        <Button Name="buttonLogin" Grid.Row="1" Content="Login" IsDefault="True" VerticalAlignment="Top" Width="60" Click="buttonLogin_Click" TabIndex="2" Margin="44,79,178,0" />
-        <Button Name="buttonSignUp" Grid.Row="1" Content="Sign Up" VerticalAlignment="Top" Width="60" Click="buttonSignUp_Click" TabIndex="3" Margin="109,79,113,0" />
-        <Button Name="buttonCancel" Grid.Row="1" Content="Cancel" IsCancel="True" VerticalAlignment="Top" Width="60" Click="buttonCancel_Click" TabIndex="4" Margin="174,79,48,0" />
         <Label Content="Login with Facebook" FontSize="30" Grid.Column="1" />
         <WebBrowser x:Name="loginBrowser" Grid.Column="1" Grid.Row="1" UseLayoutRounding="False" Margin="5" />
     </Grid>

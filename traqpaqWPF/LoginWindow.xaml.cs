@@ -19,6 +19,7 @@ using MySql.Data.Common;
 using MySql.Data.MySqlClient;
 using System.Net;
 using System.Collections.Specialized;
+using System.Windows.Media.Animation;
 
 namespace traqpaqWPF
 {
@@ -52,9 +53,10 @@ namespace traqpaqWPF
             // load the login web page (facebook, google, twitter)
             loginBrowser.Navigate(new Uri("http://www.traqpaq.com/facebook/loginpage.html"));
 
+
             // connect to the database
-            connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-            sqlConnection = new MySqlConnection(connectionString);
+            //connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
+            //sqlConnection = new MySqlConnection(connectionString);
             //try
             //{
             //    sqlConnection.Open();
@@ -68,11 +70,12 @@ namespace traqpaqWPF
             //webClient.BaseAddress = "http://redline-testing.com/";
 
             // Add dummy values to the login dictionary
-            loginDictionary["kbdavid15"] = "password1";
-            loginDictionary["ryan"] = "123";
+            //loginDictionary["kbdavid15"] = "password1";
+            //loginDictionary["ryan"] = "123";
 
             // set focus to the username box
-            textBoxUsername.Focus();
+            //textBoxUsername.Focus();
+
         }
 
         /// <summary>
@@ -80,14 +83,26 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void buttonLogin_Click(object sender, RoutedEventArgs e)
+        private void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
+            // toggle visibility if necessary
+            if (loginCanvas.Visibility == System.Windows.Visibility.Hidden)
+            {
+                loginCanvas.Visibility = System.Windows.Visibility.Visible;
+                signupCanvas.Visibility = System.Windows.Visibility.Hidden;
+                return;
+            }
+
             // get user input
             string uname = textBoxUsername.Text;
             string pass = passwordBox.Password;
 
+            // this is necessary because the server is using a self-signed certificate
+            // In production, we will pay for a cert issued by a CA and will not require this line.
+            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
+
             // POST the credentials to PHP
-            byte[] response = webClient.UploadValues(new Uri("http://redline-testing.com/login.php"), new NameValueCollection()
+            byte[] response = webClient.UploadValues(new Uri("https://redline-testing.com/login.php"), new NameValueCollection()
             {
                 { "user", uname },
                 { "pass", pass }
@@ -95,6 +110,11 @@ namespace traqpaqWPF
             string s = webClient.Encoding.GetString(response);
 
             MessageBox.Show(s); 
+        }
+
+        public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
         }
 
         /// <summary>
@@ -105,7 +125,10 @@ namespace traqpaqWPF
         /// <param name="e"></param>
         private void buttonSignUp_Click(object sender, RoutedEventArgs e)
         {
-
+            loginCanvas.Visibility = System.Windows.Visibility.Hidden;
+            //signupCanvas.Visibility = System.Windows.Visibility.Visible;
+            Storyboard sb = signupCanvas.FindResource("signUpStoryboard") as Storyboard;
+            signupCanvas.BeginStoryboard(sb);
         }
 
         /// <summary>
