@@ -105,13 +105,8 @@ class Bcrypt {
   }
 }
 
-// $bcrypt = new Bcrypt();
-// $hash = $bcrypt->hash('password1');
-// echo $hash;
-
-
 // load the database connection information from config file
-$db = unserialize(file_get_contents('../redline-mysql.conf'));
+$db = unserialize(file_get_contents('/var/www/redline/redline-mysql.conf'));
 $dbhost = $db['hostname'];
 $dbname = $db['database'];
 $dbuser = $db['username'];

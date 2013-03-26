@@ -290,9 +290,9 @@
   <ItemGroup>
     <Resource Include="Images\1358368677_Reset.png" />
     <Resource Include="Images\ajax-loader.gif" />
-    <None Include="Images\greencheck.png" />
-    <None Include="Images\redx.png" />
-    <None Include="Images\ajax_loader_blue_32.gif" />
+    <Resource Include="Images\greencheck.png" />
+    <Resource Include="Images\redx.png" />
+    <Resource Include="Images\ajax_loader_blue_32.gif" />
     <Content Include="Web\channel.html" />
     <Content Include="Web\ge1.htm" />
     <Content Include="Web\gmaps.html" />

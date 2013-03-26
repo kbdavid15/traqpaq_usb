@@ -20,6 +20,7 @@ using MySql.Data.MySqlClient;
 using System.Net;
 using System.Collections.Specialized;
 using System.Windows.Media.Animation;
+using System.Threading;
 
 namespace traqpaqWPF
 {
@@ -30,20 +31,21 @@ namespace traqpaqWPF
     {
         WebClient webClient = new WebClient();
 
+        UIElement[] ajaxImages;
+
         public LoginWindow()
         {
             InitializeComponent();
 
+            ajaxImages = new UIElement[] { ajaxLoadingImage, greenCheckImage, redXImage };
+
             // load the login web page (facebook, google, twitter)
             loginBrowser.Navigate(new Uri("http://www.traqpaq.com/facebook/loginpage.html"));
-
-            // set up the web client
-            //webClient.BaseAddress = "http://redline-testing.com/";
 
             // set focus to the username box
             textBoxUsername.Focus();
         }
-
+        
         /// <summary>
         /// Attempt to login with the username/password combination
         /// </summary>
@@ -97,18 +99,8 @@ namespace traqpaqWPF
             inputCanvas.BeginStoryboard(sb);
 
             // hide signup button, show submit button
-            buttonSignUp.Visibility = System.Windows.Visibility.Collapsed;
-            buttonSubmit.Visibility = System.Windows.Visibility.Visible;
-        }
-
-        /// <summary>
-        /// Closes the window
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void buttonCancel_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
+            buttonSignUp.Visibility = Visibility.Collapsed;
+            buttonSubmit.Visibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -116,7 +108,7 @@ namespace traqpaqWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonSubmit_Click(object sender, RoutedEventArgs e)
+        private async void buttonSubmit_Click(object sender, RoutedEventArgs e)
         {
             // username and password are required, and passwords must match
             //TODO implement Ajax and have the server check if a username is available before hitting submit
@@ -157,7 +149,7 @@ namespace traqpaqWPF
             ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
             // now, send the information to the server to create a database entry for this user
-            byte[] response = webClient.UploadValues(new Uri("https://redline-testing.com/signup.php"), new NameValueCollection()
+            byte[] response = await webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/signup.php"), new NameValueCollection()
             {
                 { "firstname", firstname },
                 { "lastname", lastname },
@@ -176,6 +168,49 @@ namespace traqpaqWPF
         private void textBoxSignUpUsername_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private async void textBoxUsername_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (textBoxUsername.Text == "")
+                foreach (var image in ajaxImages)
+                    image.Visibility = Visibility.Collapsed;
+            else
+            {
+                // show the loading image
+                ajaxLoadingImage.Visibility = Visibility.Visible;
+
+                // this is necessary because the server is using a self-signed certificate
+                // In production, we will pay for a cert issued by a CA and will not require this line.
+                ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
+
+                // now, send the information to the server to create a database entry for this user
+                byte[] response_bytes = await webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/ajax/username.php"), new NameValueCollection(){ { "email", textBoxUsername.Text } });
+                string response = webClient.Encoding.GetString(response_bytes);
+
+                // parse response
+                PHPreturn PHP_response = PHP.get_PHP_return(response);
+                switch (PHP_response)
+                {
+                    case PHPreturn.USERNAME_EXISTS:
+                        setImageVisibility(greenCheckImage);
+                        break;
+                    case PHPreturn.USERNAME_DNE:
+                        setImageVisibility(redXImage);
+                        break;
+                    default:
+                        ajaxLoadingImage.Visibility = Visibility.Collapsed;
+                        break;
+                }
+            }
+        }
+
+        private void setImageVisibility(UIElement image)
+        {
+            foreach (var elem in ajaxImages)
+            {
+                elem.Visibility = elem.Equals(image) ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
     }
 }

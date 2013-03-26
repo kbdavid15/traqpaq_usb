@@ -23,7 +23,7 @@
                 <Button x:Name="buttonLogin" Content="Login" IsDefault="True" VerticalAlignment="Top" Width="60" Click="buttonLogin_Click" TabIndex="2" />
                 <Button x:Name="buttonSignUp" Content="Sign Up" VerticalAlignment="Top" Width="60" Click="buttonSignUp_Click" TabIndex="3" Margin="15,0,0,0" />
                 <Button x:Name="buttonSubmit" Content="Submit" Width="60" TabIndex="5" VerticalAlignment="Top" Margin="15,0,0,0" Visibility="Collapsed" Click="buttonSubmit_Click" />
-                <Button x:Name="buttonCancel" Content="Cancel" IsCancel="True"  Width="60" Click="buttonCancel_Click" TabIndex="4" VerticalAlignment="Top" Margin="15,0,0,0" />
+                <Button x:Name="buttonCancel" Content="Cancel" IsCancel="True"  Width="60" TabIndex="4" VerticalAlignment="Top" Margin="15,0,0,0" />
             </StackPanel>
             <Canvas Margin="10,0,0,0" Name="inputCanvas" Grid.ColumnSpan="2" Panel.ZIndex="-1">
                 <Canvas.Resources>
@@ -39,11 +39,13 @@
                     <StackPanel>
                         <Label Content="Username / Email" VerticalAlignment="Top" HorizontalAlignment="Left" Canvas.Left="10"/>
                         <StackPanel Orientation="Horizontal" >
-                            <TextBox Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="textBoxUsername" TabIndex="0" Padding="0,0,0,5" Width="182" />
-                            <controls:GifImage x:Name="gifImage" Stretch="None" GifSource="pack://application:,,,/Images/ajax-loader.gif" AutoStart="False" Visibility="Hidden" />
+                            <TextBox Height="23" x:Name="textBoxUsername" HorizontalAlignment="Left" TabIndex="0" Width="180" LostFocus="textBoxUsername_LostFocus" />
+                            <controls:GifImage x:Name="ajaxLoadingImage" Stretch="None" GifSource="pack://application:,,,/Images/ajax-loader.gif" Visibility="Collapsed" />
+                            <Image x:Name="greenCheckImage" Source="pack://application:,,,/Images/greencheck.png" Width="16" Height="16" Visibility="Collapsed" />
+                            <Image x:Name="redXImage" Source="pack://application:,,,/Images/redx.png" Width="16" Height="16" Visibility="Collapsed" />
                         </StackPanel>
-                        <Label Content="Password" VerticalAlignment="Top" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="45" />                        
-                        <PasswordBox Height="23" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" x:Name="passwordBox" TabIndex="1" Padding="0,0,0,5" Canvas.Left="10" Canvas.Top="70" Width="182" />
+                        <Label Content="Password" HorizontalAlignment="Left" />
+                        <PasswordBox Height="23" HorizontalAlignment="Left" x:Name="passwordBox" TabIndex="1" Width="180" />
                     </StackPanel>
                     <StackPanel Margin="175,0,0,0">
                         <Label Content="First Name" HorizontalAlignment="Left" />

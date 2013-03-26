@@ -4,6 +4,15 @@ using System.Text.RegularExpressions;
 
 namespace traqpaqWPF
 {
+    public enum PHPreturn
+    {
+        USERNAME_EXISTS,
+        USERNAME_DNE,
+        EMPTY_STRING_ERROR,
+        PDO_EXCEPTION,
+        REGEX_PARSE_ERROR
+    }
+
     public class RegexUtil
     {
         bool invalid = false;
@@ -57,6 +66,26 @@ namespace traqpaqWPF
                 invalid = true;
             }
             return match.Groups[1].Value + domainName;
+        }
+    }
+
+    public static class PHP
+    {
+        /// <summary>
+        /// Parse the result string returned from PHP using regex
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public static PHPreturn get_PHP_return(string result)
+        {
+            Regex rx = new Regex(@"(?<=\[)\d(?=\])");
+            Match match = rx.Match(result);
+            int value;
+            if (match.Success && int.TryParse(match.Value, out value))
+            {
+                return (PHPreturn)value;
+            }
+            else return PHPreturn.REGEX_PARSE_ERROR;
         }
     }
 }
