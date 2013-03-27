@@ -36,6 +36,8 @@ try {
 		$bcrypt = new Bcrypt();
 		if ($bcrypt->verify($pass, $row[0])) {
 			// correct password, create session
+			session_start();
+			$_SESSION['user'] = $user;
 			echo "LOGGED IN";
 		} else {
 			die("Incorrect password");

@@ -19,6 +19,8 @@ using LibUsbDotNet.DeviceNotify.Info;
 using System.Threading;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Net;
+using System.Collections.Specialized;
 
 namespace traqpaqWPF
 {
@@ -46,6 +48,8 @@ namespace traqpaqWPF
         public UploadPage uploadPage;
 
         public delegate void Populate();
+
+        public WebClient webClient = new WebClient();
 
         public MainWindow()
         {
@@ -187,7 +191,10 @@ namespace traqpaqWPF
         /// </summary>
         private void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
-            LoginWindow login = new LoginWindow();
+            LoginWindow login = new LoginWindow(this);
+            // add event handler for login successful
+            login.Closed += login_Closed;
+
             if (login.ShowDialog() == true)
             {
                 Label username = new Label();
@@ -197,6 +204,12 @@ namespace traqpaqWPF
                 buttonLogin.Visibility = System.Windows.Visibility.Hidden;
                 buttonLogout.Visibility = System.Windows.Visibility.Visible;
             }
+        }
+
+        void login_Closed(object sender, EventArgs e)
+        {
+            // if login successful
+            syncUserRecords();
         }
 
         /// <summary>
@@ -209,6 +222,43 @@ namespace traqpaqWPF
             // revert to the login button
             buttonLogin.Visibility = System.Windows.Visibility.Visible;
             buttonLogout.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void syncUserRecords()
+        {
+            // this is necessary because the server is using a self-signed certificate
+            // In production, we will pay for a cert issued by a CA and will not require this line.
+            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
+
+            // get listing of data from server
+            byte[] response = await webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/upload.php"), new NameValueCollection()
+            {
+                { "sync", "server" }    // value of "server" tells the server to return a listing of all records stored for user
+            });
+            string s = webClient.Encoding.GetString(response);
+            MessageBox.Show(s);
+
+            // now, send the information to the server to create a database entry for this user
+            //byte[] response = await webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/upload.php"), new NameValueCollection()
+            //{
+            //    { "firstname", firstname },
+            //    { "lastname", lastname },
+            //    { "email", email },
+            //    { "password", password }
+            //});
+            //string s = webClient.Encoding.GetString(response);
+            //MessageBox.Show(s);
+        }
+
+        //TODO remove this once SSL cert is purchased
+        public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
         }
     }
 }

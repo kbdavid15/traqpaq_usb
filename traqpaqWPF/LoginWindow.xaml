@@ -3,7 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:traqpaqWPF"
         xmlns:winForms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
-        Title="Login to traqpaq.com" Height="375" Width="717" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+        Title="Login to traqpaq.com" Height="375" Width="717" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" >
+    <Window.Resources>
+        <ResourceDictionary>
+            
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />            
@@ -28,7 +33,7 @@
             <Canvas Margin="10,0,0,0" Name="inputCanvas" Grid.ColumnSpan="2" Panel.ZIndex="-1">
                 <Canvas.Resources>
                     <Storyboard x:Key="signUpStoryboard">
-                        <DoubleAnimation From="0" To="-350" Duration="00:00:00.5" Storyboard.TargetName="loginSignupStackPanel" Storyboard.TargetProperty="(Canvas.Left)">
+                        <DoubleAnimation From="0" To="-355" Duration="00:00:00.5" Storyboard.TargetName="loginSignupStackPanel" Storyboard.TargetProperty="(Canvas.Left)">
                             <DoubleAnimation.EasingFunction>
                                 <CircleEase EasingMode="EaseIn" />
                             </DoubleAnimation.EasingFunction>
@@ -54,8 +59,10 @@
                         <TextBox Height="23" x:Name="textBoxLasttName" TabIndex="1" Padding="0,0,0,5"  Width="182" />
                         <Label Content="Email" />
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Height="23" x:Name="textBoxSignUpUsername" TabIndex="2" Padding="0,0,0,5"  Width="182" TextChanged="textBoxSignUpUsername_TextChanged" />
-                            <Image  />
+                            <TextBox Height="23" x:Name="textBoxSignUpUsername" TabIndex="2" Padding="0,0,0,5"  Width="182" LostFocus="textBoxSignUpUsername_LostFocus" />
+                            <controls:GifImage x:Name="ajaxLoadingImageSignUp" Stretch="None" GifSource="pack://application:,,,/Images/ajax-loader.gif" Visibility="Collapsed" />
+                            <Image x:Name="greenCheckImageSignUp" Source="pack://application:,,,/Images/greencheck.png" Width="16" Height="16" Visibility="Collapsed" />
+                            <Image x:Name="redXImageSignUp" Source="pack://application:,,,/Images/redx.png" Width="16" Height="16" Visibility="Collapsed" />
                         </StackPanel>
                         <Label Content="Password" />
                         <PasswordBox Height="23" x:Name="passwordBoxSignUp" TabIndex="3" Padding="0,0,0,5" Width="182" />
