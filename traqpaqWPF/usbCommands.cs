@@ -21,6 +21,8 @@ namespace traqpaqWPF
         USB_CMD_WRITE_SAVED_TRACKS = 0x19,
         USB_CMD_READ_OTP = 0x1C,
         USB_CMD_WRITE_OTP = 0x1D,
+        //TODO new
+        USB_DBG_READ_ADC_VALUES = 0x33,
         USB_DBG_DF_SECTOR_ERASE = 0x39,
         USB_DBG_DF_BUSY = 0x3A,
         USB_DBG_DF_CHIP_ERASE = 0x3B,
@@ -32,13 +34,17 @@ namespace traqpaqWPF
         USB_DBG_GPS_INFO_PN = 0x44,
         USB_DBG_GPS_INFO_SW_VER = 0x45,
         USB_DBG_GPS_INFO_SW_DATE = 0x46,
+        //TODO new
+        USB_DBG_GPS_LAST_RESPONSE = 0x47,
         USB_DBG_START_RECORDING = 0x50,
         USB_DBG_STOP_RECORDING = 0x51,
         USB_DBG_RECORDING_STATUS = 0x52,
         USB_DBG_ACCEL_GET_STATUS = 0x60,
         USB_DBG_ACCEL_GET_FILT_DATA = 0x61,
         USB_DBG_ACCEL_GET_NORM_DATA = 0x62,
-        USB_DBG_ACCEL_GET_ST_DATA = 0x63
+        USB_DBG_ACCEL_GET_ST_DATA = 0x63,
+        //TODO new
+        USB_DBG_LOAD_GPS_AID = 0x70
     }
 
     public enum tAccelStatus
@@ -140,6 +146,6 @@ namespace traqpaqWPF
         public const double UTC_FACTOR = 1000;
         public const double HDOP_FACTOR = 100;
         
-        public const int TIMEOUT = 250;                          // usb timeout in ms
+        public const int USB_TIMEOUT = 250;                          // usb timeout in ms
     }
 }

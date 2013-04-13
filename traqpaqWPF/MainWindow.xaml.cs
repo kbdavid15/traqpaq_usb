@@ -38,7 +38,7 @@ namespace traqpaqWPF
         /// <summary>
         /// Background Worker used to add records to the Log Book Page without freezing the GUI
         /// </summary>
-        public BackgroundWorker bw = new BackgroundWorker();
+        //public BackgroundWorker bw = new BackgroundWorker();
 
         // Declare the log page and data page here so that there are not multiple copies of the same page
         public LogBookPage logBookPage;
@@ -47,7 +47,7 @@ namespace traqpaqWPF
         public SettingsPage settingsPage;
         public UploadPage uploadPage;
 
-        public delegate void Populate();
+        //public delegate void Populate();
 
         public WebClient webClient = new WebClient();
 
@@ -92,13 +92,15 @@ namespace traqpaqWPF
             //logBookPage.populateTracks();
 
             // configure the background worker
-            bw.DoWork += bw_DoWork;
-            bw.WorkerReportsProgress = false;
+            //bw.DoWork += bw_DoWork;
+            //bw.WorkerReportsProgress = false;
             // attempt with backgroundworker if connected
-            if (traqpaq != null)
-            {
-                bw.RunWorkerAsync();
-            }
+            //if (traqpaq != null)
+            //{
+            //    logBookPage.populateTracks();
+            //    //bw.RunWorkerAsync();
+            //}
+
 
             //// create the log book page as a background task
             //Thread threadCreateRecordPage = new System.Threading.Thread(
@@ -123,17 +125,16 @@ namespace traqpaqWPF
 
         }
 
-        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            MessageBox.Show("Complete");
-        }
+        //void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        //{
+        //    MessageBox.Show("Complete");
+        //}
 
-        void bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Populate handler = logBookPage.populateTracks;
-            logBookPage.Dispatcher.BeginInvoke(handler);
-            //logBookPage.populateTracks();
-        }
+        //void bw_DoWork(object sender, DoWorkEventArgs e)
+        //{
+        //    Populate handler = logBookPage.populateTracks;
+        //    logBookPage.Dispatcher.BeginInvoke(handler);
+        //}
 
         /// <summary>
         /// Called whenever a usb device is plugged in or unplugged
@@ -154,19 +155,19 @@ namespace traqpaqWPF
                             statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.reqSerialNumber();
                             // populate tracks
                             //TODO fix populate tracks
+                            logBookPage.populateTracks();
                             
                         }
                         catch (TraqPaqNotConnectedException) { return; }    // Silently fail and exit method
 
-                        //logBookPage.populateTracks();
                         //BackgroundWorker bw = new BackgroundWorker();
                         //bw.DoWork += bw_DoWork;
-                        bw.RunWorkerAsync(); 
+                        //bw.RunWorkerAsync(); 
                     }
                 }
                 else    // device removal
                 {
-                    traqpaq.MyUSBDevice.Close();
+                    traqpaq.disconnectDevice();
                     traqpaq = null;
                     // update status bar
                     statusBarItemTraqpaq.Content = "Traqpaq disconnected";

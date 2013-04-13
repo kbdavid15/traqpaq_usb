@@ -11,7 +11,7 @@ namespace traqpaqWPF
 {
     public class TraqpaqDevice
     {
-        public UsbDevice MyUSBDevice;
+        private UsbDevice MyUSBDevice;
         private static UsbDeviceFinder traqpaqDeviceFinder;
         private UsbEndpointReader reader;
         private UsbEndpointWriter writer;
@@ -51,11 +51,29 @@ namespace traqpaqWPF
             this.recordTableList = tableReader.recordTable;
         }
 
+        // device level functions
+        public bool disconnectDevice()
+        {
+            return MyUSBDevice.Close();
+        }
+
+
+
+
+
         #region sendCommand
         /*************************************************
          * Methods for talking to the device             *
          * sendCommand() should not be called directly   *
          *************************************************/
+        
+        //TODO revamp the send command to comply with USB Interface Protocol Rev A
+
+
+
+
+
+
         /// <summary>
         /// Send command with no command bytes in the writeBuffer
         /// </summary>
@@ -67,11 +85,11 @@ namespace traqpaqWPF
             int bytesRead, bytesWritten;
             byte[] writeBuffer = { (byte)cmd };
 
-            this.ec = writer.Write(writeBuffer, Constants.TIMEOUT, out bytesWritten);
+            this.ec = writer.Write(writeBuffer, Constants.USB_TIMEOUT, out bytesWritten);
             if (this.ec != ErrorCode.None)
                 return false;
 
-            this.ec = reader.Read(readBuffer, Constants.TIMEOUT, out bytesRead);
+            this.ec = reader.Read(readBuffer, Constants.USB_TIMEOUT, out bytesRead);
             if (this.ec != ErrorCode.None)
                 return false;
             return true;
@@ -91,14 +109,14 @@ namespace traqpaqWPF
             writeBuffer[0] = (byte)cmd;
             for (int i = 0; i < commandBytes.Length; i++)
             {
-                writeBuffer[i+1] = commandBytes[i];
+                writeBuffer[i + 1] = commandBytes[i];
             }
 
-            this.ec = writer.Write(writeBuffer, Constants.TIMEOUT, out bytesWritten);
+            this.ec = writer.Write(writeBuffer, Constants.USB_TIMEOUT, out bytesWritten);
             if (this.ec != ErrorCode.None)
                 return false;
 
-            this.ec = reader.Read(readBuffer, Constants.TIMEOUT, out bytesRead);
+            this.ec = reader.Read(readBuffer, Constants.USB_TIMEOUT, out bytesRead);
             if (this.ec != ErrorCode.None)
                 return false;
 
@@ -111,20 +129,21 @@ namespace traqpaqWPF
             byte[] writeBuffer = { (byte)USBcommand.USB_CMD_READ_RECORDDATA, (byte)((length >> 8) & 0xFF),
                                      (byte)(length & 0xFF), (byte)((index >> 8) & 0xFF), (byte)(index & 0xFF) };
 
-            this.ec = writer.Write(writeBuffer, Constants.TIMEOUT, out bytesWritten);
+            this.ec = writer.Write(writeBuffer, Constants.USB_TIMEOUT, out bytesWritten);
             if (this.ec != ErrorCode.None)
                 return false;
             // now read the response 64 bytes at a time
             int i = 0;
             while (i < length)
             {
-                this.ec = reader.Read(readBuffer, i, 64, Constants.TIMEOUT, out bytesRead);
+                this.ec = reader.Read(readBuffer, i, 64, Constants.USB_TIMEOUT, out bytesRead);
                 if (this.ec != ErrorCode.None)
                     return false;
                 i += 64;
             }
             return true;
         }
+
         #endregion
 
         public string reqApplicationVersion()
