@@ -28,9 +28,9 @@ namespace traqpaqWPF
     /// </summary>
     public partial class LoginWindow : Window
     {
-        MainWindow parent;
-
-        UIElement[] ajaxImages, ajaxSignUpImages;
+        private MainWindow parent;
+        private UIElement[] ajaxImages, ajaxSignUpImages;
+        private CookieContainer cookieContainer = new CookieContainer();
 
         public LoginWindow(MainWindow parent)
         {
@@ -64,17 +64,38 @@ namespace traqpaqWPF
             ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
             // POST the credentials to PHP
-            byte[] response = parent.webClient.UploadValues(new Uri("https://redline-testing.com/login.php"), new NameValueCollection()
+            CookieWebClient webClient = new CookieWebClient();
+            //WebClient webClient = new WebClient();
+            byte[] response = webClient.UploadValues(new Uri("https://redline-testing.com/login.php"), new NameValueCollection()
             {
                 { "user", uname },
                 { "pass", pass }
             });
-            string s = parent.webClient.Encoding.GetString(response);
+            
+            switch (PHP.get_PHP_return(webClient.Encoding.GetString(response)))
+            {
+                case PHPreturn.LOGIN_SUCCESSFUL:
+                    // close login window
+                    this.Close();
+                    break;
+                case PHPreturn.INCORRECT_PASSWORD:
+                    MessageBox.Show("Incorrect password");
+                    break;
+                case PHPreturn.USERNAME_DNE:
+                    MessageBox.Show("That username was not found in our database");
+                    break;
+                default:
+                    break;
+            }
 
-            MessageBox.Show(s); 
+            // test the cookies
+            byte[] x = webClient.DownloadData(new Uri("https://redline-testing.com/upload.php"));
 
-            // if login is successful, close window
-            this.Close();
+            MessageBox.Show( webClient.Encoding.GetString(x));
+
+
+            // release the web client
+            webClient.Dispose();
         }
 
         public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
@@ -112,14 +133,14 @@ namespace traqpaqWPF
             string firstname = null, lastname = null, email, password;
             if (textBoxFirstName.Text != "")
                 firstname = textBoxFirstName.Text;
-            if (textBoxLasttName.Text != "")
-                lastname = textBoxLasttName.Text;
+            if (textBoxLastName.Text != "")
+                lastname = textBoxLastName.Text;
             if (textBoxSignUpUsername.Text != "")
             {
                 email = textBoxSignUpUsername.Text;
                 // check against regex to determine if it is an email
-                RegexUtil util = new RegexUtil();   //TODO convert this into a static class/method
-                if (!util.IsValidEmail(email))
+                //RegexUtil util = new RegexUtil();   //TODO convert this into a static class/method
+                if (!RegexUtil.IsValidEmail(email))
                 {
                     MessageBox.Show("Please enter a valid email address");
                     return;
@@ -132,7 +153,7 @@ namespace traqpaqWPF
             }
             if (passwordBoxSignUp.Password != "" && passwordBoxConfirmSignUp.Password != "" && passwordBoxSignUp.Password == passwordBoxConfirmSignUp.Password)
             {
-                // check if password is secure enough
+                //TODO check if password is secure enough
                 password = passwordBoxSignUp.Password;
             }
             else
@@ -145,16 +166,21 @@ namespace traqpaqWPF
             // In production, we will pay for a cert issued by a CA and will not require this line.
             ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
+            WebClient webClient = new WebClient();
+
             // now, send the information to the server to create a database entry for this user
-            byte[] response = await parent.webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/signup.php"), new NameValueCollection()
+            byte[] response = await webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/signup.php"), new NameValueCollection()
             {
                 { "firstname", firstname },
                 { "lastname", lastname },
                 { "email", email },
                 { "password", password }
             });
-            string s = parent.webClient.Encoding.GetString(response);
+            string s = webClient.Encoding.GetString(response);
             MessageBox.Show(s);
+
+            // release the web client
+            webClient.Dispose();
         }
 
         private async void textBoxUsername_LostFocus(object sender, RoutedEventArgs e)
@@ -171,9 +197,11 @@ namespace traqpaqWPF
                 // In production, we will pay for a cert issued by a CA and will not require this line.
                 ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
+                WebClient webClient = new WebClient();
+
                 // now, send the information to the server to create a database entry for this user
-                byte[] response_bytes = await parent.webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/ajax/username.php"), new NameValueCollection() { { "email", textBoxUsername.Text } });
-                string response = parent.webClient.Encoding.GetString(response_bytes);
+                byte[] response_bytes = await webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/ajax/username.php"), new NameValueCollection() { { "email", textBoxUsername.Text } });
+                string response = webClient.Encoding.GetString(response_bytes);
 
                 // parse response
                 PHPreturn PHP_response = PHP.get_PHP_return(response);
@@ -189,6 +217,9 @@ namespace traqpaqWPF
                         ajaxLoadingImage.Visibility = Visibility.Collapsed;
                         break;
                 }
+
+                // release the web client
+                webClient.Dispose();
             }
         }
 
@@ -229,9 +260,11 @@ namespace traqpaqWPF
                 // In production, we will pay for a cert issued by a CA and will not require this line.
                 ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
+                WebClient webClient = new WebClient();
+
                 // now, send the information to the server to create a database entry for this user
-                byte[] response_bytes = await parent.webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/ajax/username.php"), new NameValueCollection() { { "email", textBoxUsername.Text } });
-                string response = parent.webClient.Encoding.GetString(response_bytes);
+                byte[] response_bytes = await webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/ajax/username.php"), new NameValueCollection() { { "email", textBoxUsername.Text } });
+                string response = webClient.Encoding.GetString(response_bytes);
 
                 // parse response
                 PHPreturn PHP_response = PHP.get_PHP_return(response);
@@ -248,7 +281,10 @@ namespace traqpaqWPF
                         break;
                 }
 
+                // release the web client
+                webClient.Dispose();
             }
+
         }
     }
 }

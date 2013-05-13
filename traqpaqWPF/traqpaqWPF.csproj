@@ -149,6 +149,9 @@
     </ApplicationDefinition>
     <Compile Include="BetterBitConverter.cs" />
     <Compile Include="CacheClearer.cs" />
+    <Compile Include="CookieWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DataPage.xaml.cs">
       <DependentUpon>DataPage.xaml</DependentUpon>
     </Compile>

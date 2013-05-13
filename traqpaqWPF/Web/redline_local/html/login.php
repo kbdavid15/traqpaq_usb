@@ -20,7 +20,7 @@ try {
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br>";
-    die();
+    die("[3]");
 }
 
 // check username and password combo using bcrypt->verify
@@ -37,14 +37,15 @@ try {
 		if ($bcrypt->verify($pass, $row[0])) {
 			// correct password, create session
 			session_start();
-			$_SESSION['user'] = $user;
-			echo "LOGGED IN";
+			$_SESSION['user'] = $uname;
+			echo "Login Successful [5]";
 		} else {
-			die("Incorrect password");
+			die("Incorrect password [6]");
 		}
 	} else {
-		echo "Username not found";
+		die("Username not found [1]");
 	}
 } catch(PDOException $e) {
 	echo 'ERROR: ' . $e->getMessage();
+	die("[3]");
 }

@@ -49,8 +49,6 @@ namespace traqpaqWPF
 
         //public delegate void Populate();
 
-        public WebClient webClient = new WebClient();
-
         public MainWindow()
         {
             InitializeComponent();
@@ -89,7 +87,10 @@ namespace traqpaqWPF
             // create the log book page
             logBookPage = new LogBookPage(this);
             frameLogBook.Navigate(logBookPage);
-            //logBookPage.populateTracks();
+            if (traqpaq != null)
+            {
+                logBookPage.populateTracks();
+            }
 
             // configure the background worker
             //bw.DoWork += bw_DoWork;
@@ -155,8 +156,7 @@ namespace traqpaqWPF
                             statusBarItemTraqpaq.Content = "Device connected: " + traqpaq.reqSerialNumber();
                             // populate tracks
                             //TODO fix populate tracks
-                            logBookPage.populateTracks();
-                            
+                            logBookPage.populateTracks();                            
                         }
                         catch (TraqPaqNotConnectedException) { return; }    // Silently fail and exit method
 
@@ -236,6 +236,8 @@ namespace traqpaqWPF
             // In production, we will pay for a cert issued by a CA and will not require this line.
             ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
+            WebClient webClient = new WebClient();
+
             // get listing of data from server
             byte[] response = await webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/upload.php"), new NameValueCollection()
             {
@@ -244,16 +246,8 @@ namespace traqpaqWPF
             string s = webClient.Encoding.GetString(response);
             MessageBox.Show(s);
 
-            // now, send the information to the server to create a database entry for this user
-            //byte[] response = await webClient.UploadValuesTaskAsync(new Uri("https://redline-testing.com/upload.php"), new NameValueCollection()
-            //{
-            //    { "firstname", firstname },
-            //    { "lastname", lastname },
-            //    { "email", email },
-            //    { "password", password }
-            //});
-            //string s = webClient.Encoding.GetString(response);
-            //MessageBox.Show(s);
+            // release the web client
+            webClient.Dispose();
         }
 
         //TODO remove this once SSL cert is purchased

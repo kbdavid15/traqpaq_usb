@@ -56,7 +56,7 @@
                         <Label Content="First Name" HorizontalAlignment="Left" />
                         <TextBox Height="23" x:Name="textBoxFirstName" TabIndex="0" Padding="0,0,0,5"  Width="182" />
                         <Label Content="Last Name" HorizontalAlignment="Left" />
-                        <TextBox Height="23" x:Name="textBoxLasttName" TabIndex="1" Padding="0,0,0,5"  Width="182" />
+                        <TextBox Height="23" x:Name="textBoxLastName" TabIndex="1" Padding="0,0,0,5"  Width="182" />
                         <Label Content="Email" />
                         <StackPanel Orientation="Horizontal">
                             <TextBox Height="23" x:Name="textBoxSignUpUsername" TabIndex="2" Padding="0,0,0,5"  Width="182" LostFocus="textBoxSignUpUsername_LostFocus" />

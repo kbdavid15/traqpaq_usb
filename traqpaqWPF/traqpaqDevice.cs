@@ -59,8 +59,6 @@ namespace traqpaqWPF
 
 
 
-
-
         #region sendCommand
         /*************************************************
          * Methods for talking to the device             *

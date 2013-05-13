@@ -6,36 +6,38 @@ namespace traqpaqWPF
 {
     public enum PHPreturn
     {
-        USERNAME_EXISTS,
-        USERNAME_DNE,
-        EMPTY_STRING_ERROR,
-        PDO_EXCEPTION,
-        REGEX_PARSE_ERROR
+        USERNAME_EXISTS = 0,
+        USERNAME_DNE = 1,
+        EMPTY_STRING_ERROR = 2,
+        PDO_EXCEPTION = 3,
+        REGEX_PARSE_ERROR = 4,
+        LOGIN_SUCCESSFUL = 5,
+        INCORRECT_PASSWORD = 6
     }
 
-    public class RegexUtil
+    public static class RegexUtil
     {
-        bool invalid = false;
+        //bool invalid = false;
 
-        public bool IsValidEmail(string strIn)
+        public static bool IsValidEmail(string strIn)
         {
-            invalid = false;
             if (String.IsNullOrEmpty(strIn))
                 return false;
 
             // Use IdnMapping class to convert Unicode domain names. 
             try
             {
-                strIn = Regex.Replace(strIn, @"(@)(.+)$", this.DomainMapper,
+                strIn = Regex.Replace(strIn, @"(@)(.+)$", DomainMapper,
                                     RegexOptions.None, TimeSpan.FromMilliseconds(200));
             }
             catch (RegexMatchTimeoutException)
             {
                 return false;
             }
-
-            if (invalid)
+            catch (ArgumentException)
+            {
                 return false;
+            }
 
             // Return true if strIn is in valid e-mail format. 
             try
@@ -51,7 +53,7 @@ namespace traqpaqWPF
             }
         }
 
-        private string DomainMapper(Match match)
+        private static string DomainMapper(Match match)
         {
             // IdnMapping class with default property values.
             IdnMapping idn = new IdnMapping();
@@ -63,7 +65,8 @@ namespace traqpaqWPF
             }
             catch (ArgumentException)
             {
-                invalid = true;
+                //invalid = true;
+                throw;
             }
             return match.Groups[1].Value + domainName;
         }
